@@ -1,7 +1,7 @@
 import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import "./App.css";
-import { Button } from "@seanchas116/paintkit/src/components/Button";
+import { Input } from "@seanchas116/paintkit/src/components/Input";
 import { PaintkitRoot } from "@seanchas116/paintkit/src/components/PaintkitRoot";
 
 function App() {
@@ -9,7 +9,7 @@ function App() {
 
   return (
     <PaintkitRoot colorScheme="auto">
-      <div className="App text-red-500">
+      <div className="text-red-500 flex flex-col items-center">
         <div>
           <a href="https://vitejs.dev" target="_blank">
             <img src="/vite.svg" className="logo" alt="Vite logo" />
@@ -30,7 +30,7 @@ function App() {
         <p className="read-the-docs">
           Click on the Vite and React logos to learn more
         </p>
-        <Button>Button</Button>
+        <Input className="w-20" />
       </div>
     </PaintkitRoot>
   );
