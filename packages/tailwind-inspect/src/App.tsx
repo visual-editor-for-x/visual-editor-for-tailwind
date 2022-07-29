@@ -3,10 +3,10 @@ import { StyleInspector } from "./inspector/StyleInspector";
 
 function App() {
   return (
-    <PaintkitRoot colorScheme="auto">
+    <PaintkitRoot colorScheme="dark">
       <div className="flex w-full h-full fixed left-0 top-0">
         <div className="flex-1"></div>
-        <div className="bg-gray-500 w-64">
+        <div className="bg-zinc-800 w-64">
           <StyleInspector />
         </div>
       </div>
