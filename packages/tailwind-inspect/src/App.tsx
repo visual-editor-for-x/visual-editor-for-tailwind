@@ -1,10 +1,6 @@
-import { useState } from "react";
-import "./App.css";
 import { PaintkitRoot } from "@seanchas116/paintkit/src/components/PaintkitRoot";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <PaintkitRoot colorScheme="auto">
       <div className="flex w-full h-full fixed left-0 top-0">
