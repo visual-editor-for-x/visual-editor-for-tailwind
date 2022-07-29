@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@seanchas116/paintkit": "seanchas116/paintkit",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
