@@ -15,7 +15,7 @@ import {
 import separateCornersIcon from "@seanchas116/paintkit/src/icon/SeparateCorners";
 import radiusIcon from "@seanchas116/paintkit/src/icon/Radius";
 import Tippy from "@tippyjs/react";
-import { StyleInspectorState } from "../../../../state/StyleInspectorState";
+import { StyleInspectorState } from "../state/StyleInspectorState";
 import { lengthPercentageUnits } from "./Units";
 import { StyleDimensionInput } from "./Components";
 

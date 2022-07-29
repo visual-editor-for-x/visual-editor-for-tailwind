@@ -14,7 +14,7 @@ import cursorPointerIcon from "@iconify-icons/mdi/cursor-pointer";
 import cursorDefaultIcon from "@iconify-icons/mdi/cursor-default";
 import cursorTextIcon from "@iconify-icons/mdi/cursor-text";
 import { Icon } from "@iconify/react/dist/offline";
-import { StyleInspectorState } from "../../../../state/StyleInspectorState";
+import { StyleInspectorState } from "../state/StyleInspectorState";
 import { StyleComboBox, StyleInput } from "./Components";
 
 const cursorOptions = [

@@ -1,11 +1,7 @@
-import {
-  isReplacedElement,
-  isSVGTagName,
-} from "@seanchas116/paintkit/src/util/HTMLTagCategory";
+import { isReplacedElement } from "@seanchas116/paintkit/src/util/HTMLTagCategory";
 import { MIXED, sameOrMixed } from "@seanchas116/paintkit/src/util/Mixed";
 import { startCase } from "lodash-es";
 import { action, computed, makeObservable, observable } from "mobx";
-import { CustomElementMetadata } from "../models/CustomElementMetadata";
 import { ElementInstance } from "../models/ElementInstance";
 import {
   AllStyleKey,
@@ -13,7 +9,6 @@ import {
   imageStyleKeys,
   textStyleKeys,
 } from "../models/Style";
-import { EditorState } from "./EditorState";
 
 export class StylePropertyState {
   constructor(state: StyleInspectorState, key: AllStyleKey) {
@@ -57,19 +52,19 @@ export class StylePropertyState {
     for (const instance of this.targetInstances) {
       instance.style[this.key] = value || undefined;
 
-      if (this.key === "width") {
-        if (!instance.parent && instance.variant) {
-          if (value) {
-            instance.variant.width = undefined;
-          }
-        }
-      }
+      // if (this.key === "width") {
+      //   if (!instance.parent && instance.variant) {
+      //     if (value) {
+      //       instance.variant.width = undefined;
+      //     }
+      //   }
+      // }
     }
     return true;
   });
 
   readonly onCommit = action(() => {
-    this.state.editorState.history.commit(`Change ${startCase(this.key)}`);
+    //this.state.editorState.history.commit(`Change ${startCase(this.key)}`);
     return true;
   });
 
@@ -112,7 +107,7 @@ export class StyleCustomPropertyState {
   });
 
   readonly onCommit = action(() => {
-    this.state.editorState.history.commit(`Change ${startCase(this.key)}`);
+    //this.state.editorState.history.commit(`Change ${startCase(this.key)}`);
     return true;
   });
 
@@ -124,8 +119,7 @@ export class StyleCustomPropertyState {
 }
 
 export class StyleInspectorState {
-  constructor(editorState: EditorState) {
-    this.editorState = editorState;
+  constructor() {
     makeObservable(this);
 
     this.props = Object.fromEntries(
@@ -133,27 +127,7 @@ export class StyleInspectorState {
     ) as Record<AllStyleKey, StylePropertyState>;
   }
 
-  readonly editorState: EditorState;
-
-  @computed private get selectedNonSVGInstances(): ElementInstance[] {
-    return this.editorState.document.selectedElementInstances.filter(
-      (instance) => {
-        if (!isSVGTagName(instance.element.tagName)) {
-          return true;
-        }
-        if (instance.element.tagName === "svg") {
-          return true;
-        }
-        return false;
-      }
-    );
-  }
-
-  @computed get instances(): ElementInstance[] {
-    return this.selectedNonSVGInstances.filter(
-      (instance) => instance.element.id || !instance.element.parent
-    );
-  }
+  readonly instances: ElementInstance[] = [new ElementInstance()];
 
   @computed get imageInstances(): ElementInstance[] {
     // TODO: include other replaced elements?
@@ -173,13 +147,6 @@ export class StyleInspectorState {
 
   @computed get tagName(): string | typeof MIXED | undefined {
     return sameOrMixed(this.instances.map((i) => i.element.tagName));
-  }
-
-  @computed get customElementMetadata(): CustomElementMetadata | undefined {
-    const { tagName } = this;
-    if (typeof tagName === "string") {
-      return this.editorState.document.getCustomElementMetadata(tagName);
-    }
   }
 
   readonly props: Record<AllStyleKey, StylePropertyState>;
@@ -215,33 +182,20 @@ export class StyleInspectorState {
     this.borderEdgeMode = "left";
   });
 
-  @computed get mustAssignID(): boolean {
-    return (
-      this.instances.length === 0 && this.selectedNonSVGInstances.length > 0
-    );
-  }
-
-  readonly onAssignID = action(() => {
-    for (const instance of this.selectedNonSVGInstances) {
-      if (!instance.element.id) {
-        instance.element.setID(instance.element.tagName);
-      }
-    }
-    this.editorState.history.commit("Assign ID");
-  });
-
   @computed get computedParentDisplay(): string | undefined | typeof MIXED {
-    return sameOrMixed(
-      this.instances.map((i) => i.parent?.computedStyle.display)
-    );
+    return undefined;
+    // return sameOrMixed(
+    //   this.instances.map((i) => i.parent?.computedStyle.display)
+    // );
   }
 
   @computed get computedParentFlexDirection():
     | string
     | undefined
     | typeof MIXED {
-    return sameOrMixed(
-      this.instances.map((i) => i.parent?.computedStyle.flexDirection)
-    );
+    return undefined;
+    // return sameOrMixed(
+    //   this.instances.map((i) => i.parent?.computedStyle.flexDirection)
+    // );
   }
 }

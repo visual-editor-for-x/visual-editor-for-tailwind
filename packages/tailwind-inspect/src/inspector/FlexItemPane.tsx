@@ -14,7 +14,7 @@ import alignVerticalTopIcon from "@iconify-icons/ic/outline-align-vertical-top";
 import alignVerticalCenterIcon from "@iconify-icons/ic/outline-align-vertical-center";
 import alignVerticalBottomIcon from "@iconify-icons/ic/outline-align-vertical-bottom";
 import alignStretchIcon from "@seanchas116/paintkit/src/icon/AlignStretch";
-import { StyleInspectorState } from "../../../../state/StyleInspectorState";
+import { StyleInspectorState } from "../state/StyleInspectorState";
 import { StyleDimensionInput, StyleIconRadio, StyleInput } from "./Components";
 import { lengthPercentageUnits } from "./Units";
 

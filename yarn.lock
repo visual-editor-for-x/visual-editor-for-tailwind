@@ -1283,6 +1283,13 @@
   dependencies:
     "@iconify/types" "*"
 
+"@iconify-icons/mdi@^1.2.27":
+  version "1.2.27"
+  resolved "https://registry.yarnpkg.com/@iconify-icons/mdi/-/mdi-1.2.27.tgz#490ebb6dd63d5b4a9eb2d9cd16b8b089963de841"
+  integrity sha512-yzKEn3mDgae5Ip2FyQ/NwAHA8076FA6n74tJiRfTnzVtNgUWtP+hhqptBPevPatHQTaXKfci5pBq3KNJ6v/B5w==
+  dependencies:
+    "@iconify/types" "*"
+
 "@iconify/react@^3.2.2":
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/@iconify/react/-/react-3.2.2.tgz#ab5241dc01562076bae3b0c22238aff7e5f029cc"

@@ -24,8 +24,7 @@ import strikethroughIcon from "@iconify-icons/ic/outline-strikethrough-s";
 import underlineIcon from "@iconify-icons/ic/outline-format-underlined";
 import closeIcon from "@iconify-icons/ic/outline-close";
 import { stripQuotes } from "@seanchas116/paintkit/src/util/String";
-import { StyleInspectorState } from "../../../../state/StyleInspectorState";
-import { useEditorState } from "../../../useEditorState";
+import { StyleInspectorState } from "../state/StyleInspectorState";
 import { lengthPercentageEmptyUnits, lengthPercentageUnits } from "./Units";
 import {
   StyleColorInput,
@@ -90,8 +89,6 @@ const fontWeightOptions = [
 export const TextPane: React.FC<{
   state: StyleInspectorState;
 }> = observer(function TextPane({ state }) {
-  const editorState = useEditorState();
-
   if (!state.textInstances.length) {
     return null;
   }
@@ -107,7 +104,7 @@ export const TextPane: React.FC<{
           title="font-family"
           value={state.props.fontFamily.value}
           placeholder={stripQuotes(state.props.fontFamily.computed ?? "")}
-          options={editorState.fontFamilyOptions}
+          //options={editorState.fontFamilyOptions}
           onChange={state.props.fontFamily.onChange}
         />
         <Row11>

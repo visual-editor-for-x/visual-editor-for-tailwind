@@ -11,7 +11,7 @@ import sizeCoverIcon from "@seanchas116/paintkit/src/icon/SizeCover";
 import sizeContainIcon from "@seanchas116/paintkit/src/icon/SizeContain";
 import closeIcon from "@iconify-icons/ic/outline-close";
 import { IconRadioOption } from "@seanchas116/paintkit/src/components/IconRadio";
-import { StyleInspectorState } from "../../../../state/StyleInspectorState";
+import { StyleInspectorState } from "../state/StyleInspectorState";
 import { StyleIconRadio } from "./Components";
 
 const objectFitOptions: IconRadioOption<string>[] = [

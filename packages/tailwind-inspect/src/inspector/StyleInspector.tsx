@@ -1,13 +1,9 @@
-import { Button } from "@seanchas116/paintkit/src/components/Button";
-import { Pane } from "@seanchas116/paintkit/src/components/sidebar/Inspector";
 import { observer } from "mobx-react-lite";
 import React, { useMemo } from "react";
 import styled from "styled-components";
-import { StyleInspectorState } from "../../../../state/StyleInspectorState";
-import { useEditorState } from "../../../useEditorState";
+import { StyleInspectorState } from "../state/StyleInspectorState";
 import { BackgroundPane } from "./BackgroundPane";
 import { BorderPane } from "./BorderPane";
-import { CSSVariablePane } from "./CSSVariablePane";
 import { EffectsPane } from "./EffectsPane";
 import { FlexItemPane } from "./FlexItemPane";
 import { ImagePane } from "./ImagePane";
@@ -20,24 +16,7 @@ import { TextPane } from "./TextPane";
 const StyleInspectorWrap = styled.div``;
 
 export const StyleInspector: React.FC = observer(function StyleInspector() {
-  const editorState = useEditorState();
-
-  const state = useMemo(
-    () => new StyleInspectorState(editorState),
-    [editorState]
-  );
-
-  if (state.mustAssignID) {
-    return (
-      <StyleInspectorWrap>
-        <Pane>
-          <Button primary onClick={state.onAssignID}>
-            Assign ID to edit style
-          </Button>
-        </Pane>
-      </StyleInspectorWrap>
-    );
-  }
+  const state = useMemo(() => new StyleInspectorState(), []);
 
   if (state.instances.length === 0) {
     return null;
@@ -55,7 +34,6 @@ export const StyleInspector: React.FC = observer(function StyleInspector() {
       <BackgroundPane state={state} />
       <BorderPane state={state} />
       <EffectsPane state={state} />
-      <CSSVariablePane state={state} />
     </StyleInspectorWrap>
   );
 });

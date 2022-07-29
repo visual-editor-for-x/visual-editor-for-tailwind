@@ -30,7 +30,7 @@ import justifyEndIcon from "@seanchas116/paintkit/src/icon/JustifyEnd";
 import justifySpaceBetweenIcon from "@seanchas116/paintkit/src/icon/JustifySpaceBetween";
 import spaceBarIcon from "@iconify-icons/ic/outline-space-bar";
 import styled from "styled-components";
-import { StyleInspectorState } from "../../../../state/StyleInspectorState";
+import { StyleInspectorState } from "../state/StyleInspectorState";
 import { lengthPercentageUnits } from "./Units";
 import { StyleDimensionInput, StyleIconRadio } from "./Components";
 
@@ -250,14 +250,14 @@ export const LayoutPane: React.FC<{
         />
         {paddingInputs}
         {flexInputs}
-        {!state.editorState.commands.autoLayoutChildren.disabled && (
+        {/* {!state.editorState.commands.autoLayoutChildren.disabled && (
           <Button
             primary
             onClick={state.editorState.commands.autoLayoutChildren.onClick}
           >
             Auto-layout children
           </Button>
-        )}
+        )} */}
       </RowGroup>
     </Pane>
   );
