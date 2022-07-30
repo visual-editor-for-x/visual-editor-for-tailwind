@@ -182,11 +182,18 @@ export class Style extends StyleBase {
   loadTailwind(className: string) {
     const classNames = className.split(/\s+/);
 
+    const keys = [
+      ["background", "bg"],
+      ["color", "text"],
+      ["width", "w"],
+      ["height", "h"],
+    ] as const;
+
     for (const className of classNames) {
-      {
-        const bgMatch = className.match(/bg-\[([^\]]+)\]/);
-        if (bgMatch) {
-          this.background = bgMatch[1];
+      for (const [key, prefix] of keys) {
+        const match = className.match(new RegExp(`${prefix}-\\[([^\\]]+)\\]`));
+        if (match) {
+          this[key] = match[1];
         }
       }
     }
