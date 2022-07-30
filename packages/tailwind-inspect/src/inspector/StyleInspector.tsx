@@ -15,25 +15,24 @@ import { TextPane } from "./TextPane";
 
 const StyleInspectorWrap = styled.div``;
 
-export const StyleInspector: React.FC = observer(function StyleInspector() {
-  const state = useMemo(() => new StyleInspectorState(), []);
+export const StyleInspector: React.FC<{ state: StyleInspectorState }> =
+  observer(function StyleInspector({ state }) {
+    if (state.instances.length === 0) {
+      return null;
+    }
 
-  if (state.instances.length === 0) {
-    return null;
-  }
-
-  return (
-    <StyleInspectorWrap>
-      <FlexItemPane state={state} />
-      <PositionPane state={state} />
-      <SizePane state={state} />
-      <LayoutPane state={state} />
-      <TextPane state={state} />
-      <SVGPane state={state} />
-      <ImagePane state={state} />
-      <BackgroundPane state={state} />
-      <BorderPane state={state} />
-      <EffectsPane state={state} />
-    </StyleInspectorWrap>
-  );
-});
+    return (
+      <StyleInspectorWrap>
+        <FlexItemPane state={state} />
+        <PositionPane state={state} />
+        <SizePane state={state} />
+        <LayoutPane state={state} />
+        <TextPane state={state} />
+        <SVGPane state={state} />
+        <ImagePane state={state} />
+        <BackgroundPane state={state} />
+        <BorderPane state={state} />
+        <EffectsPane state={state} />
+      </StyleInspectorWrap>
+    );
+  });

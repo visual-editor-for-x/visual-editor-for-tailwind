@@ -76,7 +76,8 @@ export class StylePropertyState {
 }
 
 export class StyleInspectorState {
-  constructor() {
+  constructor(getElementInstances: () => ElementInstance[]) {
+    this._getElementInstances = getElementInstances;
     makeObservable(this);
 
     this.props = Object.fromEntries(
@@ -84,7 +85,11 @@ export class StyleInspectorState {
     ) as Record<AllStyleKey, StylePropertyState>;
   }
 
-  readonly instances: ElementInstance[] = [new ElementInstance()];
+  private readonly _getElementInstances: () => ElementInstance[];
+
+  get instances(): ElementInstance[] {
+    return this._getElementInstances();
+  }
 
   @computed get imageInstances(): ElementInstance[] {
     // TODO: include other replaced elements?
