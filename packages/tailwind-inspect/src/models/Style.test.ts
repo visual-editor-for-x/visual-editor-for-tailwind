@@ -7,6 +7,7 @@ describe(Style.name, () => {
       const style = new Style();
       style.loadTailwind("bg-[#fff]");
       expect(style.background).toEqual("#fff");
+      expect(style.toTailwind()).toEqual("bg-[#fff]");
     });
   });
 });
