@@ -178,4 +178,17 @@ const StyleBase: {
   }
 };
 
-export class Style extends StyleBase {}
+export class Style extends StyleBase {
+  loadTailwind(className: string) {
+    const classNames = className.split(/\s+/);
+
+    for (const className of classNames) {
+      {
+        const bgMatch = className.match(/bg-\[([^\]]+)\]/);
+        if (bgMatch) {
+          this.background = bgMatch[1];
+        }
+      }
+    }
+  }
+}
