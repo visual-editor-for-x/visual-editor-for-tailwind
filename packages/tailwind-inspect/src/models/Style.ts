@@ -179,18 +179,29 @@ const StyleBase: {
 };
 
 const tailwindPrefixes = [
+  ["marginTop", "mt"],
+  ["marginRight", "mr"],
+  ["marginBottom", "mb"],
+  ["marginLeft", "ml"],
   ["top", "t"],
   ["right", "r"],
   ["bottom", "b"],
   ["left", "l"],
+  ["width", "w"],
+  ["height", "h"],
+  ["borderTopLeftRadius", "rounded-tl"],
+  ["borderTopRightRadius", "rounded-tr"],
+  ["borderBottomRightRadius", "rounded-br"],
+  ["borderBottomLeftRadius", "rounded-bl"],
+  ["paddingTop", "pt"],
+  ["paddingRight", "pr"],
+  ["paddingBottom", "pb"],
+  ["paddingLeft", "pl"],
   ["background", "bg"],
-  ["fontFamily", "font"],
   ["fontWeight", "font"],
   ["fontSize", "text"],
   ["lineHeight", "leading"],
   ["color", "text"],
-  ["width", "w"],
-  ["height", "h"],
 ] as const;
 
 export class Style extends StyleBase {
@@ -198,6 +209,8 @@ export class Style extends StyleBase {
     const classNames = className.split(/\s+/);
 
     for (const className of classNames) {
+      // TODO: font family
+
       for (const [key, prefix] of tailwindPrefixes) {
         const match = className.match(new RegExp(`${prefix}-\\[([^\\]]+)\\]`));
         if (match) {
@@ -215,6 +228,10 @@ export class Style extends StyleBase {
       if (value) {
         classNames.push(`${prefix}-[${value}]`);
       }
+    }
+
+    if (this.fontFamily) {
+      classNames.push(`font-['${this.fontFamily.replace(" ", "_")}']`);
     }
 
     return classNames.join(" ");
