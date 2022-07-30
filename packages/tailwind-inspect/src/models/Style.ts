@@ -179,7 +179,15 @@ const StyleBase: {
 };
 
 const tailwindPrefixes = [
+  ["top", "t"],
+  ["right", "r"],
+  ["bottom", "b"],
+  ["left", "l"],
   ["background", "bg"],
+  ["fontFamily", "font"],
+  ["fontWeight", "font"],
+  ["fontSize", "text"],
+  ["lineHeight", "leading"],
   ["color", "text"],
   ["width", "w"],
   ["height", "h"],
