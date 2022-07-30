@@ -88,22 +88,21 @@ export class StyleInspectorState {
 
   @computed get imageInstances(): ElementInstance[] {
     // TODO: include other replaced elements?
-    return this.instances.filter((i) => i.element.tagName === "img");
+    return this.instances.filter((i) => i.tagName === "img");
   }
 
   @computed get textInstances(): ElementInstance[] {
     return this.instances.filter(
-      (i) =>
-        !isReplacedElement(i.element.tagName) && i.element.tagName !== "svg"
+      (i) => !isReplacedElement(i.tagName) && i.tagName !== "svg"
     );
   }
 
   @computed get svgInstances(): ElementInstance[] {
-    return this.instances.filter((i) => i.element.tagName === "svg");
+    return this.instances.filter((i) => i.tagName === "svg");
   }
 
   @computed get tagName(): string | typeof MIXED | undefined {
-    return sameOrMixed(this.instances.map((i) => i.element.tagName));
+    return sameOrMixed(this.instances.map((i) => i.tagName));
   }
 
   readonly props: Record<AllStyleKey, StylePropertyState>;
