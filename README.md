@@ -1,11 +1,23 @@
-# tailwind-inspect
+# visual-editor-for-tailwind
 
-Tailwind class name inspector based on style inspector of Macaron
-
-## Run
+## Setup
 
 ```bash
 yarn
+```
+## Run
+
+### tailwind-inspect
+
+```bash
 cd packages/tailwind-inspect
 yarn dev
+```
+
+### react-bridge
+
+```bash
+cd packages/react-bridge
+yarn build
+yarn serve
 ```

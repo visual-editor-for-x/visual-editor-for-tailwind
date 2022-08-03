@@ -1,5 +1,5 @@
 {
-  "name": "tailwind-inspect",
+  "name": "visual-editor-for-tailwind",
   "private": true,
   "workspaces": [
     "packages/*"

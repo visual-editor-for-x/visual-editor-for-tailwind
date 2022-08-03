@@ -1,0 +1,22 @@
+{
+  "name": "react-bridge",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc && vite build",
+    "serve": "serve -l 3003 --cors"
+  },
+  "devDependencies": {
+    "@types/react-devtools-inline": "^4.24.0",
+    "serve": "^14.0.1",
+    "typescript": "^4.6.4",
+    "vite": "^3.0.0"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-devtools-inline": "^4.25.0",
+    "react-dom": "^18.2.0",
+    "react-is": "^18.2.0"
+  }
+}
