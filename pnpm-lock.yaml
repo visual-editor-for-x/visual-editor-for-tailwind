@@ -202,8 +202,10 @@ importers:
 
   packages/tailwind-inspect:
     specifiers:
+      '@iconify-icons/ic': ^1.2.6
       '@iconify-icons/mdi': ^1.2.27
       '@seanchas116/paintkit': '*'
+      '@tippyjs/react': ^4.2.6
       '@types/react': ^18.0.15
       '@types/react-dom': ^18.0.6
       '@vitejs/plugin-react': ^2.0.0
@@ -219,8 +221,10 @@ importers:
       vite: ^3.0.0
       vitest: ^0.19.1
     dependencies:
+      '@iconify-icons/ic': 1.2.9
       '@iconify-icons/mdi': 1.2.27
       '@seanchas116/paintkit': link:../paintkit
+      '@tippyjs/react': 4.2.6_biqbaboplfbrettd7655fr4n2y
       mobx: 6.6.1
       mobx-react-lite: 3.4.0_m26jawr67gnusmh4egzqtnhxru
       path-browserify: 1.0.1

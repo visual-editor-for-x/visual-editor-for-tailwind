@@ -10,8 +10,10 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@iconify-icons/ic": "^1.2.6",
     "@iconify-icons/mdi": "^1.2.27",
     "@seanchas116/paintkit": "*",
+    "@tippyjs/react": "^4.2.6",
     "mobx": "^6.6.1",
     "mobx-react-lite": "^3.4.0",
     "path-browserify": "^1.0.1",
