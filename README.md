@@ -3,21 +3,22 @@
 ## Setup
 
 ```bash
-yarn
+pnpm install
 ```
+
 ## Run
 
 ### tailwind-inspect
 
 ```bash
 cd packages/tailwind-inspect
-yarn dev
+pnpm run dev
 ```
 
 ### react-bridge
 
 ```bash
 cd packages/react-bridge
-yarn build
-yarn serve
+pnpm run build
+pnpm run serve
 ```
