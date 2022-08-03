@@ -3,21 +3,26 @@
 ## Setup
 
 ```bash
-yarn
+git submodule update --init
+pnpm install
 ```
+
 ## Run
 
 ### tailwind-inspect
 
 ```bash
+cd packages/paintkit
+pnpm run build
+cd ../..
 cd packages/tailwind-inspect
-yarn dev
+pnpm run dev
 ```
 
 ### react-bridge
 
 ```bash
 cd packages/react-bridge
-yarn build
-yarn serve
+pnpm run build
+pnpm run serve
 ```

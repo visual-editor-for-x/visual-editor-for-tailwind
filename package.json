@@ -1,7 +1,4 @@
 {
   "name": "visual-editor-for-tailwind",
-  "private": true,
-  "workspaces": [
-    "packages/*"
-  ]
+  "private": true
 }
