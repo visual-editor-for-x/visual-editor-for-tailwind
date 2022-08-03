@@ -17,7 +17,7 @@ const App = observer(function App() {
             class: <span className="text-gray-700">{tailwindClass}</span>
           </div>
         </div>
-        <div className="bg-zinc-800 w-64">
+        <div className="bg-zinc-800 w-64 overflow-y-auto">
           <StyleInspector state={appState.styleInspectorState} />
         </div>
       </div>
