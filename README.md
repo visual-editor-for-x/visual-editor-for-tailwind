@@ -3,6 +3,7 @@
 ## Setup
 
 ```bash
+git submodule update --init
 pnpm install
 ```
 
