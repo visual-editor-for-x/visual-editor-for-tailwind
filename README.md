@@ -12,6 +12,9 @@ pnpm install
 ### tailwind-inspect
 
 ```bash
+cd packages/paintkit
+pnpm run build
+cd ../..
 cd packages/tailwind-inspect
 pnpm run dev
 ```
