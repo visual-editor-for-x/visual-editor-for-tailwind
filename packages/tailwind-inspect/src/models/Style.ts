@@ -183,10 +183,10 @@ const tailwindPrefixes = [
   ["marginRight", "mr"],
   ["marginBottom", "mb"],
   ["marginLeft", "ml"],
-  ["top", "t"],
-  ["right", "r"],
-  ["bottom", "b"],
-  ["left", "l"],
+  ["top", "top"],
+  ["right", "right"],
+  ["bottom", "bottom"],
+  ["left", "left"],
   ["width", "w"],
   ["height", "h"],
   ["borderTopLeftRadius", "rounded-tl"],
@@ -229,6 +229,10 @@ export class Style extends StyleBase {
       if (value) {
         classNames.push(`${prefix}-[${value}]`);
       }
+    }
+
+    if (this.position) {
+      classNames.push(this.position);
     }
 
     if (this.fontFamily) {
