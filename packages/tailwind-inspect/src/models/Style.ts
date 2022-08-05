@@ -211,6 +211,8 @@ const tailwindPrefixes = [
   ["borderRightColor", "border-r"],
   ["borderBottomColor", "border-b"],
   ["borderLeftColor", "border-l"],
+  ["opacity", "opacity"],
+  ["cursor", "cursor"],
 ] as const;
 
 export class Style extends StyleBase {
