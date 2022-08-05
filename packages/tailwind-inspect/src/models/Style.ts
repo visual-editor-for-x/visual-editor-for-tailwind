@@ -198,6 +198,8 @@ const tailwindPrefixes = [
   ["paddingRight", "pr"],
   ["paddingBottom", "pb"],
   ["paddingLeft", "pl"],
+  ["columnGap", "gap-x"],
+  ["rowGap", "gap-y"],
   ["background", "bg"],
   ["fontWeight", "font"],
   ["fontSize", "text"],
@@ -302,6 +304,72 @@ export class Style extends StyleBase {
       } else {
         classNames.push(this.display);
       }
+    }
+
+    switch (this.flexDirection) {
+      case "row":
+        classNames.push("flex-row");
+        break;
+      case "row-reverse":
+        classNames.push("flex-row-reverse");
+        break;
+      case "column":
+        classNames.push("flex-col");
+        break;
+      case "column-reverse":
+        classNames.push("flex-col-reverse");
+        break;
+    }
+
+    switch (this.alignItems) {
+      case "flex-start":
+        classNames.push("items-start");
+        break;
+      case "flex-end":
+        classNames.push("items-end");
+        break;
+      case "center":
+        classNames.push("items-center");
+        break;
+      case "baseline":
+        classNames.push("items-baseline");
+        break;
+      case "stretch":
+        classNames.push("items-stretch");
+        break;
+    }
+
+    switch (this.justifyContent) {
+      case "flex-start":
+        classNames.push("justify-start");
+        break;
+      case "flex-end":
+        classNames.push("justify-end");
+        break;
+      case "center":
+        classNames.push("justify-center");
+        break;
+      case "space-between":
+        classNames.push("justify-between");
+        break;
+      case "space-around":
+        classNames.push("justify-around");
+        break;
+      case "space-evenly":
+        classNames.push("justify-evenly");
+        break;
+    }
+
+    switch (this.flexWrap) {
+      case "wrap":
+        classNames.push("flex-wrap");
+        break;
+      case "wrap-reverse":
+        classNames.push("flex-wrap-reverse");
+        break;
+      case "nowrap":
+        classNames.push("flex-nowrap");
+        break;
     }
 
     return classNames.join(" ");
