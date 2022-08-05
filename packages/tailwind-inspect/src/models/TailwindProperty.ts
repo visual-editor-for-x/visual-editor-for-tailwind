@@ -45,11 +45,11 @@ export class FontFamilyTailwindProperty implements ITailwindProperty {
 }
 
 export class KeywordTailwindProperty implements ITailwindProperty {
-  constructor(cssName: StyleKey, keywordCSSToTailwind: Map<string, string>) {
+  constructor(cssName: StyleKey, keywordCSSToTailwind: Record<string, string>) {
     this.cssName = cssName;
-    this.keywordCSSToTailwind = keywordCSSToTailwind;
+    this.keywordCSSToTailwind = new Map(Object.entries(keywordCSSToTailwind));
     this.keywordTailwindToCSS = new Map(
-      Array.from(keywordCSSToTailwind.entries()).map(([key, value]) => [
+      Array.from(this.keywordCSSToTailwind.entries()).map(([key, value]) => [
         value,
         key,
       ])
@@ -98,6 +98,16 @@ export const tailwindProperties: ITailwindProperty[] = [
   new JITTailwindProperty("lineHeight", "leading"),
   new JITTailwindProperty("letterSpacing", "tracking"),
   new JITTailwindProperty("color", "text"),
+  new KeywordTailwindProperty("textAlign", {
+    left: "text-left",
+    center: "text-center",
+    right: "text-right",
+    justify: "text-justify",
+  }),
+  new KeywordTailwindProperty("fontStyle", {
+    normal: "not-italic",
+    italic: "italic",
+  }),
   new JITTailwindProperty("borderTopWidth", "border-t"),
   new JITTailwindProperty("borderRightWidth", "border-r"),
   new JITTailwindProperty("borderBottomWidth", "border-b"),

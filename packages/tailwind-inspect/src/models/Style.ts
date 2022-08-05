@@ -218,16 +218,6 @@ export class Style extends StyleBase {
       classNames.push(this.position);
     }
 
-    if (this.textAlign) {
-      classNames.push(`text-${this.textAlign}`);
-    }
-    if (this.fontStyle) {
-      if (this.fontStyle === "italic") {
-        classNames.push("italic");
-      } else {
-        classNames.push("not-italic");
-      }
-    }
     switch (this.textDecorationLine) {
       case "underline":
         classNames.push("underline");
