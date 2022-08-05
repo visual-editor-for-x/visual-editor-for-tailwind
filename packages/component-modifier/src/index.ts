@@ -17,27 +17,42 @@ export const getAttributeModifiedCode = (arg: {
 
   traverse(ast, {
     enter(path) {
-      const isUpdate =
-        path.isJSXAttribute({ name: attribute }) &&
-        path.parent.loc?.start.line === targetComponentLine;
+      const isRemove =
+        value === "" &&
+        path.node.loc?.start.line === targetComponentLine &&
+        path.isJSXOpeningElement();
 
-      const isAdd =
-        path.isJSXOpeningElement() &&
-        path.node.loc?.start.line === targetComponentLine;
+      if (isRemove) {
+        path.node.attributes = path.node.attributes.filter(
+          (attr) => attr.type === "JSXAttribute" && attr.name.name !== attribute
+        );
+        path.stop();
+        return;
+      }
+
+      const isUpdate =
+        path.parent.loc?.start.line === targetComponentLine &&
+        path.isJSXAttribute({ name: attribute });
 
       if (isUpdate) {
         path.node.value = { type: "StringLiteral", value };
+        path.stop();
         return;
       }
+
+      const isAdd =
+        path.node.loc?.start.line === targetComponentLine &&
+        path.isJSXOpeningElement();
+
       if (isAdd) {
         path.node.attributes.unshift({
           type: "JSXAttribute",
           name: { type: "JSXIdentifier", name: attribute },
           value: { type: "StringLiteral", value },
         });
+        path.stop();
         return;
       }
-      // TODO remove
     },
   });
 

@@ -12,46 +12,60 @@ describe("getAttributeModifiedCode", () => {
 
   const testCases = [
     {
-      name: "jsx, one line component",
+      name: "jsx, update one line component",
       inputCode: getTestCodeByFileName("Card.jsx"),
       targetComponentLine: 7,
       attribute: "className",
       value: "mod text-xl mb-2",
     },
     {
-      name: "jsx, multi line component",
+      name: "jsx, update multi line component",
       inputCode: getTestCodeByFileName("Card.jsx"),
       targetComponentLine: 8,
       attribute: "className",
       value: "mod text-base",
     },
     {
-      name: "tsx, one line component",
+      name: "tsx, update one line component",
       inputCode: getTestCodeByFileName("Card.tsx"),
       targetComponentLine: 16,
       attribute: "className",
       value: "mod text-xl mb-2",
     },
     {
-      name: "tsx, multi line component",
+      name: "tsx, update multi line component",
       inputCode: getTestCodeByFileName("Card.tsx"),
       targetComponentLine: 17,
       attribute: "className",
       value: "mod text-base",
     },
     {
-      name: "jsx, no className one line component",
+      name: "jsx, add one line component",
       inputCode: getTestCodeByFileName("NoClassNameComponent.jsx"),
       targetComponentLine: 5,
       attribute: "className",
       value: "mod",
     },
     {
-      name: "jsx, no className multi line component",
+      name: "jsx, add multi line component",
       inputCode: getTestCodeByFileName("NoClassNameComponent.jsx"),
       targetComponentLine: 6,
       attribute: "className",
       value: "mod",
+    },
+    {
+      name: "jsx, remove one line component",
+      inputCode: getTestCodeByFileName("Card.jsx"),
+      targetComponentLine: 4,
+      attribute: "className",
+      value: "",
+    },
+    {
+      name: "jsx, remove multi line component",
+      inputCode: getTestCodeByFileName("Card.jsx"),
+      targetComponentLine: 8,
+      attribute: "className",
+      value: "",
     },
   ];
 

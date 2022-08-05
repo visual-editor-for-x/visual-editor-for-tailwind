@@ -1,6 +1,108 @@
 // Vitest Snapshot v1
 
-exports[`getAttributeModifiedCode > jsx, multi line component 1`] = `
+exports[`getAttributeModifiedCode > jsx, add multi line component 1`] = `
+"import React from \\"react\\";
+
+const NoClassNameComponent = () => <div>
+    <div>title</div>
+    <p className=\\"mod\\" data-1=\\"1\\" data-2=\\"2\\" data-3=\\"3\\" data-4=\\"4\\" data-5=\\"5\\" data-6=\\"6\\" data-7=\\"7\\" data-8=\\"8\\" data-9=\\"9\\" data-10=\\"10\\">
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus
+      quia, nulla! Maiores et perferendis eaque, exercitationem praesentium
+      nihil.
+    </p>
+  </div>;
+
+export default NoClassNameComponent;"
+`;
+
+exports[`getAttributeModifiedCode > jsx, add one line component 1`] = `
+"import React from \\"react\\";
+
+const NoClassNameComponent = () => <div>
+    <div className=\\"mod\\">title</div>
+    <p data-1=\\"1\\" data-2=\\"2\\" data-3=\\"3\\" data-4=\\"4\\" data-5=\\"5\\" data-6=\\"6\\" data-7=\\"7\\" data-8=\\"8\\" data-9=\\"9\\" data-10=\\"10\\">
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus
+      quia, nulla! Maiores et perferendis eaque, exercitationem praesentium
+      nihil.
+    </p>
+  </div>;
+
+export default NoClassNameComponent;"
+`;
+
+exports[`getAttributeModifiedCode > jsx, remove multi line component 1`] = `
+"import React from \\"react\\";
+
+const Card = ({
+  title,
+  image,
+  onClick
+}) => <div className=\\"max-w-sm rounded overflow-hidden shadow-lg\\" onClick={onClick}>
+    <img className=\\"w-full\\" src={image} alt=\\"Sunset in the mountains\\" />
+    <div className=\\"px-6 py-4\\">
+      <div className=\\"font-bold text-xl mb-2\\">{title}</div>
+      <p style={{
+      alignItems: \\"center\\",
+      textAlign: \\"center\\"
+    }}>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus
+        quia, nulla! Maiores et perferendis eaque, exercitationem praesentium
+        nihil.
+      </p>
+    </div>
+    <div className=\\"px-6 pt-4 pb-2\\">
+      <span className=\\"inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2\\">
+        #photography
+      </span>
+      <span className=\\"inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2\\">
+        #travel
+      </span>
+      <span className=\\"inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2\\">
+        #winter
+      </span>
+    </div>
+  </div>;
+
+export default Card;"
+`;
+
+exports[`getAttributeModifiedCode > jsx, remove one line component 1`] = `
+"import React from \\"react\\";
+
+const Card = ({
+  title,
+  image,
+  onClick
+}) => <div onClick={onClick}>
+    <img className=\\"w-full\\" src={image} alt=\\"Sunset in the mountains\\" />
+    <div className=\\"px-6 py-4\\">
+      <div className=\\"font-bold text-xl mb-2\\">{title}</div>
+      <p style={{
+      alignItems: \\"center\\",
+      textAlign: \\"center\\"
+    }} className=\\"text-gray-700 text-base\\">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus
+        quia, nulla! Maiores et perferendis eaque, exercitationem praesentium
+        nihil.
+      </p>
+    </div>
+    <div className=\\"px-6 pt-4 pb-2\\">
+      <span className=\\"inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2\\">
+        #photography
+      </span>
+      <span className=\\"inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2\\">
+        #travel
+      </span>
+      <span className=\\"inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2\\">
+        #winter
+      </span>
+    </div>
+  </div>;
+
+export default Card;"
+`;
+
+exports[`getAttributeModifiedCode > jsx, update multi line component 1`] = `
 "import React from \\"react\\";
 
 const Card = ({
@@ -36,37 +138,7 @@ const Card = ({
 export default Card;"
 `;
 
-exports[`getAttributeModifiedCode > jsx, no className multi line component 1`] = `
-"import React from \\"react\\";
-
-const NoClassNameComponent = () => <div>
-    <div>title</div>
-    <p className=\\"mod\\" data-1=\\"1\\" data-2=\\"2\\" data-3=\\"3\\" data-4=\\"4\\" data-5=\\"5\\" data-6=\\"6\\" data-7=\\"7\\" data-8=\\"8\\" data-9=\\"9\\" data-10=\\"10\\">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus
-      quia, nulla! Maiores et perferendis eaque, exercitationem praesentium
-      nihil.
-    </p>
-  </div>;
-
-export default NoClassNameComponent;"
-`;
-
-exports[`getAttributeModifiedCode > jsx, no className one line component 1`] = `
-"import React from \\"react\\";
-
-const NoClassNameComponent = () => <div>
-    <div className=\\"mod\\">title</div>
-    <p data-1=\\"1\\" data-2=\\"2\\" data-3=\\"3\\" data-4=\\"4\\" data-5=\\"5\\" data-6=\\"6\\" data-7=\\"7\\" data-8=\\"8\\" data-9=\\"9\\" data-10=\\"10\\">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus
-      quia, nulla! Maiores et perferendis eaque, exercitationem praesentium
-      nihil.
-    </p>
-  </div>;
-
-export default NoClassNameComponent;"
-`;
-
-exports[`getAttributeModifiedCode > jsx, one line component 1`] = `
+exports[`getAttributeModifiedCode > jsx, update one line component 1`] = `
 "import React from \\"react\\";
 
 const Card = ({
@@ -102,7 +174,7 @@ const Card = ({
 export default Card;"
 `;
 
-exports[`getAttributeModifiedCode > tsx, multi line component 1`] = `
+exports[`getAttributeModifiedCode > tsx, update multi line component 1`] = `
 "// @ts-nocheck
 import React from \\"react\\";
 
@@ -143,7 +215,7 @@ const Card = ({
 export default Card;"
 `;
 
-exports[`getAttributeModifiedCode > tsx, one line component 1`] = `
+exports[`getAttributeModifiedCode > tsx, update one line component 1`] = `
 "// @ts-nocheck
 import React from \\"react\\";
 
