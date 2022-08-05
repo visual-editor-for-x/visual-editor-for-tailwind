@@ -203,6 +203,14 @@ const tailwindPrefixes = [
   ["lineHeight", "leading"],
   ["letterSpacing", "tracking"],
   ["color", "text"],
+  ["borderTopWidth", "border-t"],
+  ["borderRightWidth", "border-r"],
+  ["borderBottomWidth", "border-b"],
+  ["borderLeftWidth", "border-l"],
+  ["borderTopColor", "border-t"],
+  ["borderRightColor", "border-r"],
+  ["borderBottomColor", "border-b"],
+  ["borderLeftColor", "border-l"],
 ] as const;
 
 export class Style extends StyleBase {
@@ -249,18 +257,33 @@ export class Style extends StyleBase {
         classNames.push("not-italic");
       }
     }
-    if (this.textDecorationLine) {
-      switch (this.textDecorationLine) {
-        case "underline":
-          classNames.push("underline");
-          break;
-        case "line-through":
-          classNames.push("line-through");
-          break;
-        case "none":
-          classNames.push("no-underline");
-          break;
-      }
+    switch (this.textDecorationLine) {
+      case "underline":
+        classNames.push("underline");
+        break;
+      case "line-through":
+        classNames.push("line-through");
+        break;
+      case "none":
+        classNames.push("no-underline");
+        break;
+    }
+    switch (this.borderStyle) {
+      case "dashed":
+        classNames.push("border-dashed");
+        break;
+      case "dotted":
+        classNames.push("border-dotted");
+        break;
+      case "double":
+        classNames.push("border-double");
+        break;
+      case "solid":
+        classNames.push("border-solid");
+        break;
+      case "none":
+        classNames.push("border-none");
+        break;
     }
 
     return classNames.join(" ");
