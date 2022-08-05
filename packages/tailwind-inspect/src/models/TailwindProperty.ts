@@ -29,6 +29,21 @@ export class JITTailwindProperty implements ITailwindProperty {
   }
 }
 
+export class FontFamilyTailwindProperty implements ITailwindProperty {
+  readonly cssName = "fontFamily";
+
+  toTailwind(cssValue: string): string {
+    return `font-['${cssValue.replace(" ", "_")}']`;
+  }
+
+  fromTailwind(tailwindValue: string): string | undefined {
+    const match = tailwindValue.match(new RegExp(`font-\\['([^\\]]+)\\']`));
+    if (match) {
+      return match[1].replace("_", " ");
+    }
+  }
+}
+
 export class KeywordTailwindProperty implements ITailwindProperty {
   constructor(cssName: StyleKey, keywordCSSToTailwind: Map<string, string>) {
     this.cssName = cssName;
@@ -77,6 +92,7 @@ export const tailwindProperties: ITailwindProperty[] = [
   new JITTailwindProperty("columnGap", "gap-x"),
   new JITTailwindProperty("rowGap", "gap-y"),
   new JITTailwindProperty("background", "bg"),
+  new FontFamilyTailwindProperty(),
   new JITTailwindProperty("fontWeight", "font"),
   new JITTailwindProperty("fontSize", "text"),
   new JITTailwindProperty("lineHeight", "leading"),

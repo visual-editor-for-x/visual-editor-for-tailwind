@@ -218,10 +218,6 @@ export class Style extends StyleBase {
       classNames.push(this.position);
     }
 
-    if (this.fontFamily) {
-      classNames.push(`font-['${this.fontFamily.replace(" ", "_")}']`);
-    }
-
     if (this.textAlign) {
       classNames.push(`text-${this.textAlign}`);
     }
