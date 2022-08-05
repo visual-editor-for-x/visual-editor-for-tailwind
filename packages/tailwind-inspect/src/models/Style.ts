@@ -201,6 +201,7 @@ const tailwindPrefixes = [
   ["fontWeight", "font"],
   ["fontSize", "text"],
   ["lineHeight", "leading"],
+  ["letterSpacing", "tracking"],
   ["color", "text"],
 ] as const;
 
@@ -232,6 +233,30 @@ export class Style extends StyleBase {
 
     if (this.fontFamily) {
       classNames.push(`font-['${this.fontFamily.replace(" ", "_")}']`);
+    }
+
+    if (this.textAlign) {
+      classNames.push(`text-${this.textAlign}`);
+    }
+    if (this.fontStyle) {
+      if (this.fontStyle === "italic") {
+        classNames.push("italic");
+      } else {
+        classNames.push("not-italic");
+      }
+    }
+    if (this.textDecorationLine) {
+      switch (this.textDecorationLine) {
+        case "underline":
+          classNames.push("underline");
+          break;
+        case "line-through":
+          classNames.push("line-through");
+          break;
+        case "none":
+          classNames.push("no-underline");
+          break;
+      }
     }
 
     return classNames.join(" ");
