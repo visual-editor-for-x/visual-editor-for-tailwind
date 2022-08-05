@@ -1,6 +1,7 @@
 import { MIXED, sameOrMixed } from "@seanchas116/paintkit/src/util/Mixed";
 import { kebabCase } from "lodash-es";
 import { computed, makeObservable, observable } from "mobx";
+import { tailwindProperties } from "./TailwindProperty";
 
 export const textStyleKeys = [
   "color",
@@ -179,45 +180,6 @@ const StyleBase: {
   }
 };
 
-const tailwindPrefixes = [
-  ["marginTop", "mt"],
-  ["marginRight", "mr"],
-  ["marginBottom", "mb"],
-  ["marginLeft", "ml"],
-  ["top", "top"],
-  ["right", "right"],
-  ["bottom", "bottom"],
-  ["left", "left"],
-  ["width", "w"],
-  ["height", "h"],
-  ["borderTopLeftRadius", "rounded-tl"],
-  ["borderTopRightRadius", "rounded-tr"],
-  ["borderBottomRightRadius", "rounded-br"],
-  ["borderBottomLeftRadius", "rounded-bl"],
-  ["paddingTop", "pt"],
-  ["paddingRight", "pr"],
-  ["paddingBottom", "pb"],
-  ["paddingLeft", "pl"],
-  ["columnGap", "gap-x"],
-  ["rowGap", "gap-y"],
-  ["background", "bg"],
-  ["fontWeight", "font"],
-  ["fontSize", "text"],
-  ["lineHeight", "leading"],
-  ["letterSpacing", "tracking"],
-  ["color", "text"],
-  ["borderTopWidth", "border-t"],
-  ["borderRightWidth", "border-r"],
-  ["borderBottomWidth", "border-b"],
-  ["borderLeftWidth", "border-l"],
-  ["borderTopColor", "border-t"],
-  ["borderRightColor", "border-r"],
-  ["borderBottomColor", "border-b"],
-  ["borderLeftColor", "border-l"],
-  ["opacity", "opacity"],
-  ["cursor", "cursor"],
-] as const;
-
 export class Style extends StyleBase {
   loadComputedStyle(dom: Element): void {
     const computedStyle = getComputedStyle(dom);
@@ -230,12 +192,10 @@ export class Style extends StyleBase {
     const classNames = className.split(/\s+/);
 
     for (const className of classNames) {
-      // TODO: font family
-
-      for (const [key, prefix] of tailwindPrefixes) {
-        const match = className.match(new RegExp(`${prefix}-\\[([^\\]]+)\\]`));
-        if (match) {
-          this[key] = match[1];
+      for (const prop of tailwindProperties) {
+        const value = prop.fromTailwind(className);
+        if (value !== undefined) {
+          this[prop.cssName] = value;
         }
       }
     }
@@ -244,10 +204,13 @@ export class Style extends StyleBase {
   toTailwind(): string {
     const classNames: string[] = [];
 
-    for (const [key, prefix] of tailwindPrefixes) {
-      const value = this[key];
-      if (value) {
-        classNames.push(`${prefix}-[${value}]`);
+    for (const prop of tailwindProperties) {
+      const value = this[prop.cssName];
+      if (value !== undefined) {
+        const className = prop.toTailwind(value);
+        if (className !== undefined) {
+          classNames.push(className);
+        }
       }
     }
 
