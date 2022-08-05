@@ -7,13 +7,19 @@ export interface ITailwindProperty {
 }
 
 export class JITTailwindProperty implements ITailwindProperty {
-  constructor(cssName: AllStyleKey, tailwindName: string) {
+  constructor(
+    cssName: AllStyleKey,
+    tailwindName: string,
+    valueRegExp?: RegExp
+  ) {
     this.tailwindName = tailwindName;
     this.cssName = cssName;
+    this.valueRegExp = valueRegExp;
   }
 
   readonly tailwindName: string;
   readonly cssName: AllStyleKey;
+  readonly valueRegExp: RegExp | undefined;
 
   toTailwind(cssValue: string): string {
     return `${this.tailwindName}-[${cssValue}]`;
@@ -24,7 +30,11 @@ export class JITTailwindProperty implements ITailwindProperty {
       new RegExp(`${this.tailwindName}-\\[([^\\]]+)\\]`)
     );
     if (match) {
-      return match[1];
+      const value = match[1];
+      if (this.valueRegExp && !this.valueRegExp.test(value)) {
+        return undefined;
+      }
+      return value;
     }
   }
 }
@@ -146,12 +156,12 @@ export const tailwindProperties: ITailwindProperty[] = [
 
   // text
 
+  new JITTailwindProperty("color", "text", /^#/),
   new FontFamilyTailwindProperty(),
-  new JITTailwindProperty("fontWeight", "font"),
+  new JITTailwindProperty("fontWeight", "font", /^[^']/),
   new JITTailwindProperty("fontSize", "text"),
   new JITTailwindProperty("lineHeight", "leading"),
   new JITTailwindProperty("letterSpacing", "tracking"),
-  new JITTailwindProperty("color", "text"),
   new KeywordTailwindProperty("textAlign", {
     left: "text-left",
     center: "text-center",

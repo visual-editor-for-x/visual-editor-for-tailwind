@@ -196,6 +196,7 @@ export class Style extends StyleBase {
         const value = prop.fromTailwind(className);
         if (value !== undefined) {
           this[prop.cssName] = value;
+          break;
         }
       }
     }
