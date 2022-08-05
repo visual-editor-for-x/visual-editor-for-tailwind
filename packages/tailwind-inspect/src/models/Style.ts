@@ -288,6 +288,14 @@ export class Style extends StyleBase {
         break;
     }
 
+    if (this.display) {
+      if (this.display === "none") {
+        classNames.push("hidden");
+      } else {
+        classNames.push(this.display);
+      }
+    }
+
     return classNames.join(" ");
   }
 }
