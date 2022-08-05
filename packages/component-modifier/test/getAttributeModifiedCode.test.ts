@@ -1,12 +1,12 @@
 import { test, describe, expect } from "vitest";
 import { readFileSync } from "fs";
-import { getModifiedCode } from "../src";
+import { getAttributeModifiedCode } from "../src";
 import path from "path";
 
-describe("getModifiedCode", () => {
+describe("getAttributeModifiedCode", () => {
   const getTestCodeByFileName = (fileName: string) =>
     readFileSync(
-      path.join(__dirname, "./data/getModifiedCode", fileName),
+      path.join(__dirname, "./data/getAttributeModifiedCode", fileName),
       "utf8"
     );
 
@@ -39,24 +39,29 @@ describe("getModifiedCode", () => {
       attribute: "className",
       value: "mod text-base",
     },
+    {
+      name: "jsx, no className one line component",
+      inputCode: getTestCodeByFileName("NoClassNameComponent.jsx"),
+      targetComponentLine: 5,
+      attribute: "className",
+      value: "mod",
+    },
+    {
+      name: "jsx, no className multi line component",
+      inputCode: getTestCodeByFileName("NoClassNameComponent.jsx"),
+      targetComponentLine: 6,
+      attribute: "className",
+      value: "mod",
+    },
   ];
 
-  testCases.forEach((testCase) => {
-    const {
-      name,
-      inputCode: code,
-      targetComponentLine,
-      attribute,
-      value,
-    } = testCase;
-    test(name, () => {
-      const result = getModifiedCode({
-        code,
-        targetComponentLine,
-        attribute,
-        value,
+  testCases.forEach(
+    ({ name, inputCode: code, targetComponentLine, attribute, value }) => {
+      test(name, () => {
+        const arg = { code, targetComponentLine, attribute, value };
+        const result = getAttributeModifiedCode(arg);
+        expect(result).toMatchSnapshot();
       });
-      expect(result).toMatchSnapshot();
-    });
-  });
+    }
+  );
 });

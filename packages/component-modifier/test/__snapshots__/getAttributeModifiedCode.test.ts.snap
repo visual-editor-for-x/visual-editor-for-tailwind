@@ -1,6 +1,6 @@
 // Vitest Snapshot v1
 
-exports[`getModifiedCode > jsx, multi line component 1`] = `
+exports[`getAttributeModifiedCode > jsx, multi line component 1`] = `
 "import React from \\"react\\";
 
 const Card = ({
@@ -11,10 +11,10 @@ const Card = ({
     <img className=\\"w-full\\" src={image} alt=\\"Sunset in the mountains\\" />
     <div className=\\"px-6 py-4\\">
       <div className=\\"font-bold text-xl mb-2\\">{title}</div>
-      <p style={{
+      <p className=\\"mod text-base\\" style={{
       alignItems: \\"center\\",
       textAlign: \\"center\\"
-    }} className=\\"mod text-base\\">
+    }} className=\\"text-gray-700 text-base\\">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus
         quia, nulla! Maiores et perferendis eaque, exercitationem praesentium
         nihil.
@@ -36,7 +36,37 @@ const Card = ({
 export default Card;"
 `;
 
-exports[`getModifiedCode > jsx, one line component 1`] = `
+exports[`getAttributeModifiedCode > jsx, no className multi line component 1`] = `
+"import React from \\"react\\";
+
+const NoClassNameComponent = () => <div>
+    <div>title</div>
+    <p className=\\"mod\\" data-1=\\"1\\" data-2=\\"2\\" data-3=\\"3\\" data-4=\\"4\\" data-5=\\"5\\" data-6=\\"6\\" data-7=\\"7\\" data-8=\\"8\\" data-9=\\"9\\" data-10=\\"10\\">
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus
+      quia, nulla! Maiores et perferendis eaque, exercitationem praesentium
+      nihil.
+    </p>
+  </div>;
+
+export default NoClassNameComponent;"
+`;
+
+exports[`getAttributeModifiedCode > jsx, no className one line component 1`] = `
+"import React from \\"react\\";
+
+const NoClassNameComponent = () => <div>
+    <div className=\\"mod\\">title</div>
+    <p data-1=\\"1\\" data-2=\\"2\\" data-3=\\"3\\" data-4=\\"4\\" data-5=\\"5\\" data-6=\\"6\\" data-7=\\"7\\" data-8=\\"8\\" data-9=\\"9\\" data-10=\\"10\\">
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus
+      quia, nulla! Maiores et perferendis eaque, exercitationem praesentium
+      nihil.
+    </p>
+  </div>;
+
+export default NoClassNameComponent;"
+`;
+
+exports[`getAttributeModifiedCode > jsx, one line component 1`] = `
 "import React from \\"react\\";
 
 const Card = ({
@@ -46,7 +76,7 @@ const Card = ({
 }) => <div className=\\"max-w-sm rounded overflow-hidden shadow-lg\\" onClick={onClick}>
     <img className=\\"w-full\\" src={image} alt=\\"Sunset in the mountains\\" />
     <div className=\\"px-6 py-4\\">
-      <div className=\\"mod text-xl mb-2\\">{title}</div>
+      <div className=\\"mod text-xl mb-2\\" className=\\"font-bold text-xl mb-2\\">{title}</div>
       <p style={{
       alignItems: \\"center\\",
       textAlign: \\"center\\"
@@ -72,7 +102,7 @@ const Card = ({
 export default Card;"
 `;
 
-exports[`getModifiedCode > tsx, multi line component 1`] = `
+exports[`getAttributeModifiedCode > tsx, multi line component 1`] = `
 "// @ts-nocheck
 import React from \\"react\\";
 
@@ -88,10 +118,10 @@ const Card = ({
     <img className=\\"w-full\\" src={image} alt=\\"Sunset in the mountains\\" />
     <div className=\\"px-6 py-4\\">
       <div className=\\"font-bold text-xl mb-2\\">{title}</div>
-      <p style={{
+      <p className=\\"mod text-base\\" style={{
       alignItems: \\"center\\",
       textAlign: \\"center\\"
-    }} className=\\"mod text-base\\">
+    }} className=\\"text-gray-700 text-base\\">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus
         quia, nulla! Maiores et perferendis eaque, exercitationem praesentium
         nihil.
@@ -113,7 +143,7 @@ const Card = ({
 export default Card;"
 `;
 
-exports[`getModifiedCode > tsx, one line component 1`] = `
+exports[`getAttributeModifiedCode > tsx, one line component 1`] = `
 "// @ts-nocheck
 import React from \\"react\\";
 
@@ -128,7 +158,7 @@ const Card = ({
 }) => <div className=\\"max-w-sm rounded overflow-hidden shadow-lg\\" onClick={onClick}>
     <img className=\\"w-full\\" src={image} alt=\\"Sunset in the mountains\\" />
     <div className=\\"px-6 py-4\\">
-      <div className=\\"mod text-xl mb-2\\">{title}</div>
+      <div className=\\"mod text-xl mb-2\\" className=\\"font-bold text-xl mb-2\\">{title}</div>
       <p style={{
       alignItems: \\"center\\",
       textAlign: \\"center\\"
