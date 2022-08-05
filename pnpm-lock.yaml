@@ -245,7 +245,7 @@ importers:
       vite: 3.0.4
       vitest: 0.19.1
 
-  packages/visual-editor-for-tailwind:
+  packages/vscode:
     specifiers:
       '@types/glob': ^7.2.0
       '@types/mocha': ^9.1.1
