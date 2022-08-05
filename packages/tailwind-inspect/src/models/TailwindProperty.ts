@@ -1,4 +1,4 @@
-import { AllStyleKey, StyleKey } from "./Style";
+import { AllStyleKey } from "./Style";
 
 export interface ITailwindProperty {
   cssName: AllStyleKey;
@@ -58,7 +58,7 @@ export class KeywordTailwindProperty implements ITailwindProperty {
       ])
     );
   }
-  readonly cssName: StyleKey;
+  readonly cssName: AllStyleKey;
   readonly keywords: [string, string][] = [];
 
   readonly keywordTailwindToCSS: Map<string, string>;
