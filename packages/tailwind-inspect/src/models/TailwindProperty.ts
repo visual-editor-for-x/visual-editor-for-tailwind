@@ -1,19 +1,19 @@
-import { StyleKey } from "./Style";
+import { AllStyleKey, StyleKey } from "./Style";
 
 export interface ITailwindProperty {
-  cssName: StyleKey;
+  cssName: AllStyleKey;
   toTailwind(cssValue: string): string | undefined;
   fromTailwind(tailwindValue: string): string | undefined;
 }
 
 export class JITTailwindProperty implements ITailwindProperty {
-  constructor(cssName: StyleKey, tailwindName: string) {
+  constructor(cssName: AllStyleKey, tailwindName: string) {
     this.tailwindName = tailwindName;
     this.cssName = cssName;
   }
 
   readonly tailwindName: string;
-  readonly cssName: StyleKey;
+  readonly cssName: AllStyleKey;
 
   toTailwind(cssValue: string): string {
     return `${this.tailwindName}-[${cssValue}]`;
@@ -45,7 +45,10 @@ export class FontFamilyTailwindProperty implements ITailwindProperty {
 }
 
 export class KeywordTailwindProperty implements ITailwindProperty {
-  constructor(cssName: StyleKey, keywordCSSToTailwind: Record<string, string>) {
+  constructor(
+    cssName: AllStyleKey,
+    keywordCSSToTailwind: Record<string, string>
+  ) {
     this.cssName = cssName;
     this.keywordCSSToTailwind = new Map(Object.entries(keywordCSSToTailwind));
     this.keywordTailwindToCSS = new Map(
@@ -71,27 +74,72 @@ export class KeywordTailwindProperty implements ITailwindProperty {
 }
 
 export const tailwindProperties: ITailwindProperty[] = [
-  new JITTailwindProperty("marginTop", "mt"),
-  new JITTailwindProperty("marginRight", "mr"),
-  new JITTailwindProperty("marginBottom", "mb"),
-  new JITTailwindProperty("marginLeft", "ml"),
+  new KeywordTailwindProperty("position", {
+    static: "static",
+    relative: "relative",
+    absolute: "absolute",
+    fixed: "fixed",
+    sticky: "sticky",
+  }),
   new JITTailwindProperty("top", "top"),
   new JITTailwindProperty("right", "right"),
   new JITTailwindProperty("bottom", "bottom"),
   new JITTailwindProperty("left", "left"),
+  new JITTailwindProperty("marginTop", "mt"),
+  new JITTailwindProperty("marginRight", "mr"),
+  new JITTailwindProperty("marginBottom", "mb"),
+  new JITTailwindProperty("marginLeft", "ml"),
+
   new JITTailwindProperty("width", "w"),
   new JITTailwindProperty("height", "h"),
   new JITTailwindProperty("borderTopLeftRadius", "rounded-tl"),
   new JITTailwindProperty("borderTopRightRadius", "rounded-tr"),
   new JITTailwindProperty("borderBottomRightRadius", "rounded-br"),
   new JITTailwindProperty("borderBottomLeftRadius", "rounded-bl"),
+
+  new KeywordTailwindProperty("display", {
+    inline: "inline",
+    block: "block",
+    "inline-block": "inline-block",
+    flex: "flex",
+    "inline-flex": "inline-flex",
+    none: "hidden",
+  }),
   new JITTailwindProperty("paddingTop", "pt"),
   new JITTailwindProperty("paddingRight", "pr"),
   new JITTailwindProperty("paddingBottom", "pb"),
   new JITTailwindProperty("paddingLeft", "pl"),
+  new KeywordTailwindProperty("flexDirection", {
+    row: "flex-row",
+    "row-reverse": "flex-row-reverse",
+    column: "flex-col",
+    "column-reverse": "flex-col-reverse",
+  }),
+  new KeywordTailwindProperty("flexWrap", {
+    wrap: "flex-wrap",
+    "wrap-reverse": "flex-wrap-reverse",
+    nowrap: "flex-nowrap",
+  }),
+  new KeywordTailwindProperty("alignItems", {
+    "flex-start": "items-start",
+    "flex-end": "items-end",
+    center: "items-center",
+    baseline: "items-baseline",
+    stretch: "items-stretch",
+  }),
+  new KeywordTailwindProperty("justifyContent", {
+    "flex-start": "justify-start",
+    "flex-end": "justify-end",
+    center: "justify-center",
+    "space-between": "justify-between",
+    "space-around": "justify-around",
+    "space-evenly": "justify-evenly",
+  }),
   new JITTailwindProperty("columnGap", "gap-x"),
   new JITTailwindProperty("rowGap", "gap-y"),
+
   new JITTailwindProperty("background", "bg"),
+
   new FontFamilyTailwindProperty(),
   new JITTailwindProperty("fontWeight", "font"),
   new JITTailwindProperty("fontSize", "text"),
@@ -107,6 +155,19 @@ export const tailwindProperties: ITailwindProperty[] = [
   new KeywordTailwindProperty("fontStyle", {
     normal: "not-italic",
     italic: "italic",
+  }),
+  new KeywordTailwindProperty("textDecorationLine", {
+    none: "no-underline",
+    underline: "underline",
+    "line-through": "line-through",
+  }),
+
+  new KeywordTailwindProperty("borderStyle", {
+    none: "border-none",
+    solid: "border-solid",
+    double: "border-double",
+    dotted: "border-dotted",
+    dashed: "border-dashed",
   }),
   new JITTailwindProperty("borderTopWidth", "border-t"),
   new JITTailwindProperty("borderRightWidth", "border-r"),

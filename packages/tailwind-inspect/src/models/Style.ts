@@ -206,120 +206,12 @@ export class Style extends StyleBase {
 
     for (const prop of tailwindProperties) {
       const value = this[prop.cssName];
-      if (value !== undefined) {
+      if (value !== undefined && value !== MIXED) {
         const className = prop.toTailwind(value);
         if (className !== undefined) {
           classNames.push(className);
         }
       }
-    }
-
-    if (this.position) {
-      classNames.push(this.position);
-    }
-
-    switch (this.textDecorationLine) {
-      case "underline":
-        classNames.push("underline");
-        break;
-      case "line-through":
-        classNames.push("line-through");
-        break;
-      case "none":
-        classNames.push("no-underline");
-        break;
-    }
-    switch (this.borderStyle) {
-      case "dashed":
-        classNames.push("border-dashed");
-        break;
-      case "dotted":
-        classNames.push("border-dotted");
-        break;
-      case "double":
-        classNames.push("border-double");
-        break;
-      case MIXED:
-      case "solid":
-        classNames.push("border-solid");
-        break;
-      case "none":
-        classNames.push("border-none");
-        break;
-    }
-
-    if (this.display) {
-      if (this.display === "none") {
-        classNames.push("hidden");
-      } else {
-        classNames.push(this.display);
-      }
-    }
-
-    switch (this.flexDirection) {
-      case "row":
-        classNames.push("flex-row");
-        break;
-      case "row-reverse":
-        classNames.push("flex-row-reverse");
-        break;
-      case "column":
-        classNames.push("flex-col");
-        break;
-      case "column-reverse":
-        classNames.push("flex-col-reverse");
-        break;
-    }
-
-    switch (this.alignItems) {
-      case "flex-start":
-        classNames.push("items-start");
-        break;
-      case "flex-end":
-        classNames.push("items-end");
-        break;
-      case "center":
-        classNames.push("items-center");
-        break;
-      case "baseline":
-        classNames.push("items-baseline");
-        break;
-      case "stretch":
-        classNames.push("items-stretch");
-        break;
-    }
-
-    switch (this.justifyContent) {
-      case "flex-start":
-        classNames.push("justify-start");
-        break;
-      case "flex-end":
-        classNames.push("justify-end");
-        break;
-      case "center":
-        classNames.push("justify-center");
-        break;
-      case "space-between":
-        classNames.push("justify-between");
-        break;
-      case "space-around":
-        classNames.push("justify-around");
-        break;
-      case "space-evenly":
-        classNames.push("justify-evenly");
-        break;
-    }
-
-    switch (this.flexWrap) {
-      case "wrap":
-        classNames.push("flex-wrap");
-        break;
-      case "wrap-reverse":
-        classNames.push("flex-wrap-reverse");
-        break;
-      case "nowrap":
-        classNames.push("flex-nowrap");
-        break;
     }
 
     return classNames.join(" ");
