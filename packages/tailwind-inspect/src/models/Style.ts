@@ -290,6 +290,7 @@ export class Style extends StyleBase {
       case "double":
         classNames.push("border-double");
         break;
+      case MIXED:
       case "solid":
         classNames.push("border-solid");
         break;
