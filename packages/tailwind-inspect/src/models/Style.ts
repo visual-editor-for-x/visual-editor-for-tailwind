@@ -1,4 +1,5 @@
 import { MIXED, sameOrMixed } from "@seanchas116/paintkit/src/util/Mixed";
+import { kebabCase } from "lodash-es";
 import { computed, makeObservable, observable } from "mobx";
 
 export const textStyleKeys = [
@@ -216,7 +217,14 @@ const tailwindPrefixes = [
 ] as const;
 
 export class Style extends StyleBase {
-  loadTailwind(className: string) {
+  loadComputedStyle(dom: Element): void {
+    const computedStyle = getComputedStyle(dom);
+    for (const key of styleKeys) {
+      this[key] = computedStyle.getPropertyValue(kebabCase(key));
+    }
+  }
+
+  loadTailwind(className: string): void {
     const classNames = className.split(/\s+/);
 
     for (const className of classNames) {
