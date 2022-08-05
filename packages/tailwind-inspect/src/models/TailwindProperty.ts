@@ -74,6 +74,8 @@ export class KeywordTailwindProperty implements ITailwindProperty {
 }
 
 export const tailwindProperties: ITailwindProperty[] = [
+  // position
+
   new KeywordTailwindProperty("position", {
     static: "static",
     relative: "relative",
@@ -90,12 +92,16 @@ export const tailwindProperties: ITailwindProperty[] = [
   new JITTailwindProperty("marginBottom", "mb"),
   new JITTailwindProperty("marginLeft", "ml"),
 
+  // size
+
   new JITTailwindProperty("width", "w"),
   new JITTailwindProperty("height", "h"),
   new JITTailwindProperty("borderTopLeftRadius", "rounded-tl"),
   new JITTailwindProperty("borderTopRightRadius", "rounded-tr"),
   new JITTailwindProperty("borderBottomRightRadius", "rounded-br"),
   new JITTailwindProperty("borderBottomLeftRadius", "rounded-bl"),
+
+  // layout
 
   new KeywordTailwindProperty("display", {
     inline: "inline",
@@ -138,7 +144,7 @@ export const tailwindProperties: ITailwindProperty[] = [
   new JITTailwindProperty("columnGap", "gap-x"),
   new JITTailwindProperty("rowGap", "gap-y"),
 
-  new JITTailwindProperty("background", "bg"),
+  // text
 
   new FontFamilyTailwindProperty(),
   new JITTailwindProperty("fontWeight", "font"),
@@ -162,6 +168,12 @@ export const tailwindProperties: ITailwindProperty[] = [
     "line-through": "line-through",
   }),
 
+  // background
+
+  new JITTailwindProperty("background", "bg"),
+
+  // border
+
   new KeywordTailwindProperty("borderStyle", {
     none: "border-none",
     solid: "border-solid",
@@ -177,6 +189,9 @@ export const tailwindProperties: ITailwindProperty[] = [
   new JITTailwindProperty("borderRightColor", "border-r"),
   new JITTailwindProperty("borderBottomColor", "border-b"),
   new JITTailwindProperty("borderLeftColor", "border-l"),
+
+  // effects
+
   new JITTailwindProperty("opacity", "opacity"),
   new JITTailwindProperty("cursor", "cursor"),
 ];
