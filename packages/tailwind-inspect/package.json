@@ -10,6 +10,10 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@babel/generator": "^7.18.9",
+    "@babel/parser": "^7.18.9",
+    "@babel/standalone": "^7.18.12",
+    "@babel/traverse": "^7.18.9",
     "@iconify-icons/ic": "^1.2.6",
     "@iconify-icons/mdi": "^1.2.27",
     "@seanchas116/paintkit": "*",
@@ -22,6 +26,9 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@types/babel__generator": "^7.6.4",
+    "@types/babel__standalone": "^7.1.4",
+    "@types/babel__traverse": "^7.17.1",
     "@types/lodash-es": "^4.17.6",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",

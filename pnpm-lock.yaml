@@ -206,10 +206,17 @@ importers:
 
   packages/tailwind-inspect:
     specifiers:
+      '@babel/generator': ^7.18.9
+      '@babel/parser': ^7.18.9
+      '@babel/standalone': ^7.18.12
+      '@babel/traverse': ^7.18.9
       '@iconify-icons/ic': ^1.2.6
       '@iconify-icons/mdi': ^1.2.27
       '@seanchas116/paintkit': '*'
       '@tippyjs/react': ^4.2.6
+      '@types/babel__generator': ^7.6.4
+      '@types/babel__standalone': ^7.1.4
+      '@types/babel__traverse': ^7.17.1
       '@types/lodash-es': ^4.17.6
       '@types/react': ^18.0.15
       '@types/react-dom': ^18.0.6
@@ -227,6 +234,10 @@ importers:
       vite: ^3.0.0
       vitest: ^0.19.1
     dependencies:
+      '@babel/generator': 7.18.10
+      '@babel/parser': 7.18.10
+      '@babel/standalone': 7.18.12
+      '@babel/traverse': 7.18.10
       '@iconify-icons/ic': 1.2.9
       '@iconify-icons/mdi': 1.2.27
       '@seanchas116/paintkit': link:../paintkit
@@ -238,6 +249,9 @@ importers:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
+      '@types/babel__generator': 7.6.4
+      '@types/babel__standalone': 7.1.4
+      '@types/babel__traverse': 7.17.1
       '@types/lodash-es': 4.17.6
       '@types/react': 18.0.15
       '@types/react-dom': 18.0.6
@@ -1705,6 +1719,11 @@ packages:
     dependencies:
       regenerator-runtime: 0.13.9
     dev: true
+
+  /@babel/standalone/7.18.12:
+    resolution: {integrity: sha512-wDh3K5IUJiSMAY0MLYBFoCaj2RCZwvDz5BHn2uHat9KOsGWEVDFgFQFIOO+81Js2phFKNppLC45iOCsZVfJniw==}
+    engines: {node: '>=6.9.0'}
+    dev: false
 
   /@babel/template/7.18.10:
     resolution: {integrity: sha512-TI+rCtooWHr3QJ27kJxfjutghu44DLnasDMwpDqCXVTal9RLp3RSYNh4NdBrRP2cQAoG9A8juOQl6P6oZG4JxA==}
@@ -3582,6 +3601,14 @@ packages:
     resolution: {integrity: sha512-tFkciB9j2K755yrTALxD44McOrk+gfpIpvC3sxHjRawj6PfnQxrse4Clq5y/Rq+G3mrBurMax/lG8Qn2t9mSsg==}
     dependencies:
       '@babel/types': 7.18.10
+    dev: true
+
+  /@types/babel__standalone/7.1.4:
+    resolution: {integrity: sha512-HijIDmcNl3Wmo0guqjYkQvMzyRCM6zMCkYcdG8f+2X7mPBNa9ikSeaQlWs2Yg18KN1klOJzyupX5BPOf+7ahaw==}
+    dependencies:
+      '@babel/core': 7.18.10
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /@types/babel__traverse/7.17.1:
