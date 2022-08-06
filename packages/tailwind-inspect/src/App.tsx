@@ -4,6 +4,14 @@ import { useEffect, useRef } from "react";
 import { StyleInspector } from "./inspector/StyleInspector";
 import { AppState } from "./state/AppState";
 
+import { parse } from "@babel/parser";
+
+const parsed = parse('console.log("Hello");', {
+  sourceType: "module",
+  plugins: ["jsx", "typescript"],
+});
+console.log(parsed);
+
 const appState = new AppState();
 
 const App = observer(function App() {
