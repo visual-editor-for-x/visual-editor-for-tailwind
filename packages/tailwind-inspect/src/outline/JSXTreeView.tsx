@@ -23,6 +23,7 @@ import { ReactNode, useMemo } from "react";
 import * as shortUUID from "short-uuid";
 import { SourceFile } from "../models/SourceFile";
 import { compact } from "lodash-es";
+import { NodeSelection } from "../models/NodeSelection";
 
 class SourceFileTreeViewItem extends RootTreeViewItem {
   constructor(file: SourceFile) {
@@ -37,7 +38,12 @@ class SourceFileTreeViewItem extends RootTreeViewItem {
       .getJSXRoots()
       .map(
         (root) =>
-          new JSXRootTreeViewItem(this, root.name ?? "default", root.element)
+          new JSXRootTreeViewItem(
+            this.file,
+            this,
+            root.name ?? "default",
+            root.element
+          )
       );
   }
   deselect(): void {
@@ -47,16 +53,19 @@ class SourceFileTreeViewItem extends RootTreeViewItem {
 
 class JSXRootTreeViewItem extends TreeViewItem {
   constructor(
+    file: SourceFile,
     parent: TreeViewItem | undefined,
     name: string,
     node: JSXElement
   ) {
     super();
+    this.file = file;
     this._parent = parent;
     this.name = name;
     this.node = node;
   }
 
+  private readonly file: SourceFile;
   private readonly _parent: TreeViewItem | undefined;
   readonly name: string;
   readonly node: JSXElement;
@@ -69,7 +78,7 @@ class JSXRootTreeViewItem extends TreeViewItem {
     return this._parent;
   }
   get children(): readonly TreeViewItem[] {
-    return [new JSXElementTreeViewItem(this, this.node)];
+    return [new JSXElementTreeViewItem(this.file, this, this.node)];
   }
   get selected(): boolean {
     // TODO
@@ -106,12 +115,18 @@ class JSXRootTreeViewItem extends TreeViewItem {
 }
 
 class JSXElementTreeViewItem extends TreeViewItem {
-  constructor(parent: TreeViewItem | undefined, node: JSXElement) {
+  constructor(
+    file: SourceFile,
+    parent: TreeViewItem | undefined,
+    node: JSXElement
+  ) {
     super();
+    this.file = file;
     this._parent = parent;
     this.node = node;
   }
 
+  private readonly file: SourceFile;
   private readonly _parent: TreeViewItem | undefined;
   readonly node: JSXElement;
   private readonly _key = shortUUID.generate();
@@ -127,15 +142,15 @@ class JSXElementTreeViewItem extends TreeViewItem {
       this.node.children.map((child) => {
         switch (child.type) {
           case "JSXElement":
-            return new JSXElementTreeViewItem(this, child);
+            return new JSXElementTreeViewItem(this.file, this, child);
           case "JSXText":
             // ignore newlines
             if (/^\s*$/.test(child.value) && child.value.includes("\n")) {
               return;
             }
-            return new JSXTextTreeViewItem(this, child);
+            return new JSXTextTreeViewItem(this.file, this, child);
           default:
-            return new JSXOtherTreeViewItem(this, child);
+            return new JSXOtherTreeViewItem(this.file, this, child);
         }
       })
     );
@@ -177,12 +192,18 @@ class JSXElementTreeViewItem extends TreeViewItem {
 }
 
 class JSXTextTreeViewItem extends LeafTreeViewItem {
-  constructor(parent: TreeViewItem | undefined, node: JSXText) {
+  constructor(
+    file: SourceFile,
+    parent: TreeViewItem | undefined,
+    node: JSXText
+  ) {
     super();
+    this.file = file;
     this._parent = parent;
     this.node = node;
   }
 
+  private readonly file: SourceFile;
   private readonly _parent: TreeViewItem | undefined;
   readonly node: JSXText;
   private readonly _key = shortUUID.generate();
@@ -218,14 +239,17 @@ class JSXTextTreeViewItem extends LeafTreeViewItem {
 
 class JSXOtherTreeViewItem extends LeafTreeViewItem {
   constructor(
+    file: SourceFile,
     parent: TreeViewItem | undefined,
     node: JSXFragment | JSXExpressionContainer | JSXSpreadChild
   ) {
     super();
+    this.file = file;
     this._parent = parent;
     this.node = node;
   }
 
+  private readonly file: SourceFile;
   private readonly _parent: TreeViewItem | undefined;
   readonly node: JSXFragment | JSXExpressionContainer | JSXSpreadChild;
   private readonly _key = shortUUID.generate();
