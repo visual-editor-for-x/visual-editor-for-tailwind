@@ -19,6 +19,7 @@ import generate from "@babel/generator";
 import { ReactNode, useMemo } from "react";
 import * as shortUUID from "short-uuid";
 import { SourceFile } from "../models/SourceFile";
+import { compact } from "lodash-es";
 
 class SourceFileTreeViewItem extends RootTreeViewItem {
   constructor(file: SourceFile) {
@@ -118,16 +119,22 @@ class JSXElementTreeViewItem extends TreeViewItem {
     return this._parent;
   }
   get children(): readonly TreeViewItem[] {
-    return this.node.children.map((child) => {
-      switch (child.type) {
-        case "JSXElement":
-          return new JSXElementTreeViewItem(this, child);
-        case "JSXText":
-          return new JSXTextTreeViewItem(this, child);
-        default:
-          return new JSXOtherTreeViewItem(this, child);
-      }
-    });
+    return compact(
+      this.node.children.map((child) => {
+        switch (child.type) {
+          case "JSXElement":
+            return new JSXElementTreeViewItem(this, child);
+          case "JSXText":
+            // ignore newlines
+            if (/^\s*$/.test(child.value) && child.value.includes("\n")) {
+              return;
+            }
+            return new JSXTextTreeViewItem(this, child);
+          default:
+            return new JSXOtherTreeViewItem(this, child);
+        }
+      })
+    );
   }
   get selected(): boolean {
     // TODO
