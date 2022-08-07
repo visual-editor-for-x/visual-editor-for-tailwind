@@ -1,5 +1,6 @@
 import { File as FileAST, JSXElement } from "@babel/types";
 import { makeObservable, observable } from "mobx";
+import { NodeSelection } from "./NodeSelection";
 
 export class SourceFile {
   constructor(ast: FileAST) {
@@ -50,4 +51,6 @@ export class SourceFile {
 
     return jsxRoots;
   }
+
+  selection = new NodeSelection();
 }
