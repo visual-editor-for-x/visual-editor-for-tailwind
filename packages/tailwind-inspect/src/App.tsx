@@ -38,9 +38,15 @@ const App = observer(function App() {
           </div>
           <DemoRunner appState={appState} />
         </div>
-        <div className="bg-zinc-800 w-64 overflow-y-auto flex flex-col">
-          <JSXTreeView className="h-80 shrink-0" file={appState.sourceFile} />
-          <StyleInspector state={appState.styleInspectorState} />
+        <div className="bg-zinc-800 w-64 flex flex-col ">
+          <JSXTreeView
+            className="h-80 shrink-0 border-b-neutral-700 border-solid border-b-[2px]"
+            file={appState.sourceFile}
+          />
+          <StyleInspector
+            className="flex-1 overflow-y-auto"
+            state={appState.styleInspectorState}
+          />
         </div>
       </div>
     </PaintkitRoot>
