@@ -1,4 +1,5 @@
 import { PaintkitRoot } from "@seanchas116/paintkit/src/components/PaintkitRoot";
+import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { useEffect, useRef } from "react";
@@ -11,13 +12,16 @@ const App = observer(function App() {
   const tailwindClass = appState.elementInstance.style.toTailwind();
   const targetRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (targetRef.current) {
-      appState.elementInstance.computedStyle.loadComputedStyle(
-        targetRef.current
-      );
-    }
-  }, [tailwindClass]);
+  useEffect(
+    action(() => {
+      if (targetRef.current) {
+        appState.elementInstance.computedStyle.loadComputedStyle(
+          targetRef.current
+        );
+      }
+    }),
+    [tailwindClass]
+  );
 
   return (
     <PaintkitRoot colorScheme="dark">
