@@ -1,7 +1,8 @@
 import { ElementInstance } from "../models/ElementInstance";
 import { StyleInspectorState } from "./StyleInspectorState";
 
-import { parse } from "@babel/parser";
+import { parse, ParseResult } from "@babel/parser";
+import { File } from "@babel/types";
 import generate from "@babel/generator";
 import demoCode from "./demo?raw";
 import { transform } from "@babel/standalone";
@@ -11,17 +12,16 @@ export class AppState {
   constructor() {
     makeObservable(this);
 
-    const parsed = parse(demoCode, {
+    this.ast = parse(demoCode, {
       sourceType: "module",
       plugins: ["jsx", "typescript"],
     });
     console.log(demoCode);
-    console.log(parsed);
+    console.log(this.ast);
 
-    parsed.program.body.reverse();
+    // parsed.program.body.reverse();
 
-    const { code } = generate(parsed, {}, demoCode);
-
+    const { code } = generate(this.ast, {}, demoCode);
     console.log(code);
 
     const output = transform(demoCode, { presets: ["env", "react"] }).code;
@@ -33,6 +33,8 @@ export class AppState {
   readonly styleInspectorState = new StyleInspectorState(() => [
     this.elementInstance,
   ]);
+
+  @observable ast: ParseResult<File>;
 
   @observable compiledCode = "";
 }
