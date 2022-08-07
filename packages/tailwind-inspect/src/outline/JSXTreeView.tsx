@@ -80,8 +80,7 @@ class JSXRootTreeViewItem extends TreeViewItem {
     return false;
   }
   get showsCollapseButton(): boolean {
-    // TODO
-    return false;
+    return true;
   }
   renderRow(options: { inverted: boolean }): ReactNode {
     return (
@@ -143,8 +142,7 @@ class JSXElementTreeViewItem extends TreeViewItem {
     return false;
   }
   get showsCollapseButton(): boolean {
-    // TODO
-    return false;
+    return true;
   }
   renderRow(options: { inverted: boolean }): ReactNode {
     return (
