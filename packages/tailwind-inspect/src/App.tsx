@@ -3,15 +3,7 @@ import { observer } from "mobx-react-lite";
 import { useEffect, useRef } from "react";
 import { StyleInspector } from "./inspector/StyleInspector";
 import { AppState } from "./state/AppState";
-
-import { parse } from "@babel/parser";
 import Demo from "./state/demo";
-
-const parsed = parse('console.log("Hello");', {
-  sourceType: "module",
-  plugins: ["jsx", "typescript"],
-});
-console.log(parsed);
 
 const appState = new AppState();
 
