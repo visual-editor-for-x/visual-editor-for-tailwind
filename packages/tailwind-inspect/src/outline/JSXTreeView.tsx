@@ -12,9 +12,12 @@ import {
 } from "@seanchas116/paintkit/src/components/treeview/TreeViewItem";
 import {
   TreeRow,
+  TreeRowIcon,
   TreeRowLabel,
 } from "@seanchas116/paintkit/src/components/treeview/TreeRow";
 import { TreeView } from "@seanchas116/paintkit/src/components/treeview/TreeView";
+import chevronsIcon from "@seanchas116/paintkit/src/icon/Chevrons";
+import widgetsFilledIcon from "@iconify-icons/ic/baseline-widgets";
 import generate from "@babel/generator";
 import { ReactNode, useMemo } from "react";
 import * as shortUUID from "short-uuid";
@@ -86,6 +89,7 @@ class JSXRootTreeViewItem extends TreeViewItem {
   renderRow(options: { inverted: boolean }): ReactNode {
     return (
       <TreeRow inverted={options.inverted}>
+        <TreeRowIcon icon={widgetsFilledIcon} />
         <TreeRowLabel>{this.name}</TreeRowLabel>
       </TreeRow>
     );
@@ -154,6 +158,7 @@ class JSXElementTreeViewItem extends TreeViewItem {
   renderRow(options: { inverted: boolean }): ReactNode {
     return (
       <TreeRow inverted={options.inverted}>
+        <TreeRowIcon icon={chevronsIcon} />
         <TreeRowLabel>
           {generate(this.node.openingElement.name).code}
         </TreeRowLabel>
