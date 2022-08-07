@@ -18,7 +18,7 @@ export class AppState {
     //console.log(ast);
 
     this.sourceFile = new SourceFile(ast);
-    console.log(this.sourceFile.getJSXRoots());
+    console.log(this.sourceFile.jsxRoots);
 
     // parsed.program.body.reverse();
 

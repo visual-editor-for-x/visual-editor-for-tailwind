@@ -34,18 +34,16 @@ class SourceFileTreeViewItem extends RootTreeViewItem {
   readonly file: SourceFile;
 
   get children(): readonly TreeViewItem[] {
-    return this.file
-      .getJSXRoots()
-      .map(
-        (root, i) =>
-          new JSXRootTreeViewItem(
-            this.file,
-            this,
-            root.name ?? "default",
-            i,
-            root.element
-          )
-      );
+    return this.file.jsxRoots.map(
+      (root, i) =>
+        new JSXRootTreeViewItem(
+          this.file,
+          this,
+          root.name ?? "default",
+          i,
+          root.element
+        )
+    );
   }
   deselect(): void {
     this.file.selection.clear();

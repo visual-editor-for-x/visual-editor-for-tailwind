@@ -2,24 +2,24 @@ import { File as FileAST, JSXElement } from "@babel/types";
 import { makeObservable, observable } from "mobx";
 import { NodeSelection } from "./NodeSelection";
 
+interface JSXRoot {
+  name?: string;
+  element: JSXElement;
+}
+
 export class SourceFile {
   constructor(ast: FileAST) {
     this.ast = ast;
-    makeObservable(this);
+    this.jsxRoots = this.getJSXRoots();
   }
 
-  @observable.ref ast: FileAST;
+  readonly ast: FileAST;
+  readonly jsxRoots: readonly JSXRoot[];
 
-  getJSXRoots(): {
-    name?: string;
-    element: JSXElement;
-  }[] {
+  private getJSXRoots(): JSXRoot[] {
     const statements = this.ast.program.body;
 
-    const jsxRoots: {
-      name?: string;
-      element: JSXElement;
-    }[] = [];
+    const jsxRoots: JSXRoot[] = [];
 
     for (const statement of statements) {
       if (
