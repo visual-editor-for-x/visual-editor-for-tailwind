@@ -10,8 +10,6 @@ import { SourceFile } from "../models/SourceFile";
 
 export class AppState {
   constructor() {
-    makeObservable(this);
-
     const ast = parse(demoCode, {
       sourceType: "module",
       plugins: ["jsx", "typescript"],
@@ -19,8 +17,8 @@ export class AppState {
     //console.log(demoCode);
     //console.log(ast);
 
-    const file = new SourceFile(ast);
-    console.log(file.getJSXRoots());
+    this.sourceFile = new SourceFile(ast);
+    console.log(this.sourceFile.getJSXRoots());
 
     // parsed.program.body.reverse();
 
@@ -30,6 +28,8 @@ export class AppState {
     const output = transform(demoCode, { presets: ["env", "react"] }).code;
     //console.log(output);
     this.compiledCode = output;
+
+    makeObservable(this);
   }
 
   readonly elementInstance = new ElementInstance();
@@ -38,4 +38,6 @@ export class AppState {
   ]);
 
   @observable compiledCode = "";
+
+  readonly sourceFile: SourceFile;
 }

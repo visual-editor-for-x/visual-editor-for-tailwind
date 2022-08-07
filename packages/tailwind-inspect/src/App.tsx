@@ -4,6 +4,7 @@ import { observer } from "mobx-react-lite";
 import React from "react";
 import { useEffect, useRef } from "react";
 import { StyleInspector } from "./inspector/StyleInspector";
+import { JSXTreeView } from "./outline/JSXTreeView";
 import { AppState } from "./state/AppState";
 
 const appState = new AppState();
@@ -37,7 +38,8 @@ const App = observer(function App() {
           </div>
           <DemoRunner appState={appState} />
         </div>
-        <div className="bg-zinc-800 w-64 overflow-y-auto">
+        <div className="bg-zinc-800 w-64 overflow-y-auto flex flex-col">
+          <JSXTreeView className="h-80 shrink-0" file={appState.sourceFile} />
           <StyleInspector state={appState.styleInspectorState} />
         </div>
       </div>
