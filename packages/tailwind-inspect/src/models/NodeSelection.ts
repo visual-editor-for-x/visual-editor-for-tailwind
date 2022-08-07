@@ -3,16 +3,16 @@ import { observable } from "mobx";
 export class NodeSelection {
   readonly selectedPathStrings = observable.set<string>();
 
-  isSelected(path: readonly number[]): boolean {
+  includes(path: readonly number[]): boolean {
     return this.selectedPathStrings.has(path.join(","));
   }
 
-  select(path: readonly number[]) {
-    this.deselect(path);
+  add(path: readonly number[]) {
+    this.delete(path);
     this.selectedPathStrings.add(path.join(","));
   }
 
-  deselect(path: readonly number[]) {
+  delete(path: readonly number[]) {
     const str = path.join(",");
 
     const newItems = [...this.selectedPathStrings].filter((pathStr) => {
@@ -26,5 +26,9 @@ export class NodeSelection {
     });
 
     this.selectedPathStrings.replace(newItems);
+  }
+
+  clear() {
+    this.selectedPathStrings.clear();
   }
 }

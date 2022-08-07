@@ -48,7 +48,7 @@ class SourceFileTreeViewItem extends RootTreeViewItem {
       );
   }
   deselect(): void {
-    // TODO
+    this.file.selection.clear();
   }
 }
 
@@ -180,8 +180,7 @@ class JSXElementTreeViewItem extends TreeViewItem {
     );
   }
   get selected(): boolean {
-    // TODO
-    return false;
+    return this.file.selection.includes(this.path);
   }
   get hovered(): boolean {
     // TODO
@@ -205,10 +204,10 @@ class JSXElementTreeViewItem extends TreeViewItem {
     );
   }
   deselect(): void {
-    // TODO
+    this.file.selection.delete(this.path);
   }
   select(): void {
-    // TODO
+    this.file.selection.add(this.path);
   }
   toggleCollapsed(): void {
     // TODO
