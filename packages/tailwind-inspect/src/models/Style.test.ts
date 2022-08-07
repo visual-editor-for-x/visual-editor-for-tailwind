@@ -15,5 +15,12 @@ describe(Style.name, () => {
         "absolute text-[#345] font-['Open_Sans'] bg-[#fff]"
       );
     });
+
+    it("should load tailwind classnames with -", () => {
+      const style = new Style();
+      style.loadTailwind("bg-slate-500 text-red-500");
+      expect(style.background).toEqual("#64748b");
+      expect(style.color).toEqual("#ef4444");
+    });
   });
 });
