@@ -1,5 +1,6 @@
 import { File as FileAST, JSXElement } from "@babel/types";
-import { makeObservable, observable } from "mobx";
+import { compact } from "lodash-es";
+import { makeObservable, observable, reaction } from "mobx";
 import { NodeSelection } from "./NodeSelection";
 
 interface JSXRoot {
@@ -11,6 +12,13 @@ export class SourceFile {
   constructor(ast: FileAST) {
     this.ast = ast;
     this.jsxRoots = this.getJSXRoots();
+
+    reaction(
+      () => this.selectedElements,
+      (elements) => {
+        console.log(elements);
+      }
+    );
   }
 
   readonly ast: FileAST;
@@ -53,4 +61,48 @@ export class SourceFile {
   }
 
   selection = new NodeSelection();
+
+  get selectedElements(): readonly JSXElement[] {
+    const nodes = this.selection.allPaths.map((path) => this.nodeForPath(path));
+    return nodes.filter(
+      (node): node is JSXElement => node?.type === "JSXElement"
+    );
+  }
+
+  nodeForPath(
+    path: readonly number[]
+  ): JSXElement["children"][number] | undefined {
+    if (path.length === 0) {
+      return undefined;
+    }
+
+    const [index, ...rest] = path;
+
+    if (index >= this.jsxRoots.length) {
+      return undefined;
+    }
+    return nodeForPath(this.jsxRoots[index].element, rest);
+  }
+}
+
+function nodeForPath(
+  node: JSXElement,
+  path: readonly number[]
+): JSXElement["children"][number] | undefined {
+  if (path.length === 0) {
+    return node;
+  }
+
+  const [nextIndex, ...rest] = path;
+  const children = node.children;
+  if (nextIndex < children.length) {
+    const child = children[nextIndex];
+    if (rest.length === 0) {
+      return child;
+    }
+
+    if (child.type === "JSXElement") {
+      return nodeForPath(child, rest);
+    }
+  }
 }

@@ -31,4 +31,10 @@ export class NodeSelection {
   clear() {
     this.selectedPathStrings.clear();
   }
+
+  get allPaths(): number[][] {
+    return [...this.selectedPathStrings].map((pathStr) => {
+      return pathStr.split(",").map((str) => parseInt(str, 10));
+    });
+  }
 }
