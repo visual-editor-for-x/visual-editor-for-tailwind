@@ -37,11 +37,12 @@ class SourceFileTreeViewItem extends RootTreeViewItem {
     return this.file
       .getJSXRoots()
       .map(
-        (root) =>
+        (root, i) =>
           new JSXRootTreeViewItem(
             this.file,
             this,
             root.name ?? "default",
+            i,
             root.element
           )
       );
@@ -56,18 +57,21 @@ class JSXRootTreeViewItem extends TreeViewItem {
     file: SourceFile,
     parent: TreeViewItem | undefined,
     name: string,
+    index: number,
     node: JSXElement
   ) {
     super();
     this.file = file;
     this._parent = parent;
     this.name = name;
+    this.index = index;
     this.node = node;
   }
 
-  private readonly file: SourceFile;
+  readonly file: SourceFile;
   private readonly _parent: TreeViewItem | undefined;
   readonly name: string;
+  readonly index: number;
   readonly node: JSXElement;
   private readonly _key = shortUUID.generate();
 
@@ -78,7 +82,9 @@ class JSXRootTreeViewItem extends TreeViewItem {
     return this._parent;
   }
   get children(): readonly TreeViewItem[] {
-    return [new JSXElementTreeViewItem(this.file, this, this.node)];
+    return [
+      new JSXElementTreeViewItem(this.file, this, [this.index], this.node),
+    ];
   }
   get selected(): boolean {
     // TODO
@@ -118,17 +124,20 @@ class JSXElementTreeViewItem extends TreeViewItem {
   constructor(
     file: SourceFile,
     parent: TreeViewItem | undefined,
+    path: readonly number[],
     node: JSXElement
   ) {
     super();
     this.file = file;
     this._parent = parent;
+    this.path = path;
     this.node = node;
   }
 
-  private readonly file: SourceFile;
+  readonly file: SourceFile;
   private readonly _parent: TreeViewItem | undefined;
   readonly node: JSXElement;
+  readonly path: readonly number[];
   private readonly _key = shortUUID.generate();
 
   get key(): string {
@@ -139,18 +148,33 @@ class JSXElementTreeViewItem extends TreeViewItem {
   }
   get children(): readonly TreeViewItem[] {
     return compact(
-      this.node.children.map((child) => {
+      this.node.children.map((child, i) => {
         switch (child.type) {
           case "JSXElement":
-            return new JSXElementTreeViewItem(this.file, this, child);
+            return new JSXElementTreeViewItem(
+              this.file,
+              this,
+              [...this.path, i],
+              child
+            );
           case "JSXText":
             // ignore newlines
             if (/^\s*$/.test(child.value) && child.value.includes("\n")) {
               return;
             }
-            return new JSXTextTreeViewItem(this.file, this, child);
+            return new JSXTextTreeViewItem(
+              this.file,
+              this,
+              [...this.path, i],
+              child
+            );
           default:
-            return new JSXOtherTreeViewItem(this.file, this, child);
+            return new JSXOtherTreeViewItem(
+              this.file,
+              this,
+              [...this.path, i],
+              child
+            );
         }
       })
     );
@@ -195,16 +219,19 @@ class JSXTextTreeViewItem extends LeafTreeViewItem {
   constructor(
     file: SourceFile,
     parent: TreeViewItem | undefined,
+    path: readonly number[],
     node: JSXText
   ) {
     super();
     this.file = file;
     this._parent = parent;
+    this.path = path;
     this.node = node;
   }
 
-  private readonly file: SourceFile;
+  readonly file: SourceFile;
   private readonly _parent: TreeViewItem | undefined;
+  readonly path: readonly number[];
   readonly node: JSXText;
   private readonly _key = shortUUID.generate();
 
@@ -241,16 +268,19 @@ class JSXOtherTreeViewItem extends LeafTreeViewItem {
   constructor(
     file: SourceFile,
     parent: TreeViewItem | undefined,
+    path: readonly number[],
     node: JSXFragment | JSXExpressionContainer | JSXSpreadChild
   ) {
     super();
     this.file = file;
     this._parent = parent;
+    this.path = path;
     this.node = node;
   }
 
-  private readonly file: SourceFile;
+  readonly file: SourceFile;
   private readonly _parent: TreeViewItem | undefined;
+  readonly path: readonly number[];
   readonly node: JSXFragment | JSXExpressionContainer | JSXSpreadChild;
   private readonly _key = shortUUID.generate();
 
