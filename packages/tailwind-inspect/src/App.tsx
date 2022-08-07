@@ -1,9 +1,9 @@
 import { PaintkitRoot } from "@seanchas116/paintkit/src/components/PaintkitRoot";
 import { observer } from "mobx-react-lite";
+import React from "react";
 import { useEffect, useRef } from "react";
 import { StyleInspector } from "./inspector/StyleInspector";
 import { AppState } from "./state/AppState";
-import Demo from "./state/demo";
 
 const appState = new AppState();
 
@@ -31,7 +31,7 @@ const App = observer(function App() {
           <div className="text-gray-500 text-sm">
             class: <span className="text-gray-700">{tailwindClass}</span>
           </div>
-          <Demo />
+          <DemoRunner appState={appState} />
         </div>
         <div className="bg-zinc-800 w-64 overflow-y-auto">
           <StyleInspector state={appState.styleInspectorState} />
@@ -39,6 +39,19 @@ const App = observer(function App() {
       </div>
     </PaintkitRoot>
   );
+});
+
+const DemoRunner = observer(({ appState }: { appState: AppState }) => {
+  const module = new Function("exports", "React", appState.compiledCode) as (
+    exports: any,
+    react: typeof React
+  ) => void;
+  const exports: { default?: React.FC } = {};
+  module(exports, React);
+
+  const Component = exports.default!;
+
+  return <Component />;
 });
 
 export default App;
