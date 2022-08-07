@@ -9,10 +9,16 @@ export class SourceFile {
 
   @observable.ref ast: FileAST;
 
-  getJSXRoots(): JSXElement[] {
+  getJSXRoots(): {
+    name?: string;
+    element: JSXElement;
+  }[] {
     const statements = this.ast.program.body;
 
-    const jsxRoots: JSXElement[] = [];
+    const jsxRoots: {
+      name?: string;
+      element: JSXElement;
+    }[] = [];
 
     for (const statement of statements) {
       if (
@@ -21,6 +27,7 @@ export class SourceFile {
       ) {
         const declaration = statement.declaration;
         if (declaration?.type === "FunctionDeclaration") {
+          const name = declaration.id?.name;
           const body = declaration.body;
           if (body.type === "BlockStatement") {
             const bodyStatements = body.body;
@@ -29,7 +36,10 @@ export class SourceFile {
                 const returnStatement = bodyStatement;
                 const returnValue = returnStatement.argument;
                 if (returnValue?.type === "JSXElement") {
-                  jsxRoots.push(returnValue);
+                  jsxRoots.push({
+                    name,
+                    element: returnValue,
+                  });
                 }
               }
             }
