@@ -34,7 +34,7 @@ export class AppState {
     this.elementInstance,
   ]);
 
-  @observable ast: ParseResult<File>;
+  @observable ast: File;
 
   @observable compiledCode = "";
 }
