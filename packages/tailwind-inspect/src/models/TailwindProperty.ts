@@ -55,14 +55,11 @@ export class FontFamilyTailwindProperty implements ITailwindProperty {
 }
 
 export class KeywordTailwindProperty implements ITailwindProperty {
-  constructor(
-    cssName: AllStyleKey,
-    keywordCSSToTailwind: Record<string, string>
-  ) {
+  constructor(cssName: AllStyleKey, tailwindToCSS: Record<string, string>) {
     this.cssName = cssName;
-    this.keywordCSSToTailwind = new Map(Object.entries(keywordCSSToTailwind));
-    this.keywordTailwindToCSS = new Map(
-      Array.from(this.keywordCSSToTailwind.entries()).map(([key, value]) => [
+    this.keywordTailwindToCSS = new Map(Object.entries(tailwindToCSS));
+    this.keywordCSSToTailwind = new Map(
+      Array.from(this.keywordTailwindToCSS.entries()).map(([key, value]) => [
         value,
         key,
       ])
@@ -119,37 +116,37 @@ export const tailwindProperties: ITailwindProperty[] = [
     "inline-block": "inline-block",
     flex: "flex",
     "inline-flex": "inline-flex",
-    none: "hidden",
+    hidden: "none",
   }),
   new JITTailwindProperty("paddingTop", "pt"),
   new JITTailwindProperty("paddingRight", "pr"),
   new JITTailwindProperty("paddingBottom", "pb"),
   new JITTailwindProperty("paddingLeft", "pl"),
   new KeywordTailwindProperty("flexDirection", {
-    row: "flex-row",
-    "row-reverse": "flex-row-reverse",
-    column: "flex-col",
-    "column-reverse": "flex-col-reverse",
+    "flex-row": "row",
+    "flex-row-reverse": "row-reverse",
+    "flex-col": "column",
+    "flex-col-reverse": "column-reverse",
   }),
   new KeywordTailwindProperty("flexWrap", {
-    wrap: "flex-wrap",
-    "wrap-reverse": "flex-wrap-reverse",
-    nowrap: "flex-nowrap",
+    "flex-wrap": "wrap",
+    "flex-wrap-reverse": "wrap-reverse",
+    "flex-nowrap": "nowrap",
   }),
   new KeywordTailwindProperty("alignItems", {
-    "flex-start": "items-start",
-    "flex-end": "items-end",
-    center: "items-center",
-    baseline: "items-baseline",
-    stretch: "items-stretch",
+    "items-start": "flex-start",
+    "items-end": "flex-end",
+    "items-center": "center",
+    "items-baseline": "baseline",
+    "items-stretch": "stretch",
   }),
   new KeywordTailwindProperty("justifyContent", {
-    "flex-start": "justify-start",
-    "flex-end": "justify-end",
-    center: "justify-center",
-    "space-between": "justify-between",
-    "space-around": "justify-around",
-    "space-evenly": "justify-evenly",
+    "justify-start": "flex-start",
+    "justify-end": "flex-end",
+    "justify-center": "center",
+    "justify-between": "space-between",
+    "justify-around": "space-around",
+    "justify-evenly": "space-evenly",
   }),
   new JITTailwindProperty("columnGap", "gap-x"),
   new JITTailwindProperty("rowGap", "gap-y"),
@@ -163,17 +160,17 @@ export const tailwindProperties: ITailwindProperty[] = [
   new JITTailwindProperty("lineHeight", "leading"),
   new JITTailwindProperty("letterSpacing", "tracking"),
   new KeywordTailwindProperty("textAlign", {
-    left: "text-left",
-    center: "text-center",
-    right: "text-right",
-    justify: "text-justify",
+    "text-left": "left",
+    "text-center": "center",
+    "text-right": "right",
+    "text-justify": "justify",
   }),
   new KeywordTailwindProperty("fontStyle", {
-    normal: "not-italic",
+    "not-italic": "normal",
     italic: "italic",
   }),
   new KeywordTailwindProperty("textDecorationLine", {
-    none: "no-underline",
+    "no-underline": "none",
     underline: "underline",
     "line-through": "line-through",
   }),
@@ -185,11 +182,11 @@ export const tailwindProperties: ITailwindProperty[] = [
   // border
 
   new KeywordTailwindProperty("borderStyle", {
-    none: "border-none",
-    solid: "border-solid",
-    double: "border-double",
-    dotted: "border-dotted",
-    dashed: "border-dashed",
+    "border-none": "none",
+    "border-solid": "solid",
+    "border-double": "double",
+    "border-dotted": "dotted",
+    "border-dashed": "dashed",
   }),
   new JITTailwindProperty("borderTopWidth", "border-t"),
   new JITTailwindProperty("borderRightWidth", "border-r"),
