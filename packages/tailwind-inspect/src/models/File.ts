@@ -15,9 +15,12 @@ export class File {
     const jsxRoots: JSXElement[] = [];
 
     for (const statement of statements) {
-      if (statement.type === "ExportDefaultDeclaration") {
+      if (
+        statement.type === "ExportDefaultDeclaration" ||
+        statement.type === "ExportNamedDeclaration"
+      ) {
         const declaration = statement.declaration;
-        if (declaration.type === "FunctionDeclaration") {
+        if (declaration?.type === "FunctionDeclaration") {
           const body = declaration.body;
           if (body.type === "BlockStatement") {
             const bodyStatements = body.body;
