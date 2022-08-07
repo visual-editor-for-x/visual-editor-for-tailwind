@@ -5,6 +5,7 @@ import { StyleInspector } from "./inspector/StyleInspector";
 import { AppState } from "./state/AppState";
 
 import { parse } from "@babel/parser";
+import Demo from "./state/demo";
 
 const parsed = parse('console.log("Hello");', {
   sourceType: "module",
@@ -38,6 +39,7 @@ const App = observer(function App() {
           <div className="text-gray-500 text-sm">
             class: <span className="text-gray-700">{tailwindClass}</span>
           </div>
+          <Demo />
         </div>
         <div className="bg-zinc-800 w-64 overflow-y-auto">
           <StyleInspector state={appState.styleInspectorState} />
