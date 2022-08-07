@@ -2,12 +2,11 @@ import { ElementInstance } from "../models/ElementInstance";
 import { StyleInspectorState } from "./StyleInspectorState";
 
 import { parse, ParseResult } from "@babel/parser";
-import { File as FileAST } from "@babel/types";
 import generate from "@babel/generator";
 import demoCode from "./demo?raw";
 import { transform } from "@babel/standalone";
 import { makeObservable, observable } from "mobx";
-import { File } from "../models/File";
+import { SourceFile } from "../models/SourceFile";
 
 export class AppState {
   constructor() {
@@ -20,7 +19,7 @@ export class AppState {
     //console.log(demoCode);
     //console.log(ast);
 
-    const file = new File(ast);
+    const file = new SourceFile(ast);
     console.log(file.getJSXRoots());
 
     // parsed.program.body.reverse();

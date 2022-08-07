@@ -1,7 +1,7 @@
 import { File as FileAST, JSXElement } from "@babel/types";
 import { makeObservable, observable } from "mobx";
 
-export class File {
+export class SourceFile {
   constructor(ast: FileAST) {
     this.ast = ast;
     makeObservable(this);
