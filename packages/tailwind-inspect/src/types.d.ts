@@ -3,6 +3,9 @@ namespace JSX {
     ["iconify-icon"]: React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLElement>,
       HTMLElement
-    > & { icon?: string };
+    > & {
+      class?: string;
+      icon?: string;
+    };
   }
 }

@@ -5,25 +5,25 @@ const features = [
     name: "Competitive exchange rates",
     description:
       "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.",
-    icon: () => <iconify-icon icon="heroicons-outline:globe-alt" />,
+    icon: "heroicons-outline:globe-alt",
   },
   {
     name: "No hidden fees",
     description:
       "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.",
-    icon: () => <iconify-icon icon="heroicons-outline:scale" />,
+    icon: "heroicons-outline:scale",
   },
   {
     name: "Transfers are instant",
     description:
       "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.",
-    icon: () => <iconify-icon icon="heroicons-outline:lightning-bolt" />,
+    icon: "heroicons-outline:lightning-bolt",
   },
   {
     name: "Mobile notifications",
     description:
       "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.",
-    icon: () => <iconify-icon icon="heroicons-outline:annotation" />,
+    icon: "heroicons-outline:annotation",
   },
 ];
 
@@ -50,7 +50,11 @@ export default function Demo() {
               <div key={feature.name} className="relative">
                 <dt>
                   <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
-                    <feature.icon className="h-6 w-6" aria-hidden="true" />
+                    <iconify-icon
+                      icon={feature.icon}
+                      class="h-6 w-6 text-2xl"
+                      aria-hidden="true"
+                    />
                   </div>
                   <p className="ml-16 text-lg leading-6 font-medium text-gray-900">
                     {feature.name}
