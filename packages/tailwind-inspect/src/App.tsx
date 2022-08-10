@@ -15,7 +15,9 @@ const App = observer(function App() {
           className="flex-1 bg-gray-900 text-white overflow-y-auto p-4"
           style={{ contain: "strict" }}
         >
-          <pre className="text-xs text-white">{appState.sourceFile.code}</pre>
+          <pre className="text-xs text-white whitespace-pre-wrap">
+            {appState.sourceFile.code}
+          </pre>
         </div>
         <div className="flex-1" style={{ contain: "strict" }}>
           <DemoRunner appState={appState} />
