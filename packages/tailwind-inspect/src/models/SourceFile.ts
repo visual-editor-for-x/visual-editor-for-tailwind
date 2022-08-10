@@ -1,7 +1,8 @@
 import { File as FileAST, JSXAttribute, JSXElement, react } from "@babel/types";
-import { compact } from "lodash-es";
 import { computed, makeObservable, observable, reaction } from "mobx";
-import traverse from "@babel/traverse";
+import { parse } from "@babel/parser";
+import generate from "@babel/generator";
+import { transform } from "@babel/standalone";
 import { NodeSelection } from "./NodeSelection";
 import { Style } from "./Style";
 import { StyleInspectorTarget } from "./StyleInspectorTarget";
@@ -12,9 +13,18 @@ interface JSXRoot {
 }
 
 export class SourceFile {
-  constructor(ast: FileAST) {
+  constructor(code: string) {
+    const ast = parse(code, {
+      sourceType: "module",
+      plugins: ["jsx", "typescript"],
+    });
+
     this.ast = ast;
     this.jsxRoots = this.getJSXRoots();
+    this._code = code;
+    this.compileCode();
+
+    makeObservable(this);
 
     reaction(
       () => this.selectedElements,
@@ -26,6 +36,32 @@ export class SourceFile {
 
   readonly ast: FileAST;
   readonly jsxRoots: readonly JSXRoot[];
+
+  @observable private _code: string;
+  @observable private _compiledCode = "";
+
+  get code(): string {
+    return this._code;
+  }
+
+  get compiledCode(): string {
+    return this._compiledCode;
+  }
+
+  private updateCode(): void {
+    const { code } = generate(this.ast, {}, this._code);
+    this._code = code;
+
+    const output = transform(code, { presets: ["env", "react"] }).code;
+    //console.log(output);
+    this._compiledCode = output;
+  }
+
+  private compileCode() {
+    const output = transform(this.code, { presets: ["env", "react"] }).code;
+    //console.log(output);
+    this._compiledCode = output;
+  }
 
   private getJSXRoots(): JSXRoot[] {
     const statements = this.ast.program.body;
@@ -89,6 +125,7 @@ export class SourceFile {
         (className) => {
           console.log(className);
           setAttribute(element, "className", className);
+          this.updateCode();
         }
       );
 
