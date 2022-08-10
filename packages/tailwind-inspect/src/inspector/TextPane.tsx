@@ -89,7 +89,7 @@ const fontWeightOptions = [
 export const TextPane: React.FC<{
   state: StyleInspectorState;
 }> = observer(function TextPane({ state }) {
-  if (!state.textInstances.length) {
+  if (!state.textTargets.length) {
     return null;
   }
 

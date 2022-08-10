@@ -19,7 +19,7 @@ export const StyleInspector: React.FC<{
   state: StyleInspectorState;
   className?: string;
 }> = observer(function StyleInspector({ state, className }) {
-  if (state.instances.length === 0) {
+  if (state.targets.length === 0) {
     return null;
   }
 

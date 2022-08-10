@@ -12,7 +12,7 @@ import { StyleColorInput } from "./Components";
 export const SVGPane: React.FC<{
   state: StyleInspectorState;
 }> = observer(function SVGPane({ state }) {
-  if (state.svgInstances.length === 0 || state.textInstances.length) {
+  if (state.svgTargets.length === 0 || state.textTargets.length) {
     return null;
   }
 

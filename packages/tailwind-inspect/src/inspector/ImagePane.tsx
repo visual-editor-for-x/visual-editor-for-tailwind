@@ -36,7 +36,7 @@ const objectFitOptions: IconRadioOption<string>[] = [
 export const ImagePane: React.FC<{
   state: StyleInspectorState;
 }> = observer(function ImagePane({ state }) {
-  if (!state.imageInstances.length) {
+  if (!state.imageTargets.length) {
     return null;
   }
 

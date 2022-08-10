@@ -1,14 +1,19 @@
 import { isReplacedElement } from "@seanchas116/paintkit/src/util/HTMLTagCategory";
 import { MIXED, sameOrMixed } from "@seanchas116/paintkit/src/util/Mixed";
-import { startCase } from "lodash-es";
 import { action, computed, makeObservable, observable } from "mobx";
-import { ElementInstance } from "../models/ElementInstance";
 import {
   AllStyleKey,
   allStyleKeys,
   imageStyleKeys,
+  Style,
   textStyleKeys,
 } from "../models/Style";
+
+export interface StyleInspectorTarget {
+  readonly tagName: string;
+  readonly computedStyle: Style;
+  readonly style: Style;
+}
 
 export class StylePropertyState {
   constructor(state: StyleInspectorState, key: AllStyleKey) {
@@ -20,23 +25,23 @@ export class StylePropertyState {
   readonly state: StyleInspectorState;
   readonly key: AllStyleKey;
 
-  @computed get targetInstances(): ElementInstance[] {
+  @computed get targets(): StyleInspectorTarget[] {
     if (this.key === "color") {
-      return [...this.state.textInstances, ...this.state.svgInstances];
+      return [...this.state.textTargets, ...this.state.svgTargets];
     }
 
     if (imageStyleKeys.includes(this.key as never)) {
-      return this.state.imageInstances;
+      return this.state.imageTargets;
     }
     if (textStyleKeys.includes(this.key as never)) {
-      return this.state.textInstances;
+      return this.state.textTargets;
     }
-    return this.state.instances;
+    return this.state.targets;
   }
 
   @computed get computed(): string | undefined {
     const value = sameOrMixed(
-      this.targetInstances.map((i) => i.computedStyle[this.key])
+      this.targets.map((i) => i.computedStyle[this.key])
     );
     if (value === MIXED) {
       return;
@@ -45,11 +50,11 @@ export class StylePropertyState {
   }
 
   @computed get value(): string | typeof MIXED | undefined {
-    return sameOrMixed(this.targetInstances.map((i) => i.style[this.key]));
+    return sameOrMixed(this.targets.map((i) => i.style[this.key]));
   }
 
   readonly onChangeWithoutCommit = action((value: string | undefined) => {
-    for (const instance of this.targetInstances) {
+    for (const instance of this.targets) {
       instance.style[this.key] = value || undefined;
 
       // if (this.key === "width") {
@@ -76,8 +81,8 @@ export class StylePropertyState {
 }
 
 export class StyleInspectorState {
-  constructor(getElementInstances: () => ElementInstance[]) {
-    this._getElementInstances = getElementInstances;
+  constructor(getTargets: () => StyleInspectorTarget[]) {
+    this._getTargets = getTargets;
     makeObservable(this);
 
     this.props = Object.fromEntries(
@@ -85,29 +90,29 @@ export class StyleInspectorState {
     ) as Record<AllStyleKey, StylePropertyState>;
   }
 
-  private readonly _getElementInstances: () => ElementInstance[];
+  private readonly _getTargets: () => StyleInspectorTarget[];
 
-  get instances(): ElementInstance[] {
-    return this._getElementInstances();
+  get targets(): StyleInspectorTarget[] {
+    return this._getTargets();
   }
 
-  @computed get imageInstances(): ElementInstance[] {
+  @computed get imageTargets(): StyleInspectorTarget[] {
     // TODO: include other replaced elements?
-    return this.instances.filter((i) => i.tagName === "img");
+    return this.targets.filter((i) => i.tagName === "img");
   }
 
-  @computed get textInstances(): ElementInstance[] {
-    return this.instances.filter(
+  @computed get textTargets(): StyleInspectorTarget[] {
+    return this.targets.filter(
       (i) => !isReplacedElement(i.tagName) && i.tagName !== "svg"
     );
   }
 
-  @computed get svgInstances(): ElementInstance[] {
-    return this.instances.filter((i) => i.tagName === "svg");
+  @computed get svgTargets(): StyleInspectorTarget[] {
+    return this.targets.filter((i) => i.tagName === "svg");
   }
 
   @computed get tagName(): string | typeof MIXED | undefined {
-    return sameOrMixed(this.instances.map((i) => i.tagName));
+    return sameOrMixed(this.targets.map((i) => i.tagName));
   }
 
   readonly props: Record<AllStyleKey, StylePropertyState>;
