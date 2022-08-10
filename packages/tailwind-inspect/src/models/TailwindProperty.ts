@@ -39,7 +39,21 @@ export class JITTailwindProperty implements ITailwindProperty {
   ) {
     this.tailwindName = tailwindName;
     this.cssName = cssName;
-    this.theme = new Map(Object.entries(flattenTheme(theme[themeName] || {})));
+
+    if (themeName === "fontSize") {
+      this.theme = new Map(
+        Object.entries(theme[themeName] || {}).map(([key, value]) => [
+          key,
+          value[0],
+        ])
+      );
+    } else {
+      this.theme = new Map(
+        Object.entries(flattenTheme(theme[themeName] || {}))
+      );
+    }
+    console.log(theme, this.theme);
+
     this.valueRegExp = valueRegExp;
   }
 
