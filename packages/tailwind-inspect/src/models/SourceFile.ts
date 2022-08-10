@@ -49,7 +49,9 @@ export class SourceFile {
   }
 
   private updateCode(): void {
-    const { code } = generate(this.ast, {}, this._code);
+    const { code } = generate(this.ast, {
+      retainLines: true,
+    });
     this._code = code;
     this.compileCode();
   }
