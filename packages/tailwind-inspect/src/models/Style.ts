@@ -181,6 +181,13 @@ const StyleBase: {
 };
 
 export class Style extends StyleBase {
+  clear(): void {
+    for (const key of styleKeys) {
+      this[key] = undefined;
+    }
+    this.unknownTailwindClassNames.clear();
+  }
+
   loadComputedStyle(dom: Element): void {
     const computedStyle = getComputedStyle(dom);
     for (const key of styleKeys) {
@@ -188,16 +195,25 @@ export class Style extends StyleBase {
     }
   }
 
+  readonly unknownTailwindClassNames = observable.array<string>();
+
   loadTailwind(className: string): void {
+    this.clear();
+
     const classNames = className.split(/\s+/);
 
     for (const className of classNames) {
+      let unknown = true;
       for (const prop of tailwindProperties) {
         const value = prop.fromTailwind(className);
         if (value !== undefined) {
           this[prop.cssName] = value;
+          unknown = false;
           break;
         }
+      }
+      if (unknown) {
+        this.unknownTailwindClassNames.push(className);
       }
     }
   }
@@ -215,6 +231,6 @@ export class Style extends StyleBase {
       }
     }
 
-    return classNames.join(" ");
+    return [...this.unknownTailwindClassNames, ...classNames].join(" ");
   }
 }
