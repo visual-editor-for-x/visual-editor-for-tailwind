@@ -52,7 +52,6 @@ export class JITTailwindProperty implements ITailwindProperty {
         Object.entries(flattenTheme(theme[themeName] || {}))
       );
     }
-    console.log(theme, this.theme);
 
     this.valueRegExp = valueRegExp;
   }
