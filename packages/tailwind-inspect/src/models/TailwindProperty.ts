@@ -53,6 +53,19 @@ export class JITTailwindProperty implements ITailwindProperty {
       );
     }
 
+    this.theme = new Map(
+      [...this.theme].map(([key, value]) => {
+        // rem to px
+
+        if (/^[0-9.]+rem$/.test(value)) {
+          const px = parseFloat(value) * 16;
+          return [key, `${px}px`];
+        }
+
+        return [key, value];
+      })
+    );
+
     this.valueRegExp = valueRegExp;
   }
 
