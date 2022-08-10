@@ -10,7 +10,6 @@ export class AppState {
     makeObservable(this);
   }
 
-  readonly elementInstance = new ElementInstance();
   readonly styleInspectorState = new StyleInspectorState(
     () => this.sourceFile.inspectorTargets
   );
