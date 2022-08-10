@@ -52,8 +52,11 @@ export class SourceFile {
     const { code } = generate(this.ast, {}, this._code);
     this._code = code;
 
-    const output = transform(code, { presets: ["env", "react"] }).code;
-    //console.log(output);
+    const output = transform(code, {
+      presets: ["env", "react"],
+      plugins: ["transform-react-jsx-source"],
+    }).code;
+    console.log(output);
     this._compiledCode = output;
   }
 
