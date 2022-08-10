@@ -1,31 +1,12 @@
 import { ElementInstance } from "../models/ElementInstance";
 import { StyleInspectorState } from "./StyleInspectorState";
 
-import { parse, ParseResult } from "@babel/parser";
+import { parse } from "@babel/parser";
 import generate from "@babel/generator";
 import demoCode from "./demo?raw";
 import { transform } from "@babel/standalone";
-import { makeObservable, observable, reaction } from "mobx";
+import { makeObservable, observable } from "mobx";
 import { SourceFile } from "../models/SourceFile";
-import { JSXAttribute, JSXElement } from "@babel/types";
-
-function classNameForJSXElement(element: JSXElement): string | undefined {
-  for (const attribute of element.openingElement.attributes) {
-    if (attribute.type !== "JSXAttribute") {
-      continue;
-    }
-    if (attribute.name.name !== "className") {
-      continue;
-    }
-
-    const value = attribute.value;
-    if (value?.type !== "StringLiteral") {
-      continue;
-    }
-
-    return value.value;
-  }
-}
 
 export class AppState {
   constructor() {
@@ -49,25 +30,12 @@ export class AppState {
     this.compiledCode = output;
 
     makeObservable(this);
-
-    reaction(
-      () => this.sourceFile.selectedElements,
-      (elements) => {
-        console.log(elements);
-        const classNames = elements.map(classNameForJSXElement);
-        console.log(classNames);
-
-        if (classNames.length) {
-          this.elementInstance.style.loadTailwind(classNames[0] ?? "");
-        }
-      }
-    );
   }
 
   readonly elementInstance = new ElementInstance();
-  readonly styleInspectorState = new StyleInspectorState(() => [
-    this.elementInstance,
-  ]);
+  readonly styleInspectorState = new StyleInspectorState(
+    () => this.sourceFile.inspectorTargets
+  );
 
   @observable compiledCode = "";
 

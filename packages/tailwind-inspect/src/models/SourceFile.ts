@@ -1,7 +1,9 @@
 import { File as FileAST, JSXElement } from "@babel/types";
 import { compact } from "lodash-es";
-import { makeObservable, observable, reaction } from "mobx";
+import { computed, makeObservable, observable, reaction } from "mobx";
 import { NodeSelection } from "./NodeSelection";
+import { Style } from "./Style";
+import { StyleInspectorTarget } from "./StyleInspectorTarget";
 
 interface JSXRoot {
   name?: string;
@@ -62,11 +64,35 @@ export class SourceFile {
 
   selection = new NodeSelection();
 
-  get selectedElements(): readonly JSXElement[] {
+  @computed get selectedElements(): readonly JSXElement[] {
     const nodes = this.selection.allPaths.map((path) => this.nodeForPath(path));
     return nodes.filter(
       (node): node is JSXElement => node?.type === "JSXElement"
     );
+  }
+
+  @computed get inspectorTargets(): StyleInspectorTarget[] {
+    return this.selectedElements.map((element) => {
+      let tagName: string;
+      if (element.openingElement.name.type === "JSXIdentifier") {
+        tagName = element.openingElement.name.name;
+      } else {
+        tagName = "div";
+      }
+
+      const style = new Style();
+      style.loadTailwind(classNameForJSXElement(element) ?? "");
+
+      // TODO: set style to AST
+
+      const computedStyle = new Style();
+
+      return {
+        tagName,
+        style,
+        computedStyle,
+      };
+    });
   }
 
   nodeForPath(
@@ -104,5 +130,23 @@ function nodeForPath(
     if (child.type === "JSXElement") {
       return nodeForPath(child, rest);
     }
+  }
+}
+
+function classNameForJSXElement(element: JSXElement): string | undefined {
+  for (const attribute of element.openingElement.attributes) {
+    if (attribute.type !== "JSXAttribute") {
+      continue;
+    }
+    if (attribute.name.name !== "className") {
+      continue;
+    }
+
+    const value = attribute.value;
+    if (value?.type !== "StringLiteral") {
+      continue;
+    }
+
+    return value.value;
   }
 }
