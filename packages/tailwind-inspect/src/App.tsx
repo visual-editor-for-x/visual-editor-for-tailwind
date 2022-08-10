@@ -11,7 +11,13 @@ const App = observer(function App() {
   return (
     <PaintkitRoot colorScheme="dark">
       <div className="flex w-full h-full fixed left-0 top-0">
-        <div className="flex-1">
+        <div
+          className="flex-1 bg-gray-900 text-white overflow-y-auto p-4"
+          style={{ contain: "strict" }}
+        >
+          <pre className="text-xs text-white">{appState.sourceFile.code}</pre>
+        </div>
+        <div className="flex-1" style={{ contain: "strict" }}>
           <DemoRunner appState={appState} />
         </div>
         <div className="bg-zinc-800 w-64 flex flex-col ">
