@@ -8,12 +8,7 @@ import {
   Style,
   textStyleKeys,
 } from "../models/Style";
-
-export interface StyleInspectorTarget {
-  readonly tagName: string;
-  readonly computedStyle: Style;
-  readonly style: Style;
-}
+import { StyleInspectorTarget } from "../models/StyleInspectorTarget";
 
 export class StylePropertyState {
   constructor(state: StyleInspectorState, key: AllStyleKey) {
