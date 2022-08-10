@@ -1,6 +1,7 @@
-import { File as FileAST, JSXElement } from "@babel/types";
+import { File as FileAST, JSXAttribute, JSXElement, react } from "@babel/types";
 import { compact } from "lodash-es";
 import { computed, makeObservable, observable, reaction } from "mobx";
+import traverse from "@babel/traverse";
 import { NodeSelection } from "./NodeSelection";
 import { Style } from "./Style";
 import { StyleInspectorTarget } from "./StyleInspectorTarget";
@@ -83,7 +84,13 @@ export class SourceFile {
       const style = new Style();
       style.loadTailwind(classNameForJSXElement(element) ?? "");
 
-      // TODO: set style to AST
+      reaction(
+        () => style.toTailwind(),
+        (className) => {
+          console.log(className);
+          setAttribute(element, "className", className);
+        }
+      );
 
       const computedStyle = new Style();
 
@@ -148,5 +155,44 @@ function classNameForJSXElement(element: JSXElement): string | undefined {
     }
 
     return value.value;
+  }
+}
+
+function setAttribute(
+  element: JSXElement,
+  key: string,
+  value: string | undefined
+) {
+  if (!value) {
+    element.openingElement.attributes =
+      element.openingElement.attributes.filter(
+        (attr) => !(attr.type === "JSXAttribute" && attr.name.name === key)
+      );
+    return;
+  }
+
+  const attribute = element.openingElement.attributes.find(
+    (attr): attr is JSXAttribute =>
+      attr.type === "JSXAttribute" &&
+      attr.name.type === "JSXIdentifier" &&
+      attr.name.name === key
+  );
+  if (attribute) {
+    attribute.value = {
+      type: "StringLiteral",
+      value,
+    };
+  } else {
+    element.openingElement.attributes.push({
+      type: "JSXAttribute",
+      name: {
+        type: "JSXIdentifier",
+        name: key,
+      },
+      value: {
+        type: "StringLiteral",
+        value,
+      },
+    });
   }
 }
