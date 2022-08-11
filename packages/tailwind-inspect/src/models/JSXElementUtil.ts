@@ -23,12 +23,12 @@ export const JSXElementUtil = {
     }
   },
 
-  className(element: JSXElement): string | undefined {
+  getAttribute(element: JSXElement, key: string): string | undefined {
     for (const attribute of element.openingElement.attributes) {
       if (attribute.type !== "JSXAttribute") {
         continue;
       }
-      if (attribute.name.name !== "className") {
+      if (attribute.name.name !== key) {
         continue;
       }
 

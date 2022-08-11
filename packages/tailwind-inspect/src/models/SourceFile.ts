@@ -132,7 +132,9 @@ export class SourceFile {
       }
 
       const style = new Style();
-      style.loadTailwind(JSXElementUtil.className(element) ?? "");
+      style.loadTailwind(
+        JSXElementUtil.getAttribute(element, "className") ?? ""
+      );
 
       reaction(
         () => style.toTailwind(),
