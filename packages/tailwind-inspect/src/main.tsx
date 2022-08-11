@@ -5,6 +5,7 @@ import { __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED } from "react-dom";
 import App from "./views/App";
 import "./index.css";
 
+// for debug
 // @ts-ignore
 window.getInstanceFromNode =
   __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.Events[0];
