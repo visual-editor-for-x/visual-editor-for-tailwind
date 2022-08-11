@@ -16,6 +16,7 @@ export default defineConfig({
   resolve: {
     alias: {
       path: "path-browserify",
+      os: "os-browserify",
     },
   },
   optimizeDeps: {

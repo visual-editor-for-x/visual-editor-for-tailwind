@@ -1,8 +1,8 @@
 import { File as FileAST, JSXAttribute, JSXElement, react } from "@babel/types";
 import { computed, makeObservable, observable, reaction } from "mobx";
 import { parse } from "@babel/parser";
-import generate from "@babel/generator";
 import { transform } from "@babel/standalone";
+import { print } from "recast";
 import { NodeSelection } from "./NodeSelection";
 import { Style } from "./Style";
 import { StyleInspectorTarget } from "./StyleInspectorTarget";
@@ -49,9 +49,7 @@ export class SourceFile {
   }
 
   private updateCode(): void {
-    const { code } = generate(this.ast, {
-      retainLines: true,
-    });
+    const { code } = print(this.ast);
     this._code = code;
     this.compileCode();
   }
