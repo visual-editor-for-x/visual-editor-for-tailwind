@@ -4,6 +4,7 @@ import React from "react";
 // @ts-ignore
 import { __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED } from "react-dom";
 import { StyleInspector } from "../inspector/StyleInspector";
+import { DebugSource } from "../models/DebugSource";
 import { JSXTreeView } from "../outline/JSXTreeView";
 import { AppState } from "../state/AppState";
 
@@ -57,8 +58,12 @@ const DemoRunner = observer(({ appState }: { appState: AppState }) => {
     const element = e.target as HTMLElement;
 
     const fiberNode = getInstanceFromNode(element);
-    const debugSource: SourceLocation | undefined = fiberNode?._debugSource;
+    const debugSource: DebugSource | undefined = fiberNode?._debugSource;
     console.log(debugSource);
+
+    if (debugSource) {
+      appState.sourceFile.selectFromDebugSource(debugSource);
+    }
   };
 
   return (
@@ -67,11 +72,5 @@ const DemoRunner = observer(({ appState }: { appState: AppState }) => {
     </div>
   );
 });
-
-interface SourceLocation {
-  fileName: string;
-  lineNumber: number;
-  columnNumber: number;
-}
 
 export default App;

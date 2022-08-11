@@ -1,4 +1,4 @@
-import { File as FileAST, JSXAttribute, JSXElement, react } from "@babel/types";
+import { File as FileAST, JSXAttribute, JSXElement } from "@babel/types";
 import { computed, makeObservable, observable, reaction } from "mobx";
 import { parse } from "@babel/parser";
 import { transform } from "@babel/standalone";
@@ -6,6 +6,7 @@ import * as recast from "recast";
 import { NodeSelection } from "./NodeSelection";
 import { Style } from "./Style";
 import { StyleInspectorTarget } from "./StyleInspectorTarget";
+import { DebugSource } from "./DebugSource";
 
 interface JSXRoot {
   name?: string;
@@ -164,6 +165,29 @@ export class SourceFile {
       return undefined;
     }
     return nodeForPath(this.jsxRoots[index].element, rest);
+  }
+
+  selectFromDebugSource(debugSource: DebugSource): void {
+    this.selection.clear();
+
+    const traverse = (node: JSXElement, path: readonly number[]) => {
+      if (
+        node.loc?.start.line === debugSource.lineNumber &&
+        node.loc?.start.column === debugSource.columnNumber - 1
+      ) {
+        this.selection.add(path);
+      }
+
+      for (const [index, child] of node.children.entries()) {
+        if (child.type === "JSXElement") {
+          traverse(child, [...path, index]);
+        }
+      }
+    };
+
+    for (const [index, root] of this.jsxRoots.entries()) {
+      traverse(root.element, [index]);
+    }
   }
 }
 
