@@ -72,7 +72,7 @@ export class SourceFile {
       plugins: ["transform-react-jsx-source"],
     }).code;
     //console.log(output);
-    this._compiledCode = output;
+    this._compiledCode = output ?? "";
   }
 
   private getJSXRoots(): JSXRoot[] {
