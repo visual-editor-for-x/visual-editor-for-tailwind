@@ -1,9 +1,9 @@
 import { PaintkitRoot } from "@seanchas116/paintkit/src/components/PaintkitRoot";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { StyleInspector } from "./inspector/StyleInspector";
-import { JSXTreeView } from "./outline/JSXTreeView";
-import { AppState } from "./state/AppState";
+import { StyleInspector } from "../inspector/StyleInspector";
+import { JSXTreeView } from "../outline/JSXTreeView";
+import { AppState } from "../state/AppState";
 
 const appState = new AppState();
 
