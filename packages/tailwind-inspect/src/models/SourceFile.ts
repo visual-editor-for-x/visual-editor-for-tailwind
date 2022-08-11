@@ -2,7 +2,7 @@ import { File as FileAST, JSXAttribute, JSXElement, react } from "@babel/types";
 import { computed, makeObservable, observable, reaction } from "mobx";
 import { parse } from "@babel/parser";
 import { transform } from "@babel/standalone";
-import { print } from "recast";
+import * as recast from "recast";
 import { NodeSelection } from "./NodeSelection";
 import { Style } from "./Style";
 import { StyleInspectorTarget } from "./StyleInspectorTarget";
@@ -14,9 +14,21 @@ interface JSXRoot {
 
 export class SourceFile {
   constructor(code: string) {
-    const ast = parse(code, {
-      sourceType: "module",
-      plugins: ["jsx", "typescript"],
+    // const ast = parse(code, {
+    //   sourceType: "module",
+    //   plugins: ["jsx", "typescript"],
+    //   tokens: true,
+    // });
+    const ast = recast.parse(code, {
+      parser: {
+        parse(code: string) {
+          return parse(code, {
+            sourceType: "module",
+            plugins: ["jsx", "typescript"],
+            tokens: true,
+          });
+        },
+      },
     });
 
     this.ast = ast;
@@ -49,7 +61,7 @@ export class SourceFile {
   }
 
   private updateCode(): void {
-    const { code } = print(this.ast);
+    const { code } = recast.print(this.ast);
     this._code = code;
     this.compileCode();
   }
