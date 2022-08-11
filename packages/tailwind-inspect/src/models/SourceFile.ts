@@ -1,4 +1,4 @@
-import { File as FileAST, JSXAttribute, JSXElement } from "@babel/types";
+import { File as FileAST, JSXElement } from "@babel/types";
 import { computed, makeObservable, observable, reaction } from "mobx";
 import { parse } from "@babel/parser";
 import { transform } from "@babel/standalone";
@@ -7,6 +7,7 @@ import { NodeSelection } from "./NodeSelection";
 import { Style } from "./Style";
 import { StyleInspectorTarget } from "./StyleInspectorTarget";
 import { DebugSource } from "./DebugSource";
+import { JSXElementUtil } from "./JSXElementUtil";
 
 interface JSXRoot {
   name?: string;
@@ -131,13 +132,13 @@ export class SourceFile {
       }
 
       const style = new Style();
-      style.loadTailwind(classNameForJSXElement(element) ?? "");
+      style.loadTailwind(JSXElementUtil.className(element) ?? "");
 
       reaction(
         () => style.toTailwind(),
         (className) => {
           console.log(className);
-          setAttribute(element, "className", className);
+          JSXElementUtil.setAttribute(element, "className", className);
           this.updateCode();
         }
       );
@@ -164,7 +165,7 @@ export class SourceFile {
     if (index >= this.jsxRoots.length) {
       return undefined;
     }
-    return nodeForPath(this.jsxRoots[index].element, rest);
+    return JSXElementUtil.nodeForPath(this.jsxRoots[index].element, rest);
   }
 
   selectFromDebugSource(debugSource: DebugSource): void {
@@ -188,84 +189,5 @@ export class SourceFile {
     for (const [index, root] of this.jsxRoots.entries()) {
       traverse(root.element, [index]);
     }
-  }
-}
-
-function nodeForPath(
-  node: JSXElement,
-  path: readonly number[]
-): JSXElement["children"][number] | undefined {
-  if (path.length === 0) {
-    return node;
-  }
-
-  const [nextIndex, ...rest] = path;
-  const children = node.children;
-  if (nextIndex < children.length) {
-    const child = children[nextIndex];
-    if (rest.length === 0) {
-      return child;
-    }
-
-    if (child.type === "JSXElement") {
-      return nodeForPath(child, rest);
-    }
-  }
-}
-
-function classNameForJSXElement(element: JSXElement): string | undefined {
-  for (const attribute of element.openingElement.attributes) {
-    if (attribute.type !== "JSXAttribute") {
-      continue;
-    }
-    if (attribute.name.name !== "className") {
-      continue;
-    }
-
-    const value = attribute.value;
-    if (value?.type !== "StringLiteral") {
-      continue;
-    }
-
-    return value.value;
-  }
-}
-
-function setAttribute(
-  element: JSXElement,
-  key: string,
-  value: string | undefined
-) {
-  if (!value) {
-    element.openingElement.attributes =
-      element.openingElement.attributes.filter(
-        (attr) => !(attr.type === "JSXAttribute" && attr.name.name === key)
-      );
-    return;
-  }
-
-  const attribute = element.openingElement.attributes.find(
-    (attr): attr is JSXAttribute =>
-      attr.type === "JSXAttribute" &&
-      attr.name.type === "JSXIdentifier" &&
-      attr.name.name === key
-  );
-  if (attribute) {
-    attribute.value = {
-      type: "StringLiteral",
-      value,
-    };
-  } else {
-    element.openingElement.attributes.push({
-      type: "JSXAttribute",
-      name: {
-        type: "JSXIdentifier",
-        name: key,
-      },
-      value: {
-        type: "StringLiteral",
-        value,
-      },
-    });
   }
 }
