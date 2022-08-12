@@ -2,6 +2,7 @@ import { PaintkitRoot } from "@seanchas116/paintkit/src/components/PaintkitRoot"
 import { colors } from "@seanchas116/paintkit/src/components/Palette";
 import { ResizeBox } from "@seanchas116/paintkit/src/components/ResizeBox";
 import { compact } from "lodash-es";
+import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import { Vec2 } from "paintvec";
 import React, { useEffect, useLayoutEffect, useState } from "react";
@@ -52,7 +53,7 @@ const DemoRunner = observer(({ appState }: { appState: AppState }) => {
 
   const Component = exports.default!;
 
-  const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const onClick = action((e: React.MouseEvent<HTMLDivElement>) => {
     const element = e.target as HTMLElement;
 
     const path = appState.domMapping.pathForDOM(element);
@@ -60,7 +61,13 @@ const DemoRunner = observer(({ appState }: { appState: AppState }) => {
       appState.sourceFile.selection.clear();
       appState.sourceFile.selection.add(path);
     }
-  };
+  });
+
+  const onMouseMove = action((e: React.MouseEvent<HTMLDivElement>) => {
+    const element = e.target as HTMLElement;
+    const path = appState.domMapping.pathForDOM(element);
+    appState.sourceFile.selection.hoveredPath = path;
+  });
 
   const ref = React.createRef<HTMLDivElement>();
 
@@ -73,6 +80,7 @@ const DemoRunner = observer(({ appState }: { appState: AppState }) => {
   return (
     <div
       onClick={onClick}
+      onMouseMove={onMouseMove}
       ref={ref}
       className="absolute left-0 top-0 w-full h-full"
     >
@@ -95,8 +103,10 @@ const SelectionOverlay = observer(function SelectionOverlay({
       appState.domMapping.domForPath(path)
     )
   );
-
-  console.log(selectedElements);
+  const hoveredElement =
+    appState.sourceFile.selection.hoveredPath &&
+    appState.domMapping.domForPath(appState.sourceFile.selection.hoveredPath);
+  const hoveredRect = hoveredElement && hoveredElement.getBoundingClientRect();
 
   useLayoutEffect(() => {
     if (ref.current) {
@@ -110,6 +120,18 @@ const SelectionOverlay = observer(function SelectionOverlay({
       ref={ref}
       className="absolute left-0 top-0 w-full h-full pointer-events-none"
     >
+      {hoveredRect && (
+        <rect
+          x={hoveredRect.left - topLeft[0]}
+          y={hoveredRect.top - topLeft[1]}
+          width={hoveredRect.width}
+          height={hoveredRect.height}
+          fill="transparent"
+          stroke={colors.active}
+          strokeWidth={1}
+        />
+      )}
+
       {selectedElements.map((element, i) => {
         const rect = element.getBoundingClientRect();
 

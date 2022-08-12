@@ -22,8 +22,9 @@ import generate from "@babel/generator";
 import { ReactNode, useMemo } from "react";
 import * as shortUUID from "short-uuid";
 import { SourceFile } from "../models/SourceFile";
-import { compact } from "lodash-es";
+import { compact, isEqual } from "lodash-es";
 import { NodeSelection } from "../models/NodeSelection";
+import { computed, makeObservable } from "mobx";
 
 class SourceFileTreeViewItem extends RootTreeViewItem {
   constructor(file: SourceFile) {
@@ -130,6 +131,7 @@ class JSXElementTreeViewItem extends TreeViewItem {
     this._parent = parent;
     this.path = path;
     this.node = node;
+    makeObservable(this);
   }
 
   readonly file: SourceFile;
@@ -177,12 +179,11 @@ class JSXElementTreeViewItem extends TreeViewItem {
       })
     );
   }
-  get selected(): boolean {
+  @computed get selected(): boolean {
     return this.file.selection.includes(this.path);
   }
-  get hovered(): boolean {
-    // TODO
-    return false;
+  @computed get hovered(): boolean {
+    return isEqual(this.file.selection.hoveredPath, this.path);
   }
   get collapsed(): boolean {
     // TODO

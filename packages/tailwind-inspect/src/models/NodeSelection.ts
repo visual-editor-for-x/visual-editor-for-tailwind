@@ -1,7 +1,13 @@
-import { observable } from "mobx";
+import { makeObservable, observable } from "mobx";
 
 export class NodeSelection {
+  constructor() {
+    makeObservable(this);
+  }
+
   readonly selectedPathStrings = observable.set<string>();
+
+  @observable hoveredPath: readonly number[] | undefined = undefined;
 
   includes(path: readonly number[]): boolean {
     return this.selectedPathStrings.has(path.join(","));
