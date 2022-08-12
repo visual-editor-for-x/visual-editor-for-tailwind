@@ -1,16 +1,9 @@
 import { PaintkitRoot } from "@seanchas116/paintkit/src/components/PaintkitRoot";
 import { observer } from "mobx-react-lite";
 import React, { useEffect } from "react";
-// @ts-ignore
-import { __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED } from "react-dom";
 import { StyleInspector } from "../inspector/StyleInspector";
-import { DebugSource } from "../models/DebugSource";
 import { JSXTreeView } from "../outline/JSXTreeView";
 import { AppState } from "../state/AppState";
-
-// @ts-ignore
-const getInstanceFromNode =
-  __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.Events[0];
 
 const appState = new AppState();
 
@@ -57,28 +50,18 @@ const DemoRunner = observer(({ appState }: { appState: AppState }) => {
   const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const element = e.target as HTMLElement;
 
-    const fiberNode = getInstanceFromNode(element);
-    const debugSource: DebugSource | undefined = fiberNode?._debugSource;
-    console.log(debugSource);
-
-    if (debugSource) {
-      appState.sourceFile.selectFromDebugSource(debugSource);
+    const path = appState.domMapping.pathForDOM(element);
+    if (path) {
+      appState.sourceFile.selection.clear();
+      appState.sourceFile.selection.add(path);
     }
   };
 
   const ref = React.createRef<HTMLDivElement>();
 
   useEffect(() => {
-    const traverse = (dom: Element) => {
-      const fiberNode = getInstanceFromNode(dom);
-      console.log(fiberNode);
-
-      for (const child of dom.children) {
-        traverse(child);
-      }
-    };
     if (ref.current) {
-      traverse(ref.current);
+      appState.domMapping.update(ref.current);
     }
   });
 

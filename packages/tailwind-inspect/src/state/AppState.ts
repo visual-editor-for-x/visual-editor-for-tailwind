@@ -3,10 +3,12 @@ import { StyleInspectorState } from "./StyleInspectorState";
 import demoCode from "./demo?raw";
 import { computed, makeObservable } from "mobx";
 import { SourceFile } from "../models/SourceFile";
+import { DOMMapping } from "./DOMMapping";
 
 export class AppState {
   constructor() {
     this.sourceFile = new SourceFile(demoCode);
+    this.domMapping = new DOMMapping(this.sourceFile);
     makeObservable(this);
   }
 
@@ -19,4 +21,5 @@ export class AppState {
   }
 
   readonly sourceFile: SourceFile;
+  readonly domMapping: DOMMapping;
 }
