@@ -69,6 +69,10 @@ const DemoRunner = observer(({ appState }: { appState: AppState }) => {
     appState.sourceFile.selection.hoveredPath = path;
   });
 
+  const onMouseLeave = action(() => {
+    appState.sourceFile.selection.hoveredPath = undefined;
+  });
+
   const ref = React.createRef<HTMLDivElement>();
 
   useEffect(() => {
@@ -81,6 +85,7 @@ const DemoRunner = observer(({ appState }: { appState: AppState }) => {
     <div
       onMouseDown={onMouseDown}
       onMouseMove={onMouseMove}
+      onMouseLeave={onMouseLeave}
       ref={ref}
       className="absolute left-0 top-0 w-full h-full"
     >
