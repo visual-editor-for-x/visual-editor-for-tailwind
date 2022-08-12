@@ -214,6 +214,8 @@ importers:
       '@esbuild-plugins/node-globals-polyfill': ^0.1.1
       '@iconify-icons/ic': ^1.2.6
       '@iconify-icons/mdi': ^1.2.27
+      '@iconify/react': ^3.2.2
+      '@iconify/types': ^1.1.0
       '@seanchas116/paintkit': '*'
       '@tippyjs/react': ^4.2.6
       '@types/babel__core': ^7.1.19
@@ -224,6 +226,7 @@ importers:
       '@types/react': ^18.0.15
       '@types/react-dom': ^18.0.6
       '@types/styled-components': ^5.1.25
+      '@types/wicg-file-system-access': ^2020.9.5
       '@vitejs/plugin-react': ^2.0.0
       autoprefixer: ^10.4.7
       buffer: ^6.0.3
@@ -252,8 +255,10 @@ importers:
       '@esbuild-plugins/node-globals-polyfill': 0.1.1
       '@iconify-icons/ic': 1.2.9
       '@iconify-icons/mdi': 1.2.27
+      '@iconify/react': 3.2.2_react@18.2.0
       '@seanchas116/paintkit': link:../paintkit
       '@tippyjs/react': 4.2.6_biqbaboplfbrettd7655fr4n2y
+      '@types/wicg-file-system-access': 2020.9.5
       buffer: 6.0.3
       lodash-es: 4.17.21
       mobx: 6.6.1
@@ -267,6 +272,7 @@ importers:
       short-uuid: 4.2.0
       styled-components: 5.3.5_biqbaboplfbrettd7655fr4n2y
     devDependencies:
+      '@iconify/types': 1.1.0
       '@types/babel__core': 7.1.19
       '@types/babel__generator': 7.6.4
       '@types/babel__standalone': 7.1.4
@@ -1992,7 +1998,6 @@ packages:
 
   /@iconify/types/1.1.0:
     resolution: {integrity: sha512-Jh0llaK2LRXQoYsorIH8maClebsnzTcve+7U3rQUSnC11X4jtPnFuyatqFLvMxZ8MLG8dB4zfHsbPfuvxluONw==}
-    dev: false
 
   /@iconify/utils/1.0.33:
     resolution: {integrity: sha512-vGeAqo7aGPxOQmGdVoXFUOuyN+0V7Lcrx2EvaiRjxUD1x6Om0Tvq2bdm7E24l2Pz++4S0mWMCVFXe/17EtKImQ==}
