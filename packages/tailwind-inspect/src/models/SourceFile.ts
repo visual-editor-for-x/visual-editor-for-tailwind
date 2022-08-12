@@ -173,14 +173,19 @@ export class SourceFile {
   selectFromDebugSource(debugSource: DebugSource): void {
     this.selection.clear();
 
-    const traverse = (node: JSXElement, path: readonly number[]) => {
+    this.traverseWithPath((node, path) => {
       if (
         node.loc?.start.line === debugSource.lineNumber &&
         node.loc?.start.column === debugSource.columnNumber - 1
       ) {
         this.selection.add(path);
       }
+    });
+  }
 
+  traverseWithPath(visit: (node: JSXElement, path: readonly number[]) => void) {
+    const traverse = (node: JSXElement, path: readonly number[]) => {
+      visit(node, path);
       for (const [index, child] of node.children.entries()) {
         if (child.type === "JSXElement") {
           traverse(child, [...path, index]);
