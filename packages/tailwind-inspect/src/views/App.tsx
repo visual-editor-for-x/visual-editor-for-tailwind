@@ -4,7 +4,7 @@ import { ResizeBox } from "@seanchas116/paintkit/src/components/ResizeBox";
 import { compact } from "lodash-es";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
-import { Vec2 } from "paintvec";
+import { Rect, Vec2 } from "paintvec";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { StyleInspector } from "../inspector/StyleInspector";
 import { JSXTreeView } from "../outline/JSXTreeView";
@@ -96,22 +96,28 @@ const SelectionOverlay = observer(function SelectionOverlay({
 }) {
   const ref = React.createRef<SVGSVGElement>();
 
-  const [topLeft, setTopLeft] = useState<[number, number]>([0, 0]);
+  const [topLeft, setTopLeft] = useState<Vec2>(new Vec2(0));
 
   const selectedElements = compact(
     appState.sourceFile.selection.allPaths.map((path) =>
       appState.domMapping.domForPath(path)
     )
   );
+  const selectedRects = selectedElements.map((element) =>
+    Rect.from(element.getBoundingClientRect()).translate(topLeft.neg)
+  );
+
   const hoveredElement =
     appState.sourceFile.selection.hoveredPath &&
     appState.domMapping.domForPath(appState.sourceFile.selection.hoveredPath);
-  const hoveredRect = hoveredElement && hoveredElement.getBoundingClientRect();
+  const hoveredRect =
+    hoveredElement &&
+    Rect.from(hoveredElement.getBoundingClientRect()).translate(topLeft.neg);
 
   useLayoutEffect(() => {
     if (ref.current) {
       const { top, left } = ref.current.getBoundingClientRect();
-      setTopLeft([left, top]);
+      setTopLeft(new Vec2(left, top));
     }
   }, []);
 
@@ -122,8 +128,8 @@ const SelectionOverlay = observer(function SelectionOverlay({
     >
       {hoveredRect && (
         <rect
-          x={hoveredRect.left - topLeft[0]}
-          y={hoveredRect.top - topLeft[1]}
+          x={hoveredRect.left}
+          y={hoveredRect.top}
           width={hoveredRect.width}
           height={hoveredRect.height}
           fill="transparent"
@@ -132,18 +138,11 @@ const SelectionOverlay = observer(function SelectionOverlay({
         />
       )}
 
-      {selectedElements.map((element, i) => {
-        const rect = element.getBoundingClientRect();
-
-        const left = rect.left - topLeft[0];
-        const top = rect.top - topLeft[1];
-        const width = rect.width;
-        const height = rect.height;
-
+      {selectedRects.map((rect, i) => {
         return (
           <ResizeBox
-            p0={new Vec2(left, top)}
-            p1={new Vec2(left + width, top + height)}
+            p0={rect.topLeft}
+            p1={rect.bottomRight}
             snap={(p) => p}
             onChangeBegin={() => {}}
             onChange={(p0, p1) => {
