@@ -53,7 +53,7 @@ const DemoRunner = observer(({ appState }: { appState: AppState }) => {
 
   const Component = exports.default!;
 
-  const onClick = action((e: React.MouseEvent<HTMLDivElement>) => {
+  const onMouseDown = action((e: React.MouseEvent<HTMLDivElement>) => {
     const element = e.target as HTMLElement;
 
     const path = appState.domMapping.pathForDOM(element);
@@ -79,7 +79,7 @@ const DemoRunner = observer(({ appState }: { appState: AppState }) => {
 
   return (
     <div
-      onClick={onClick}
+      onMouseDown={onMouseDown}
       onMouseMove={onMouseMove}
       ref={ref}
       className="absolute left-0 top-0 w-full h-full"
