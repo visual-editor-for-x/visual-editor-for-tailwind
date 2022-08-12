@@ -1,7 +1,9 @@
 import { PaintkitRoot } from "@seanchas116/paintkit/src/components/PaintkitRoot";
 import { colors } from "@seanchas116/paintkit/src/components/Palette";
+import { ResizeBox } from "@seanchas116/paintkit/src/components/ResizeBox";
 import { compact } from "lodash-es";
 import { observer } from "mobx-react-lite";
+import { Vec2 } from "paintvec";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { StyleInspector } from "../inspector/StyleInspector";
 import { JSXTreeView } from "../outline/JSXTreeView";
@@ -117,15 +119,15 @@ const SelectionOverlay = observer(function SelectionOverlay({
         const height = rect.height;
 
         return (
-          <rect
-            key={i}
-            x={left}
-            y={top}
-            width={width}
-            height={height}
-            fill="transparent"
-            stroke={colors.active}
-            strokeWidth="1"
+          <ResizeBox
+            p0={new Vec2(left, top)}
+            p1={new Vec2(left + width, top + height)}
+            snap={(p) => p}
+            onChangeBegin={() => {}}
+            onChange={(p0, p1) => {
+              // TODO
+            }}
+            onChangeEnd={() => {}}
           />
         );
       })}
