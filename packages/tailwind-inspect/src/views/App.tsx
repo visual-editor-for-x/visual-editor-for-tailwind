@@ -1,6 +1,6 @@
 import { PaintkitRoot } from "@seanchas116/paintkit/src/components/PaintkitRoot";
 import { observer } from "mobx-react-lite";
-import React from "react";
+import React, { useEffect } from "react";
 // @ts-ignore
 import { __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED } from "react-dom";
 import { StyleInspector } from "../inspector/StyleInspector";
@@ -66,8 +66,24 @@ const DemoRunner = observer(({ appState }: { appState: AppState }) => {
     }
   };
 
+  const ref = React.createRef<HTMLDivElement>();
+
+  useEffect(() => {
+    const traverse = (dom: Element) => {
+      const fiberNode = getInstanceFromNode(dom);
+      console.log(fiberNode);
+
+      for (const child of dom.children) {
+        traverse(child);
+      }
+    };
+    if (ref.current) {
+      traverse(ref.current);
+    }
+  });
+
   return (
-    <div onClick={onClick}>
+    <div onClick={onClick} ref={ref}>
       <Component />
     </div>
   );
