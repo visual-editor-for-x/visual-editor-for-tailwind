@@ -21,18 +21,18 @@ import widgetsFilledIcon from "@iconify-icons/ic/baseline-widgets";
 import generate from "@babel/generator";
 import { ReactNode, useMemo } from "react";
 import * as shortUUID from "short-uuid";
-import { SourceFile } from "../models/SourceFile";
+import { SourceFileOld } from "../models/SourceFileOld";
 import { compact, isEqual } from "lodash-es";
 import { NodeSelection } from "../models/NodeSelection";
 import { computed, makeObservable } from "mobx";
 
 class SourceFileTreeViewItem extends RootTreeViewItem {
-  constructor(file: SourceFile) {
+  constructor(file: SourceFileOld) {
     super();
     this.file = file;
   }
 
-  readonly file: SourceFile;
+  readonly file: SourceFileOld;
 
   get children(): readonly TreeViewItem[] {
     return this.file.jsxRoots.map(
@@ -53,7 +53,7 @@ class SourceFileTreeViewItem extends RootTreeViewItem {
 
 class JSXRootTreeViewItem extends TreeViewItem {
   constructor(
-    file: SourceFile,
+    file: SourceFileOld,
     parent: TreeViewItem | undefined,
     name: string,
     index: number,
@@ -67,7 +67,7 @@ class JSXRootTreeViewItem extends TreeViewItem {
     this.node = node;
   }
 
-  readonly file: SourceFile;
+  readonly file: SourceFileOld;
   private readonly _parent: TreeViewItem | undefined;
   readonly name: string;
   readonly index: number;
@@ -121,7 +121,7 @@ class JSXRootTreeViewItem extends TreeViewItem {
 
 class JSXElementTreeViewItem extends TreeViewItem {
   constructor(
-    file: SourceFile,
+    file: SourceFileOld,
     parent: TreeViewItem | undefined,
     path: readonly number[],
     node: JSXElement
@@ -134,7 +134,7 @@ class JSXElementTreeViewItem extends TreeViewItem {
     makeObservable(this);
   }
 
-  readonly file: SourceFile;
+  readonly file: SourceFileOld;
   private readonly _parent: TreeViewItem | undefined;
   readonly node: JSXElement;
   readonly path: readonly number[];
@@ -215,7 +215,7 @@ class JSXElementTreeViewItem extends TreeViewItem {
 
 class JSXTextTreeViewItem extends LeafTreeViewItem {
   constructor(
-    file: SourceFile,
+    file: SourceFileOld,
     parent: TreeViewItem | undefined,
     path: readonly number[],
     node: JSXText
@@ -227,7 +227,7 @@ class JSXTextTreeViewItem extends LeafTreeViewItem {
     this.node = node;
   }
 
-  readonly file: SourceFile;
+  readonly file: SourceFileOld;
   private readonly _parent: TreeViewItem | undefined;
   readonly path: readonly number[];
   readonly node: JSXText;
@@ -264,7 +264,7 @@ class JSXTextTreeViewItem extends LeafTreeViewItem {
 
 class JSXOtherTreeViewItem extends LeafTreeViewItem {
   constructor(
-    file: SourceFile,
+    file: SourceFileOld,
     parent: TreeViewItem | undefined,
     path: readonly number[],
     node: JSXFragment | JSXExpressionContainer | JSXSpreadChild
@@ -276,7 +276,7 @@ class JSXOtherTreeViewItem extends LeafTreeViewItem {
     this.node = node;
   }
 
-  readonly file: SourceFile;
+  readonly file: SourceFileOld;
   private readonly _parent: TreeViewItem | undefined;
   readonly path: readonly number[];
   readonly node: JSXFragment | JSXExpressionContainer | JSXSpreadChild;
@@ -312,7 +312,7 @@ class JSXOtherTreeViewItem extends LeafTreeViewItem {
 }
 
 export const JSXTreeView: React.FC<{
-  file: SourceFile;
+  file: SourceFileOld;
   className?: string;
 }> = ({ file, className }) => {
   const rootItem = useMemo(() => new SourceFileTreeViewItem(file), [file]);

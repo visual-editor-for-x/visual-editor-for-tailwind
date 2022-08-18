@@ -14,7 +14,7 @@ interface JSXRoot {
   element: JSXElement;
 }
 
-export class SourceFile {
+export class SourceFileOld {
   constructor(code: string) {
     // const ast = parse(code, {
     //   sourceType: "module",

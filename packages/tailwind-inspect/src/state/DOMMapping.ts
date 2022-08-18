@@ -1,17 +1,17 @@
 // @ts-ignore
 import { __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED } from "react-dom";
-import { SourceFile } from "../models/SourceFile";
+import { SourceFileOld } from "../models/SourceFileOld";
 
 // @ts-ignore
 const getInstanceFromNode =
   __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.Events[0];
 
 export class DOMMapping {
-  constructor(sourceFile: SourceFile) {
+  constructor(sourceFile: SourceFileOld) {
     this.sourceFile = sourceFile;
   }
 
-  readonly sourceFile: SourceFile;
+  readonly sourceFile: SourceFileOld;
 
   private readonly _domForPath = new Map<string, Element>();
   private readonly _pathForDOM = new Map<Element, readonly number[]>();
