@@ -56,21 +56,21 @@ const DemoRunner = observer(({ appState }: { appState: AppState }) => {
   const onMouseDown = action((e: React.MouseEvent<HTMLDivElement>) => {
     const element = e.target as HTMLElement;
 
-    const path = appState.domMapping.pathForDOM(element);
-    if (path) {
-      appState.sourceFile.selection.clear();
-      appState.sourceFile.selection.add(path);
+    const node = appState.domMapping.nodeForDOM.get(element);
+    if (node) {
+      appState.sourceFile.node.deselect();
+      node.select();
     }
   });
 
   const onMouseMove = action((e: React.MouseEvent<HTMLDivElement>) => {
     const element = e.target as HTMLElement;
-    const path = appState.domMapping.pathForDOM(element);
-    appState.sourceFile.selection.hoveredPath = path;
+    appState.sourceFile.hoveredElement =
+      appState.domMapping.nodeForDOM.get(element);
   });
 
   const onMouseLeave = action(() => {
-    appState.sourceFile.selection.hoveredPath = undefined;
+    appState.sourceFile.hoveredElement = undefined;
   });
 
   const ref = React.createRef<HTMLDivElement>();
@@ -104,8 +104,8 @@ const SelectionOverlay = observer(function SelectionOverlay({
   const [topLeft, setTopLeft] = useState<Vec2>(new Vec2(0));
 
   const selectedElements = compact(
-    appState.sourceFile.selection.allPaths.map((path) =>
-      appState.domMapping.domForPath(path)
+    appState.sourceFile.selectedElements.map((node) =>
+      appState.domMapping.domForNode.get(node)
     )
   );
   const selectedRects = selectedElements.map((element) =>
@@ -113,8 +113,8 @@ const SelectionOverlay = observer(function SelectionOverlay({
   );
 
   const hoveredElement =
-    appState.sourceFile.selection.hoveredPath &&
-    appState.domMapping.domForPath(appState.sourceFile.selection.hoveredPath);
+    appState.sourceFile.hoveredElement &&
+    appState.domMapping.domForNode.get(appState.sourceFile.hoveredElement);
   const hoveredRect =
     hoveredElement &&
     Rect.from(hoveredElement.getBoundingClientRect()).translate(topLeft.neg);

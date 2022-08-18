@@ -27,12 +27,13 @@ export class ComponentNode extends NodeBase<
     super();
     this.originalAST = foundComponent.statement;
     this.componentName = foundComponent.name;
-    this.root = new JSXElementNode(foundComponent.element);
+    this.rootElement = new JSXElementNode(foundComponent.element);
+    this.append(this.rootElement);
   }
 
   originalAST: babel.ExportDefaultDeclaration | babel.ExportNamedDeclaration;
   componentName: string | undefined;
-  root: JSXElementNode;
+  rootElement: JSXElementNode;
 
   loadAST(ast: babel.ExportDefaultDeclaration | babel.ExportNamedDeclaration) {
     const foundComponent = findComponentFromStatement(ast);
@@ -42,7 +43,7 @@ export class ComponentNode extends NodeBase<
 
     this.originalAST = ast;
     this.componentName = foundComponent.name;
-    this.root.loadAST(foundComponent.element);
+    this.rootElement.loadAST(foundComponent.element);
   }
 
   toAST(): babel.ExportDefaultDeclaration | babel.ExportNamedDeclaration {
@@ -54,7 +55,7 @@ export class ComponentNode extends NodeBase<
     if (declaration?.type === "FunctionDeclaration") {
       for (const bodyStatement of declaration.body.body) {
         if (bodyStatement.type === "ReturnStatement") {
-          bodyStatement.argument = this.root.toAST();
+          bodyStatement.argument = this.rootElement.toAST();
         }
       }
     }

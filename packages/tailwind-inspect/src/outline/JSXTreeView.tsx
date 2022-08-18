@@ -1,11 +1,4 @@
 import {
-  JSXElement,
-  JSXExpressionContainer,
-  JSXFragment,
-  JSXSpreadChild,
-  JSXText,
-} from "@babel/types";
-import {
   LeafTreeViewItem,
   RootTreeViewItem,
   TreeViewItem,
@@ -20,70 +13,56 @@ import chevronsIcon from "@seanchas116/paintkit/src/icon/Chevrons";
 import widgetsFilledIcon from "@iconify-icons/ic/baseline-widgets";
 import generate from "@babel/generator";
 import { ReactNode, useMemo } from "react";
-import * as shortUUID from "short-uuid";
-import { SourceFileOld } from "../models/SourceFileOld";
-import { compact, isEqual } from "lodash-es";
-import { NodeSelection } from "../models/NodeSelection";
+import { compact } from "lodash-es";
 import { computed, makeObservable } from "mobx";
+import { SourceFile } from "../models/SourceFile";
+import { JSXElementNode } from "../models/node/JSXElementNode";
+import { ComponentNode } from "../models/node/ComponentNode";
+import { JSXTextNode } from "../models/node/JSXTextNode";
+import { JSXOtherNode } from "../models/node/JSXOtherNode";
 
 class SourceFileTreeViewItem extends RootTreeViewItem {
-  constructor(file: SourceFileOld) {
+  constructor(file: SourceFile) {
     super();
     this.file = file;
   }
 
-  readonly file: SourceFileOld;
+  readonly file: SourceFile;
 
   get children(): readonly TreeViewItem[] {
-    return this.file.jsxRoots.map(
-      (root, i) =>
-        new JSXRootTreeViewItem(
-          this.file,
-          this,
-          root.name ?? "default",
-          i,
-          root.element
-        )
+    return this.file.node.children.map(
+      (component) => new ComponentTreeViewItem(this.file, this, component)
     );
   }
   deselect(): void {
-    this.file.selection.clear();
+    this.file.node.deselect();
   }
 }
 
-class JSXRootTreeViewItem extends TreeViewItem {
+class ComponentTreeViewItem extends TreeViewItem {
   constructor(
-    file: SourceFileOld,
+    file: SourceFile,
     parent: TreeViewItem | undefined,
-    name: string,
-    index: number,
-    node: JSXElement
+    node: ComponentNode
   ) {
     super();
     this.file = file;
     this._parent = parent;
-    this.name = name;
-    this.index = index;
     this.node = node;
   }
 
-  readonly file: SourceFileOld;
+  readonly file: SourceFile;
   private readonly _parent: TreeViewItem | undefined;
-  readonly name: string;
-  readonly index: number;
-  readonly node: JSXElement;
-  private readonly _key = shortUUID.generate();
+  readonly node: ComponentNode;
 
   get key(): string {
-    return this._key;
+    return this.node.key;
   }
   get parent(): TreeViewItem | undefined {
     return this._parent;
   }
   get children(): readonly TreeViewItem[] {
-    return [
-      new JSXElementTreeViewItem(this.file, this, [this.index], this.node),
-    ];
+    return [new JSXElementTreeViewItem(this.file, this, this.node.rootElement)];
   }
   get selected(): boolean {
     // TODO
@@ -104,7 +83,7 @@ class JSXRootTreeViewItem extends TreeViewItem {
     return (
       <TreeRow inverted={options.inverted}>
         <TreeRowIcon icon={widgetsFilledIcon} />
-        <TreeRowLabel>{this.name}</TreeRowLabel>
+        <TreeRowLabel>{this.node.componentName ?? "default"}</TreeRowLabel>
       </TreeRow>
     );
   }
@@ -121,69 +100,49 @@ class JSXRootTreeViewItem extends TreeViewItem {
 
 class JSXElementTreeViewItem extends TreeViewItem {
   constructor(
-    file: SourceFileOld,
+    file: SourceFile,
     parent: TreeViewItem | undefined,
-    path: readonly number[],
-    node: JSXElement
+    node: JSXElementNode
   ) {
     super();
     this.file = file;
     this._parent = parent;
-    this.path = path;
     this.node = node;
     makeObservable(this);
   }
 
-  readonly file: SourceFileOld;
+  readonly file: SourceFile;
   private readonly _parent: TreeViewItem | undefined;
-  readonly node: JSXElement;
-  readonly path: readonly number[];
-  private readonly _key = shortUUID.generate();
+  readonly node: JSXElementNode;
 
   get key(): string {
-    return this._key;
+    return this.node.key;
   }
   get parent(): TreeViewItem | undefined {
     return this._parent;
   }
   get children(): readonly TreeViewItem[] {
     return compact(
-      this.node.children.map((child, i) => {
-        switch (child.type) {
-          case "JSXElement":
-            return new JSXElementTreeViewItem(
-              this.file,
-              this,
-              [...this.path, i],
-              child
-            );
-          case "JSXText":
-            // ignore newlines
-            if (/^\s*$/.test(child.value) && child.value.includes("\n")) {
-              return;
-            }
-            return new JSXTextTreeViewItem(
-              this.file,
-              this,
-              [...this.path, i],
-              child
-            );
-          default:
-            return new JSXOtherTreeViewItem(
-              this.file,
-              this,
-              [...this.path, i],
-              child
-            );
+      this.node.children.map((child) => {
+        if (child instanceof JSXElementNode) {
+          return new JSXElementTreeViewItem(this.file, this, child);
         }
+        if (child instanceof JSXTextNode) {
+          // ignore newlines
+          if (/^\s*$/.test(child.value) && child.value.includes("\n")) {
+            return;
+          }
+          return new JSXTextTreeViewItem(this.file, this, child);
+        }
+        return new JSXOtherTreeViewItem(this.file, this, child);
       })
     );
   }
   @computed get selected(): boolean {
-    return this.file.selection.includes(this.path);
+    return this.node.selected;
   }
   @computed get hovered(): boolean {
-    return isEqual(this.file.selection.hoveredPath, this.path);
+    return this.file.hoveredElement === this.node;
   }
   get collapsed(): boolean {
     // TODO
@@ -196,17 +155,15 @@ class JSXElementTreeViewItem extends TreeViewItem {
     return (
       <TreeRow inverted={options.inverted}>
         <TreeRowIcon icon={chevronsIcon} />
-        <TreeRowLabel>
-          {generate(this.node.openingElement.name).code}
-        </TreeRowLabel>
+        <TreeRowLabel>{this.node.tagName}</TreeRowLabel>
       </TreeRow>
     );
   }
   deselect(): void {
-    this.file.selection.delete(this.path);
+    this.node.deselect();
   }
   select(): void {
-    this.file.selection.add(this.path);
+    this.node.select();
   }
   toggleCollapsed(): void {
     // TODO
@@ -215,26 +172,22 @@ class JSXElementTreeViewItem extends TreeViewItem {
 
 class JSXTextTreeViewItem extends LeafTreeViewItem {
   constructor(
-    file: SourceFileOld,
+    file: SourceFile,
     parent: TreeViewItem | undefined,
-    path: readonly number[],
-    node: JSXText
+    node: JSXTextNode
   ) {
     super();
     this.file = file;
     this._parent = parent;
-    this.path = path;
     this.node = node;
   }
 
-  readonly file: SourceFileOld;
+  readonly file: SourceFile;
   private readonly _parent: TreeViewItem | undefined;
-  readonly path: readonly number[];
-  readonly node: JSXText;
-  private readonly _key = shortUUID.generate();
+  readonly node: JSXTextNode;
 
   get key(): string {
-    return this._key;
+    return this.node.key;
   }
   get parent(): TreeViewItem | undefined {
     return this._parent;
@@ -264,26 +217,22 @@ class JSXTextTreeViewItem extends LeafTreeViewItem {
 
 class JSXOtherTreeViewItem extends LeafTreeViewItem {
   constructor(
-    file: SourceFileOld,
+    file: SourceFile,
     parent: TreeViewItem | undefined,
-    path: readonly number[],
-    node: JSXFragment | JSXExpressionContainer | JSXSpreadChild
+    node: JSXOtherNode
   ) {
     super();
     this.file = file;
     this._parent = parent;
-    this.path = path;
     this.node = node;
   }
 
-  readonly file: SourceFileOld;
+  readonly file: SourceFile;
   private readonly _parent: TreeViewItem | undefined;
-  readonly path: readonly number[];
-  readonly node: JSXFragment | JSXExpressionContainer | JSXSpreadChild;
-  private readonly _key = shortUUID.generate();
+  readonly node: JSXOtherNode;
 
   get key(): string {
-    return this._key;
+    return this.node.key;
   }
   get parent(): TreeViewItem | undefined {
     return this._parent;
@@ -299,7 +248,7 @@ class JSXOtherTreeViewItem extends LeafTreeViewItem {
   renderRow(options: { inverted: boolean }): ReactNode {
     return (
       <TreeRow inverted={options.inverted}>
-        <TreeRowLabel>{generate(this.node).code}</TreeRowLabel>
+        <TreeRowLabel>{generate(this.node.originalAST).code}</TreeRowLabel>
       </TreeRow>
     );
   }
@@ -312,7 +261,7 @@ class JSXOtherTreeViewItem extends LeafTreeViewItem {
 }
 
 export const JSXTreeView: React.FC<{
-  file: SourceFileOld;
+  file: SourceFile;
   className?: string;
 }> = ({ file, className }) => {
   const rootItem = useMemo(() => new SourceFileTreeViewItem(file), [file]);

@@ -17,7 +17,7 @@ interface JSXRoot {
   element: JSXElement;
 }
 
-export class SourceFileOld {
+export class SourceFile {
   constructor(code: string) {
     // const ast = parse(code, {
     //   sourceType: "module",
@@ -82,6 +82,8 @@ export class SourceFileOld {
     //console.log(output);
     this._compiledCode = output ?? "";
   }
+
+  @observable hoveredElement: JSXElementNode | undefined = undefined;
 
   @computed get selectedElements(): readonly JSXElementNode[] {
     return filterInstance(this.node.selectedDescendants, [JSXElementNode]);

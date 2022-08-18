@@ -20,7 +20,7 @@ export class StylePropertyState {
   readonly state: StyleInspectorState;
   readonly key: AllStyleKey;
 
-  @computed get targets(): StyleInspectorTarget[] {
+  @computed get targets(): readonly StyleInspectorTarget[] {
     if (this.key === "color") {
       return [...this.state.textTargets, ...this.state.svgTargets];
     }
@@ -76,7 +76,7 @@ export class StylePropertyState {
 }
 
 export class StyleInspectorState {
-  constructor(getTargets: () => StyleInspectorTarget[]) {
+  constructor(getTargets: () => readonly StyleInspectorTarget[]) {
     this._getTargets = getTargets;
     makeObservable(this);
 
@@ -85,9 +85,9 @@ export class StyleInspectorState {
     ) as Record<AllStyleKey, StylePropertyState>;
   }
 
-  private readonly _getTargets: () => StyleInspectorTarget[];
+  private readonly _getTargets: () => readonly StyleInspectorTarget[];
 
-  get targets(): StyleInspectorTarget[] {
+  get targets(): readonly StyleInspectorTarget[] {
     return this._getTargets();
   }
 

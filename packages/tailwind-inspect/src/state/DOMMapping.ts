@@ -1,42 +1,37 @@
 // @ts-ignore
 import { __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED } from "react-dom";
-import { SourceFileOld } from "../models/SourceFileOld";
+import { JSXElementNode } from "../models/node/JSXElementNode";
+import { SourceFile } from "../models/SourceFile";
 
 // @ts-ignore
 const getInstanceFromNode =
   __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.Events[0];
 
 export class DOMMapping {
-  constructor(sourceFile: SourceFileOld) {
+  constructor(sourceFile: SourceFile) {
     this.sourceFile = sourceFile;
   }
 
-  readonly sourceFile: SourceFileOld;
+  readonly sourceFile: SourceFile;
 
-  private readonly _domForPath = new Map<string, Element>();
-  private readonly _pathForDOM = new Map<Element, readonly number[]>();
-
-  domForPath(path: readonly number[]): Element | undefined {
-    return this._domForPath.get(JSON.stringify(path));
-  }
-
-  pathForDOM(dom: Element): readonly number[] | undefined {
-    return this._pathForDOM.get(dom);
-  }
+  readonly domForNode = new Map<JSXElementNode, Element>();
+  readonly nodeForDOM = new Map<Element, JSXElementNode>();
 
   update(root: Element): void {
-    this._domForPath.clear();
-    this._pathForDOM.clear();
+    this.domForNode.clear();
+    this.nodeForDOM.clear();
 
-    const locationToPath = new Map<string, readonly number[]>();
+    const locationToNode = new Map<string, JSXElementNode>();
 
-    this.sourceFile.traverseWithPath((node, path) => {
-      const loc = node.loc;
-      if (loc) {
-        locationToPath.set(
-          JSON.stringify([loc.start.line, loc.start.column]),
-          path
-        );
+    this.sourceFile.node.forEachDescendant((node) => {
+      if (node instanceof JSXElementNode) {
+        const loc = node.originalAST.loc;
+        if (loc) {
+          locationToNode.set(
+            JSON.stringify([loc.start.line, loc.start.column]),
+            node
+          );
+        }
       }
     });
 
@@ -47,10 +42,10 @@ export class DOMMapping {
         const line = fiberNode._debugSource.lineNumber;
         const column = fiberNode._debugSource.columnNumber - 1;
 
-        const path = locationToPath.get(JSON.stringify([line, column]));
-        if (path) {
-          this._domForPath.set(JSON.stringify(path), dom);
-          this._pathForDOM.set(dom, path);
+        const node = locationToNode.get(JSON.stringify([line, column]));
+        if (node) {
+          this.domForNode.set(node, dom);
+          this.nodeForDOM.set(dom, node);
         }
       }
 

@@ -13,15 +13,18 @@ export class JSXOtherNode extends NodeBase<
     ast: babel.JSXFragment | babel.JSXExpressionContainer | babel.JSXSpreadChild
   ) {
     super();
-    this.ast = ast;
+    this.originalAST = ast;
   }
 
-  ast: babel.JSXFragment | babel.JSXExpressionContainer | babel.JSXSpreadChild;
+  originalAST:
+    | babel.JSXFragment
+    | babel.JSXExpressionContainer
+    | babel.JSXSpreadChild;
 
   toAST():
     | babel.JSXFragment
     | babel.JSXExpressionContainer
     | babel.JSXSpreadChild {
-    return this.ast;
+    return this.originalAST;
   }
 }
