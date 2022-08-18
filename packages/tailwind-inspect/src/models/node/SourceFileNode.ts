@@ -35,9 +35,12 @@ export class SourceFileNode extends NodeBase<
     );
 
     const ast = babel.cloneNode(this.originalAST, false);
-    ast.program.body = ast.program.body.map((child) => {
+    const program = babel.cloneNode(ast.program, false);
+    program.body = program.body.map((child) => {
       return components.get(child)?.toAST() || child;
     });
+
+    ast.program = program;
     return ast;
   }
 }
