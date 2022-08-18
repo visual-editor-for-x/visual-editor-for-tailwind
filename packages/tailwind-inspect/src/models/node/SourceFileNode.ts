@@ -2,8 +2,10 @@ import { TreeNode } from "@seanchas116/paintkit/src/util/TreeNode";
 import { ComponentNode } from "./ComponentNode";
 import * as babel from "@babel/types";
 import { clone, compact } from "lodash-es";
+import { makeObservable, observable } from "mobx";
+import { NodeBase } from "./NodeBase";
 
-export class SourceFileNode extends TreeNode<
+export class SourceFileNode extends NodeBase<
   never,
   SourceFileNode,
   ComponentNode

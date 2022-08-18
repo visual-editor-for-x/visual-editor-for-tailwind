@@ -2,6 +2,8 @@ import { TreeNode } from "@seanchas116/paintkit/src/util/TreeNode";
 import { JSXElementNode } from "./JSXElementNode";
 import { SourceFileNode } from "./SourceFileNode";
 import * as babel from "@babel/types";
+import { makeObservable, observable } from "mobx";
+import { NodeBase } from "./NodeBase";
 
 interface FoundComponent {
   name?: string;
@@ -9,11 +11,18 @@ interface FoundComponent {
   element: babel.JSXElement;
 }
 
-export class ComponentNode extends TreeNode<
+export class ComponentNode extends NodeBase<
   SourceFileNode,
   ComponentNode,
   JSXElementNode
 > {
+  static maybeCreate(ast: babel.Statement): ComponentNode | undefined {
+    const foundComponent = findComponentFromStatement(ast);
+    if (foundComponent) {
+      return new ComponentNode(foundComponent);
+    }
+  }
+
   constructor(foundComponent: FoundComponent) {
     super();
     this.originalAST = foundComponent.statement;
@@ -51,13 +60,6 @@ export class ComponentNode extends TreeNode<
     }
 
     return statement;
-  }
-
-  static maybeCreate(ast: babel.Statement): ComponentNode | undefined {
-    const foundComponent = findComponentFromStatement(ast);
-    if (foundComponent) {
-      return new ComponentNode(foundComponent);
-    }
   }
 }
 

@@ -5,8 +5,10 @@ import { JSXTextNode } from "./JSXTextNode";
 import { JSXOtherNode } from "./JSXOtherNode";
 import { Style } from "../Style";
 import { JSXElementUtil } from "../JSXElementUtil";
+import { makeObservable, observable } from "mobx";
+import { NodeBase } from "./NodeBase";
 
-export class JSXElementNode extends TreeNode<
+export class JSXElementNode extends NodeBase<
   JSXElementNode,
   JSXElementNode,
   JSXElementNode | JSXTextNode | JSXOtherNode

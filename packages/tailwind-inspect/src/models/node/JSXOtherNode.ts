@@ -1,8 +1,10 @@
 import * as babel from "@babel/types";
 import { TreeNode } from "@seanchas116/paintkit/src/util/TreeNode";
+import { makeObservable, observable } from "mobx";
 import { JSXElementNode } from "./JSXElementNode";
+import { NodeBase } from "./NodeBase";
 
-export class JSXOtherNode extends TreeNode<
+export class JSXOtherNode extends NodeBase<
   JSXElementNode,
   JSXOtherNode,
   never
