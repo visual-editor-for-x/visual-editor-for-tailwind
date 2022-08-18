@@ -42,7 +42,6 @@ export class DOMMapping {
 
     const traverse = (dom: Element) => {
       const fiberNode = getInstanceFromNode(dom);
-      console.log(fiberNode);
 
       if (fiberNode?._debugSource) {
         const line = fiberNode._debugSource.lineNumber;
