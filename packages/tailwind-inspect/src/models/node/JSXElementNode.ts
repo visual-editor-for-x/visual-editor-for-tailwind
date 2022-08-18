@@ -21,6 +21,7 @@ export class JSXElementNode extends NodeBase<
 
   originalAST: babel.JSXElement;
   readonly style = new Style();
+  readonly computedStyle = new Style();
 
   loadAST(ast: babel.JSXElement) {
     const children = ast.children.map((child) => {
@@ -46,5 +47,13 @@ export class JSXElementNode extends NodeBase<
     ast.children = this.children.map((child) => child.toAST());
     JSXElementUtil.setAttribute(ast, "className", this.style.toTailwind());
     return ast;
+  }
+
+  get tagName(): string {
+    if (this.originalAST.openingElement.name.type === "JSXIdentifier") {
+      return this.originalAST.openingElement.name.name;
+    } else {
+      return "div";
+    }
   }
 }

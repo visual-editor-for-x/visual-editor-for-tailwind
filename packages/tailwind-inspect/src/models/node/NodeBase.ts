@@ -1,5 +1,5 @@
 import { TreeNode } from "@seanchas116/paintkit/src/util/TreeNode";
-import { makeObservable, observable } from "mobx";
+import { computed, makeObservable, observable } from "mobx";
 
 export abstract class NodeBase<
   Parent extends NodeBase<any, any, any>,
@@ -25,5 +25,12 @@ export abstract class NodeBase<
     for (const child of this.children) {
       child.deselect();
     }
+  }
+
+  @computed.struct get selectedDescendants(): NodeBase<any, any, any>[] {
+    if (this.selected) {
+      return [this];
+    }
+    return this.children.flatMap((child) => child.selectedDescendants);
   }
 }
