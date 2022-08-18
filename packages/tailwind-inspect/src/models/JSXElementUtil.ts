@@ -1,4 +1,4 @@
-import { JSXAttribute, JSXElement } from "@babel/types";
+import { JSXAttribute, JSXElement, JSXOpeningElement } from "@babel/types";
 
 export const JSXElementUtil = {
   nodeForPath(
@@ -23,8 +23,11 @@ export const JSXElementUtil = {
     }
   },
 
-  getAttribute(element: JSXElement, key: string): string | undefined {
-    for (const attribute of element.openingElement.attributes) {
+  getAttribute(
+    openingElement: JSXOpeningElement,
+    key: string
+  ): string | undefined {
+    for (const attribute of openingElement.attributes) {
       if (attribute.type !== "JSXAttribute") {
         continue;
       }
@@ -41,16 +44,19 @@ export const JSXElementUtil = {
     }
   },
 
-  setAttribute(element: JSXElement, key: string, value: string | undefined) {
+  setAttribute(
+    openingElement: JSXOpeningElement,
+    key: string,
+    value: string | undefined
+  ) {
     if (!value) {
-      element.openingElement.attributes =
-        element.openingElement.attributes.filter(
-          (attr) => !(attr.type === "JSXAttribute" && attr.name.name === key)
-        );
+      openingElement.attributes = openingElement.attributes.filter(
+        (attr) => !(attr.type === "JSXAttribute" && attr.name.name === key)
+      );
       return;
     }
 
-    const attribute = element.openingElement.attributes.find(
+    const attribute = openingElement.attributes.find(
       (attr): attr is JSXAttribute =>
         attr.type === "JSXAttribute" &&
         attr.name.type === "JSXIdentifier" &&
@@ -62,7 +68,7 @@ export const JSXElementUtil = {
         value,
       };
     } else {
-      element.openingElement.attributes.push({
+      openingElement.attributes.push({
         type: "JSXAttribute",
         name: {
           type: "JSXIdentifier",

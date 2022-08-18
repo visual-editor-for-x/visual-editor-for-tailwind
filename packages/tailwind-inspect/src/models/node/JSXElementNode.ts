@@ -38,15 +38,21 @@ export class JSXElementNode extends NodeBase<
     this.clear();
     this.append(...children);
     this.style.loadTailwind(
-      JSXElementUtil.getAttribute(ast, "className") ?? ""
+      JSXElementUtil.getAttribute(ast.openingElement, "className") ?? ""
     );
   }
 
   toAST(): babel.JSXElement {
-    const ast = clone(this.originalAST);
-    ast.children = this.children.map((child) => child.toAST());
-    JSXElementUtil.setAttribute(ast, "className", this.style.toTailwind());
-    return ast;
+    const element = babel.cloneNode(this.originalAST, false);
+    element.children = this.children.map((child) => child.toAST());
+    element.openingElement = babel.cloneNode(this.originalAST.openingElement);
+
+    JSXElementUtil.setAttribute(
+      element.openingElement,
+      "className",
+      this.style.toTailwind()
+    );
+    return element;
   }
 
   get tagName(): string {

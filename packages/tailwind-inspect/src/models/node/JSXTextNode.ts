@@ -1,8 +1,6 @@
-import { TreeNode } from "@seanchas116/paintkit/src/util/TreeNode";
 import { JSXElementNode } from "./JSXElementNode";
 import * as babel from "@babel/types";
 import { makeObservable, observable } from "mobx";
-import { clone } from "lodash-es";
 import { NodeBase } from "./NodeBase";
 
 export class JSXTextNode extends NodeBase<JSXElementNode, JSXTextNode, never> {
@@ -23,7 +21,7 @@ export class JSXTextNode extends NodeBase<JSXElementNode, JSXTextNode, never> {
   }
 
   toAST(): babel.JSXText {
-    const ast = clone(this.originalAST);
+    const ast = babel.cloneNode(this.originalAST, false);
     ast.value = this.value;
     return ast;
   }
