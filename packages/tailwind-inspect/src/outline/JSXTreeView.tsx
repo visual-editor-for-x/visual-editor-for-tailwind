@@ -20,6 +20,9 @@ import { JSXElementNode } from "../models/node/JSXElementNode";
 import { ComponentNode } from "../models/node/ComponentNode";
 import { JSXTextNode } from "../models/node/JSXTextNode";
 import { JSXOtherNode } from "../models/node/JSXOtherNode";
+import { JSXNode } from "../models/node/JSXNode";
+
+const NODE_DRAG_MIME = "application/x.macaron-tree-drag-node";
 
 class SourceFileTreeViewItem extends RootTreeViewItem {
   constructor(file: SourceFile) {
@@ -165,6 +168,38 @@ class JSXElementTreeViewItem extends TreeViewItem {
   toggleCollapsed(): void {
     this.node.collapsed = !this.node.collapsed;
   }
+
+  handleDragStart(e: React.DragEvent): void {
+    e.dataTransfer.effectAllowed = "copyMove";
+    e.dataTransfer.setData(NODE_DRAG_MIME, "drag");
+  }
+
+  canDropData(dataTransfer: DataTransfer): boolean {
+    return dataTransfer.types.includes(NODE_DRAG_MIME);
+  }
+
+  handleDrop(event: React.DragEvent, before: TreeViewItem | undefined): void {
+    const copy = event.altKey || event.ctrlKey;
+
+    const beforeNode =
+      before &&
+      (
+        before as
+          | JSXElementTreeViewItem
+          | JSXTextTreeViewItem
+          | JSXOtherTreeViewItem
+      ).node;
+
+    // TODO: copy
+    for (const node of this.file.selectedNodes) {
+      this.node.insertBefore(node, beforeNode);
+    }
+
+    // TODO: commit
+    // this.context.editorState.history.commit(
+    //   copy ? "Duplicate Layers" : "Move Layers"
+    // );
+  }
 }
 
 class JSXTextTreeViewItem extends LeafTreeViewItem {
@@ -190,11 +225,9 @@ class JSXTextTreeViewItem extends LeafTreeViewItem {
     return this._parent;
   }
   get selected(): boolean {
-    // TODO
-    return false;
+    return this.node.selected;
   }
   get hovered(): boolean {
-    // TODO
     return false;
   }
   renderRow(options: { inverted: boolean }): ReactNode {
@@ -205,10 +238,15 @@ class JSXTextTreeViewItem extends LeafTreeViewItem {
     );
   }
   deselect(): void {
-    // TODO
+    this.node.deselect();
   }
   select(): void {
-    // TODO
+    this.node.select();
+  }
+
+  handleDragStart(e: React.DragEvent): void {
+    e.dataTransfer.effectAllowed = "copyMove";
+    e.dataTransfer.setData(NODE_DRAG_MIME, "drag");
   }
 }
 
@@ -235,11 +273,9 @@ class JSXOtherTreeViewItem extends LeafTreeViewItem {
     return this._parent;
   }
   get selected(): boolean {
-    // TODO
-    return false;
+    return this.node.selected;
   }
   get hovered(): boolean {
-    // TODO
     return false;
   }
   renderRow(options: { inverted: boolean }): ReactNode {
@@ -250,10 +286,15 @@ class JSXOtherTreeViewItem extends LeafTreeViewItem {
     );
   }
   deselect(): void {
-    // TODO
+    this.node.deselect();
   }
   select(): void {
-    // TODO
+    this.node.select();
+  }
+
+  handleDragStart(e: React.DragEvent): void {
+    e.dataTransfer.effectAllowed = "copyMove";
+    e.dataTransfer.setData(NODE_DRAG_MIME, "drag");
   }
 }
 

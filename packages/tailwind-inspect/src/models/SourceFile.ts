@@ -3,14 +3,13 @@ import { action, computed, makeObservable, observable, reaction } from "mobx";
 import { parse } from "@babel/parser";
 import { transform } from "@babel/standalone";
 import * as recast from "recast";
-import { NodeSelection } from "./NodeSelection";
-import { Style } from "./Style";
-import { StyleInspectorTarget } from "./StyleInspectorTarget";
 import { DebugSource } from "./DebugSource";
-import { JSXElementUtil } from "./JSXElementUtil";
 import { SourceFileNode } from "./node/SourceFileNode";
 import { JSXElementNode } from "./node/JSXElementNode";
 import { filterInstance } from "@seanchas116/paintkit/src/util/Collection";
+import { JSXNode } from "./node/JSXNode";
+import { JSXTextNode } from "./node/JSXTextNode";
+import { JSXOtherNode } from "./node/JSXOtherNode";
 
 interface JSXRoot {
   name?: string;
@@ -92,6 +91,13 @@ export class SourceFile {
 
   @computed get selectedElements(): readonly JSXElementNode[] {
     return filterInstance(this.node.selectedDescendants, [JSXElementNode]);
+  }
+  @computed get selectedNodes(): readonly JSXNode[] {
+    return filterInstance(this.node.selectedDescendants, [
+      JSXElementNode,
+      JSXTextNode,
+      JSXOtherNode,
+    ]);
   }
 
   selectFromDebugSource(debugSource: DebugSource): void {
