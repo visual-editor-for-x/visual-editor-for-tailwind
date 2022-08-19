@@ -33,4 +33,6 @@ export abstract class NodeBase<
     }
     return this.children.flatMap((child) => child.selectedDescendants);
   }
+
+  @observable collapsed = false;
 }

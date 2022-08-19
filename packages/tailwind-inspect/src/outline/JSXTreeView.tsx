@@ -65,16 +65,14 @@ class ComponentTreeViewItem extends TreeViewItem {
     return [new JSXElementTreeViewItem(this.file, this, this.node.rootElement)];
   }
   get selected(): boolean {
-    // TODO
-    return false;
+    return this.node.selected;
   }
   get hovered(): boolean {
     // TODO
     return false;
   }
   get collapsed(): boolean {
-    // TODO
-    return false;
+    return this.node.collapsed;
   }
   get showsCollapseButton(): boolean {
     return true;
@@ -88,13 +86,13 @@ class ComponentTreeViewItem extends TreeViewItem {
     );
   }
   deselect(): void {
-    // TODO
+    this.node.deselect();
   }
   select(): void {
-    // TODO
+    this.node.select();
   }
   toggleCollapsed(): void {
-    // TODO
+    this.node.collapsed = !this.node.collapsed;
   }
 }
 
@@ -145,8 +143,7 @@ class JSXElementTreeViewItem extends TreeViewItem {
     return this.file.hoveredElement === this.node;
   }
   get collapsed(): boolean {
-    // TODO
-    return false;
+    return this.node.collapsed;
   }
   get showsCollapseButton(): boolean {
     return true;
@@ -166,7 +163,7 @@ class JSXElementTreeViewItem extends TreeViewItem {
     this.node.select();
   }
   toggleCollapsed(): void {
-    // TODO
+    this.node.collapsed = !this.node.collapsed;
   }
 }
 
