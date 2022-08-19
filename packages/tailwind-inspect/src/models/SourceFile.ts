@@ -27,8 +27,8 @@ function parseCode(code: string): babel.File {
 
 export class SourceFile {
   constructor(code: string) {
-    this.ast = parseCode(code);
-    this.node = new SourceFileNode(this.ast);
+    const ast = parseCode(code);
+    this.node = new SourceFileNode(ast);
     this._code = code;
     this.compileCode();
 
@@ -42,7 +42,6 @@ export class SourceFile {
     );
   }
 
-  private ast: babel.File;
   readonly node: SourceFileNode;
 
   @observable private _code: string;
@@ -57,13 +56,11 @@ export class SourceFile {
   }
 
   updateCode() {
-    const ast = this.node.toAST();
-
-    const { code } = recast.print(ast);
+    const { code } = recast.print(this.node.toAST());
     this._code = code;
 
-    this.ast = parseCode(code);
-    this.node.loadAST(this.ast);
+    const newAST = parseCode(code);
+    this.node.loadAST(newAST);
 
     this.compileCode();
   }
