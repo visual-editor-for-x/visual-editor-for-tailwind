@@ -195,6 +195,8 @@ class JSXElementTreeViewItem extends TreeViewItem {
       this.node.insertBefore(node, beforeNode);
     }
 
+    this.file.updateCode();
+
     // TODO: commit
     // this.context.editorState.history.commit(
     //   copy ? "Duplicate Layers" : "Move Layers"
