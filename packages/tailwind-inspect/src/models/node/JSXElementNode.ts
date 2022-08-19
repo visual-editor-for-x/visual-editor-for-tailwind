@@ -32,7 +32,7 @@ export class JSXElementNode extends NodeBase<
 
     const children = ast.children.map((child) => {
       if (child.type === "JSXText") {
-        const node = oldTextNodes.pop();
+        const node = oldTextNodes.shift();
         if (node) {
           node.loadAST(child);
           return node;
@@ -40,7 +40,7 @@ export class JSXElementNode extends NodeBase<
           return new JSXTextNode(child);
         }
       } else if (child.type === "JSXElement") {
-        const node = oldElementNodes.pop();
+        const node = oldElementNodes.shift();
         if (node) {
           node.loadAST(child);
           return node;
@@ -48,7 +48,7 @@ export class JSXElementNode extends NodeBase<
           return new JSXElementNode(child);
         }
       } else {
-        const node = oldOtherNodes.pop();
+        const node = oldOtherNodes.shift();
         if (node) {
           node.loadAST(child);
           return node;

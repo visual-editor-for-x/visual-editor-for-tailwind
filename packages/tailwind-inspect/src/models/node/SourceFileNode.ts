@@ -21,7 +21,7 @@ export class SourceFileNode extends NodeBase<
 
     const components = compact(
       ast.program.body.map((child) =>
-        ComponentNode.maybeCreate(child, () => oldChildren.pop())
+        ComponentNode.maybeCreate(child, () => oldChildren.shift())
       )
     );
 
