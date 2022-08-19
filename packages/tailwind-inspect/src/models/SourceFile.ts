@@ -1,4 +1,4 @@
-import { File as FileAST, JSXElement } from "@babel/types";
+import * as babel from "@babel/types";
 import { action, computed, makeObservable, observable, reaction } from "mobx";
 import { parse } from "@babel/parser";
 import { transform } from "@babel/standalone";
@@ -11,32 +11,24 @@ import { JSXNode } from "./node/JSXNode";
 import { JSXTextNode } from "./node/JSXTextNode";
 import { JSXOtherNode } from "./node/JSXOtherNode";
 
-interface JSXRoot {
-  name?: string;
-  element: JSXElement;
+function parseCode(code: string): babel.File {
+  return recast.parse(code, {
+    parser: {
+      parse(code: string) {
+        return parse(code, {
+          sourceType: "module",
+          plugins: ["jsx", "typescript"],
+          tokens: true,
+        });
+      },
+    },
+  });
 }
 
 export class SourceFile {
   constructor(code: string) {
-    // const ast = parse(code, {
-    //   sourceType: "module",
-    //   plugins: ["jsx", "typescript"],
-    //   tokens: true,
-    // });
-    const ast = recast.parse(code, {
-      parser: {
-        parse(code: string) {
-          return parse(code, {
-            sourceType: "module",
-            plugins: ["jsx", "typescript"],
-            tokens: true,
-          });
-        },
-      },
-    });
-
-    this.ast = ast;
-    this.node = new SourceFileNode(ast);
+    this.ast = parseCode(code);
+    this.node = new SourceFileNode(this.ast);
     this._code = code;
     this.compileCode();
 
@@ -56,6 +48,10 @@ export class SourceFile {
 
         const { code } = recast.print(ast);
         this._code = code;
+
+        this.ast = parseCode(code);
+        this.node.loadAST(this.ast);
+
         this.compileCode();
       }),
       {
@@ -64,7 +60,7 @@ export class SourceFile {
     );
   }
 
-  readonly ast: FileAST;
+  ast: babel.File;
   readonly node: SourceFileNode;
 
   @observable private _code: string;
