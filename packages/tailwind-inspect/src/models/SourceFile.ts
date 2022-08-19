@@ -40,27 +40,9 @@ export class SourceFile {
         console.log(elements);
       }
     );
-
-    reaction(
-      () => this.node.toAST(),
-      action((ast) => {
-        console.log("update code");
-
-        const { code } = recast.print(ast);
-        this._code = code;
-
-        this.ast = parseCode(code);
-        this.node.loadAST(this.ast);
-
-        this.compileCode();
-      }),
-      {
-        equals: () => false,
-      }
-    );
   }
 
-  ast: babel.File;
+  private ast: babel.File;
   readonly node: SourceFileNode;
 
   @observable private _code: string;
@@ -72,6 +54,18 @@ export class SourceFile {
 
   get compiledCode(): string {
     return this._compiledCode;
+  }
+
+  updateCode() {
+    const ast = this.node.toAST();
+
+    const { code } = recast.print(ast);
+    this._code = code;
+
+    this.ast = parseCode(code);
+    this.node.loadAST(this.ast);
+
+    this.compileCode();
   }
 
   private compileCode() {

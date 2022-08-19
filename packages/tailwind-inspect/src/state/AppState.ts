@@ -13,9 +13,15 @@ export class AppState {
     makeObservable(this);
   }
 
-  readonly styleInspectorState = new StyleInspectorState(
-    () => this.sourceFile.selectedElements
-  );
+  readonly styleInspectorState = new StyleInspectorState({
+    getTargets: () => this.sourceFile.selectedElements,
+    notifyChange: () => {
+      this.sourceFile.updateCode();
+    },
+    commit: (message) => {
+      //TODO
+    },
+  });
 
   @computed get compiledCode() {
     return this.sourceFile.compiledCode;

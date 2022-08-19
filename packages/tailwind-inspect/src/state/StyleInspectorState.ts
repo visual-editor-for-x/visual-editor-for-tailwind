@@ -1,5 +1,6 @@
 import { isReplacedElement } from "@seanchas116/paintkit/src/util/HTMLTagCategory";
 import { MIXED, sameOrMixed } from "@seanchas116/paintkit/src/util/Mixed";
+import { startCase } from "lodash-es";
 import { action, computed, makeObservable, observable } from "mobx";
 import {
   AllStyleKey,
@@ -60,11 +61,12 @@ export class StylePropertyState {
       //   }
       // }
     }
+    this.state.notifyChange();
     return true;
   });
 
   readonly onCommit = action(() => {
-    //this.state.editorState.history.commit(`Change ${startCase(this.key)}`);
+    this.state.commit(`Change ${startCase(this.key)}`);
     return true;
   });
 
@@ -75,9 +77,15 @@ export class StylePropertyState {
   });
 }
 
+interface StyleInspectorStateDelegate {
+  getTargets(): readonly StyleInspectorTarget[];
+  notifyChange(): void;
+  commit(message: string): void;
+}
+
 export class StyleInspectorState {
-  constructor(getTargets: () => readonly StyleInspectorTarget[]) {
-    this._getTargets = getTargets;
+  constructor(delegate: StyleInspectorStateDelegate) {
+    this.delegate = delegate;
     makeObservable(this);
 
     this.props = Object.fromEntries(
@@ -85,10 +93,18 @@ export class StyleInspectorState {
     ) as Record<AllStyleKey, StylePropertyState>;
   }
 
-  private readonly _getTargets: () => readonly StyleInspectorTarget[];
+  private readonly delegate: StyleInspectorStateDelegate;
 
   get targets(): readonly StyleInspectorTarget[] {
-    return this._getTargets();
+    return this.delegate.getTargets();
+  }
+
+  notifyChange() {
+    this.delegate.notifyChange();
+  }
+
+  commit(message: string) {
+    this.delegate.commit(message);
   }
 
   @computed get imageTargets(): StyleInspectorTarget[] {
