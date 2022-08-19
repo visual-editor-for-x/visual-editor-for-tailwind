@@ -21,6 +21,12 @@ export class JSXOtherNode extends NodeBase<
     | babel.JSXExpressionContainer
     | babel.JSXSpreadChild;
 
+  loadAST(
+    ast: babel.JSXFragment | babel.JSXExpressionContainer | babel.JSXSpreadChild
+  ) {
+    this.originalAST = ast;
+  }
+
   toAST():
     | babel.JSXFragment
     | babel.JSXExpressionContainer

@@ -4,6 +4,7 @@ import { SourceFileNode } from "./SourceFileNode";
 import * as babel from "@babel/types";
 import { makeObservable, observable } from "mobx";
 import { NodeBase } from "./NodeBase";
+import { MultiMap } from "@seanchas116/paintkit/src/util/MultiMap";
 
 interface FoundComponent {
   name?: string;
@@ -16,9 +17,17 @@ export class ComponentNode extends NodeBase<
   ComponentNode,
   JSXElementNode
 > {
-  static maybeCreate(ast: babel.Statement): ComponentNode | undefined {
+  static maybeCreate(
+    ast: babel.Statement,
+    getReusableComponent: (name?: string) => ComponentNode | undefined
+  ): ComponentNode | undefined {
     const foundComponent = findComponentFromStatement(ast);
     if (foundComponent) {
+      const component = getReusableComponent(foundComponent.name);
+      if (component) {
+        component.loadFoundComponent(foundComponent);
+        return component;
+      }
       return new ComponentNode(foundComponent);
     }
   }
@@ -35,13 +44,8 @@ export class ComponentNode extends NodeBase<
   componentName: string | undefined;
   rootElement: JSXElementNode;
 
-  loadAST(ast: babel.ExportDefaultDeclaration | babel.ExportNamedDeclaration) {
-    const foundComponent = findComponentFromStatement(ast);
-    if (!foundComponent) {
-      throw new Error("No JSX Root");
-    }
-
-    this.originalAST = ast;
+  loadFoundComponent(foundComponent: FoundComponent) {
+    this.originalAST = foundComponent.statement;
     this.componentName = foundComponent.name;
     this.rootElement.loadAST(foundComponent.element);
   }

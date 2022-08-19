@@ -1,4 +1,5 @@
 import { TreeNode } from "@seanchas116/paintkit/src/util/TreeNode";
+import { MultiMap } from "@seanchas116/paintkit/src/util/MultiMap";
 import { ComponentNode } from "./ComponentNode";
 import * as babel from "@babel/types";
 import { clone, compact } from "lodash-es";
@@ -19,9 +20,12 @@ export class SourceFileNode extends NodeBase<
   originalAST: babel.File;
 
   loadAST(ast: babel.File) {
-    // TODO: reuse instances
+    const oldChildren = [...this.children];
+
     const components = compact(
-      ast.program.body.map((child) => ComponentNode.maybeCreate(child))
+      ast.program.body.map((child) =>
+        ComponentNode.maybeCreate(child, () => oldChildren.pop())
+      )
     );
 
     this.originalAST = ast;

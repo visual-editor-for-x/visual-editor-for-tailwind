@@ -7,6 +7,7 @@ import { Style } from "../Style";
 import { JSXElementUtil } from "../JSXElementUtil";
 import { makeObservable, observable, reaction } from "mobx";
 import { NodeBase } from "./NodeBase";
+import { filterInstance } from "@seanchas116/paintkit/src/util/Collection";
 
 export class JSXElementNode extends NodeBase<
   JSXElementNode,
@@ -24,13 +25,36 @@ export class JSXElementNode extends NodeBase<
   readonly computedStyle = new Style();
 
   loadAST(ast: babel.JSXElement) {
+    const oldChildren = this.children;
+    const oldTextNodes = filterInstance(oldChildren, [JSXTextNode]);
+    const oldOtherNodes = filterInstance(oldChildren, [JSXOtherNode]);
+    const oldElementNodes = filterInstance(oldChildren, [JSXElementNode]);
+
     const children = ast.children.map((child) => {
       if (child.type === "JSXText") {
-        return new JSXTextNode(child);
+        const node = oldTextNodes.pop();
+        if (node) {
+          node.loadAST(child);
+          return node;
+        } else {
+          return new JSXTextNode(child);
+        }
       } else if (child.type === "JSXElement") {
-        return new JSXElementNode(child);
+        const node = oldElementNodes.pop();
+        if (node) {
+          node.loadAST(child);
+          return node;
+        } else {
+          return new JSXElementNode(child);
+        }
       } else {
-        return new JSXOtherNode(child);
+        const node = oldOtherNodes.pop();
+        if (node) {
+          node.loadAST(child);
+          return node;
+        } else {
+          return new JSXOtherNode(child);
+        }
       }
     });
 
