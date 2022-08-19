@@ -18,7 +18,7 @@ export class AppState {
     notifyChange: () => {
       this.sourceFile.updateCode();
     },
-    commit: (message) => {
+    notifyChangeEnd: (message) => {
       //TODO
     },
   });

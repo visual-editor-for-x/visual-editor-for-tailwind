@@ -66,7 +66,7 @@ export class StylePropertyState {
   });
 
   readonly onCommit = action(() => {
-    this.state.commit(`Change ${startCase(this.key)}`);
+    this.state.notifyChangeEnd(`Change ${startCase(this.key)}`);
     return true;
   });
 
@@ -80,7 +80,7 @@ export class StylePropertyState {
 interface StyleInspectorStateDelegate {
   getTargets(): readonly StyleInspectorTarget[];
   notifyChange(): void;
-  commit(message: string): void;
+  notifyChangeEnd(message: string): void;
 }
 
 export class StyleInspectorState {
@@ -103,8 +103,8 @@ export class StyleInspectorState {
     this.delegate.notifyChange();
   }
 
-  commit(message: string) {
-    this.delegate.commit(message);
+  notifyChangeEnd(message: string) {
+    this.delegate.notifyChangeEnd(message);
   }
 
   @computed get imageTargets(): StyleInspectorTarget[] {
