@@ -21,8 +21,7 @@ export class JSXTextNode extends NodeBase<JSXElementNode, JSXTextNode, never> {
   }
 
   toAST(): babel.JSXText {
-    const ast = babel.cloneNode(this.originalAST, false);
-    ast.value = this.value;
-    return ast;
+    this.originalAST.value = this.value;
+    return this.originalAST;
   }
 }

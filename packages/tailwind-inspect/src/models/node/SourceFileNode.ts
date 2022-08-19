@@ -30,17 +30,7 @@ export class SourceFileNode extends NodeBase<
   }
 
   toAST(): babel.File {
-    const components = new Map<babel.Statement, ComponentNode>(
-      this.children.map((child) => [child.originalAST, child])
-    );
-
-    const ast = babel.cloneNode(this.originalAST, false);
-    const program = babel.cloneNode(ast.program, false);
-    program.body = program.body.map((child) => {
-      return components.get(child)?.toAST() || child;
-    });
-
-    ast.program = program;
-    return ast;
+    this.children.forEach((c) => c.toAST());
+    return this.originalAST;
   }
 }

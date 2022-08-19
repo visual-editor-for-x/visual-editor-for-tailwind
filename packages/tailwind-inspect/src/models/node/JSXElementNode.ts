@@ -5,7 +5,7 @@ import { JSXTextNode } from "./JSXTextNode";
 import { JSXOtherNode } from "./JSXOtherNode";
 import { Style } from "../Style";
 import { JSXElementUtil } from "../JSXElementUtil";
-import { makeObservable, observable } from "mobx";
+import { makeObservable, observable, reaction } from "mobx";
 import { NodeBase } from "./NodeBase";
 
 export class JSXElementNode extends NodeBase<
@@ -43,16 +43,16 @@ export class JSXElementNode extends NodeBase<
   }
 
   toAST(): babel.JSXElement {
-    const element = babel.cloneNode(this.originalAST, false);
-    element.children = this.children.map((child) => child.toAST());
-    element.openingElement = babel.cloneNode(this.originalAST.openingElement);
+    console.log("toAST");
 
+    this.originalAST.children = this.children.map((child) => child.toAST());
+    // this.style.toTailwind();
     JSXElementUtil.setAttribute(
-      element.openingElement,
+      this.originalAST.openingElement,
       "className",
       this.style.toTailwind()
     );
-    return element;
+    return this.originalAST;
   }
 
   get tagName(): string {

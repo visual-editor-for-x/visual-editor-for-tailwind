@@ -47,20 +47,8 @@ export class ComponentNode extends NodeBase<
   }
 
   toAST(): babel.ExportDefaultDeclaration | babel.ExportNamedDeclaration {
-    // TODO: avoid copying the return value deeply
-
-    const statement = babel.cloneNode(this.originalAST);
-
-    const declaration = statement.declaration;
-    if (declaration?.type === "FunctionDeclaration") {
-      for (const bodyStatement of declaration.body.body) {
-        if (bodyStatement.type === "ReturnStatement") {
-          bodyStatement.argument = this.rootElement.toAST();
-        }
-      }
-    }
-
-    return statement;
+    this.rootElement.toAST();
+    return this.originalAST;
   }
 }
 

@@ -53,10 +53,15 @@ export class SourceFile {
     reaction(
       () => this.node.toAST(),
       action((ast) => {
+        console.log("update code");
+
         const { code } = recast.print(ast);
         this._code = code;
         this.compileCode();
-      })
+      }),
+      {
+        equals: () => false,
+      }
     );
   }
 
