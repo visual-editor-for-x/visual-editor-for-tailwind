@@ -1,10 +1,7 @@
-import { TreeNode } from "@seanchas116/paintkit/src/util/TreeNode";
 import { JSXElementNode } from "./JSXElementNode";
 import { SourceFileNode } from "./SourceFileNode";
 import * as babel from "@babel/types";
-import { makeObservable, observable } from "mobx";
 import { NodeBase } from "./NodeBase";
-import { MultiMap } from "@seanchas116/paintkit/src/util/MultiMap";
 
 interface FoundComponent {
   name?: string;
@@ -34,25 +31,24 @@ export class ComponentNode extends NodeBase<
 
   constructor(foundComponent: FoundComponent) {
     super();
-    this.originalAST = foundComponent.statement;
+    this.ast = foundComponent.statement;
     this.componentName = foundComponent.name;
     this.rootElement = new JSXElementNode(foundComponent.element);
     this.append(this.rootElement);
   }
 
-  originalAST: babel.ExportDefaultDeclaration | babel.ExportNamedDeclaration;
+  ast: babel.ExportDefaultDeclaration | babel.ExportNamedDeclaration;
   componentName: string | undefined;
   rootElement: JSXElementNode;
 
   loadFoundComponent(foundComponent: FoundComponent) {
-    this.originalAST = foundComponent.statement;
+    this.ast = foundComponent.statement;
     this.componentName = foundComponent.name;
     this.rootElement.loadAST(foundComponent.element);
   }
 
-  toAST(): babel.ExportDefaultDeclaration | babel.ExportNamedDeclaration {
-    this.rootElement.toAST();
-    return this.originalAST;
+  updateAST(): void {
+    this.rootElement.updateAST();
   }
 }
 

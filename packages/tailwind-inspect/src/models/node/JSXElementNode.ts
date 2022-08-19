@@ -16,11 +16,11 @@ export class JSXElementNode extends NodeBase<
 > {
   constructor(ast: babel.JSXElement) {
     super();
-    this.originalAST = ast;
+    this.ast = ast;
     this.loadAST(ast);
   }
 
-  originalAST: babel.JSXElement;
+  ast: babel.JSXElement;
   readonly style = new Style();
   readonly computedStyle = new Style();
 
@@ -58,7 +58,7 @@ export class JSXElementNode extends NodeBase<
       }
     });
 
-    this.originalAST = ast;
+    this.ast = ast;
     this.clear();
     this.append(...children);
     this.style.loadTailwind(
@@ -66,22 +66,22 @@ export class JSXElementNode extends NodeBase<
     );
   }
 
-  toAST(): babel.JSXElement {
-    console.log("toAST");
+  updateAST(): void {
+    const children = this.children;
+    children.forEach((c) => c.updateAST());
 
-    this.originalAST.children = this.children.map((child) => child.toAST());
+    this.ast.children = children.map((c) => c.ast);
     // this.style.toTailwind();
     JSXElementUtil.setAttribute(
-      this.originalAST.openingElement,
+      this.ast.openingElement,
       "className",
       this.style.toTailwind()
     );
-    return this.originalAST;
   }
 
   get tagName(): string {
-    if (this.originalAST.openingElement.name.type === "JSXIdentifier") {
-      return this.originalAST.openingElement.name.name;
+    if (this.ast.openingElement.name.type === "JSXIdentifier") {
+      return this.ast.openingElement.name.name;
     } else {
       return "div";
     }

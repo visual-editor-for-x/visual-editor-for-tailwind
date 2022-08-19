@@ -6,22 +6,21 @@ import { NodeBase } from "./NodeBase";
 export class JSXTextNode extends NodeBase<JSXElementNode, JSXTextNode, never> {
   constructor(ast: babel.JSXText) {
     super();
-    this.originalAST = ast;
+    this.ast = ast;
     this.value = ast.value;
     makeObservable(this);
   }
 
   @observable value: string;
 
-  originalAST: babel.JSXText;
+  ast: babel.JSXText;
 
   loadAST(ast: babel.JSXText) {
-    this.originalAST = ast;
+    this.ast = ast;
     this.value = ast.value;
   }
 
-  toAST(): babel.JSXText {
-    this.originalAST.value = this.value;
-    return this.originalAST;
+  updateAST() {
+    this.ast.value = this.value;
   }
 }

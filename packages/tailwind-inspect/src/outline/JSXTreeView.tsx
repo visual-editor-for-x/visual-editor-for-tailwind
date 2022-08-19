@@ -281,7 +281,7 @@ class JSXOtherTreeViewItem extends LeafTreeViewItem {
   renderRow(options: { inverted: boolean }): ReactNode {
     return (
       <TreeRow inverted={options.inverted}>
-        <TreeRowLabel>{generate(this.node.originalAST).code}</TreeRowLabel>
+        <TreeRowLabel>{generate(this.node.ast).code}</TreeRowLabel>
       </TreeRow>
     );
   }

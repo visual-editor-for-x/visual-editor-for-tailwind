@@ -25,7 +25,7 @@ export class DOMMapping {
 
     this.sourceFile.node.forEachDescendant((node) => {
       if (node instanceof JSXElementNode) {
-        const loc = node.originalAST.loc;
+        const loc = node.ast.loc;
         if (loc) {
           locationToNode.set(
             JSON.stringify([loc.start.line, loc.start.column]),

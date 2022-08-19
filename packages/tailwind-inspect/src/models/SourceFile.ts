@@ -56,7 +56,9 @@ export class SourceFile {
   }
 
   updateCode() {
-    const { code } = recast.print(this.node.toAST());
+    this.node.updateAST();
+
+    const { code } = recast.print(this.node.ast);
     this._code = code;
 
     const newAST = parseCode(code);
@@ -93,8 +95,8 @@ export class SourceFile {
     this.node.forEachDescendant((node) => {
       if (node instanceof JSXElementNode) {
         if (
-          node.originalAST.loc?.start.line === debugSource.lineNumber &&
-          node.originalAST.loc?.start.column === debugSource.columnNumber - 1
+          node.ast.loc?.start.line === debugSource.lineNumber &&
+          node.ast.loc?.start.column === debugSource.columnNumber - 1
         ) {
           node.select();
         }
