@@ -1,8 +1,6 @@
-import { ElementInstance } from "../models/ElementInstance";
 import { StyleInspectorState } from "./StyleInspectorState";
 import demoCode from "./demo?raw";
 import { computed, makeObservable } from "mobx";
-import { SourceFileOld } from "../models/SourceFileOld";
 import { DOMMapping } from "./DOMMapping";
 import { SourceFile } from "../models/SourceFile";
 
