@@ -139,7 +139,10 @@ abstract class JSXGroupTreeViewItem extends TreeViewItem {
           }
           return new JSXTextTreeViewItem(this.file, this, child);
         }
-        return new JSXOtherTreeViewItem(this.file, this, child);
+        if (child instanceof JSXExpressionContainerNode) {
+          return new JSXExpressionContainerTreeViewItem(this.file, this, child);
+        }
+        return new JSXSpreadChildTreeViewItem(this.file, this, child);
       })
     );
   }
@@ -184,7 +187,7 @@ abstract class JSXGroupTreeViewItem extends TreeViewItem {
           | JSXElementTreeViewItem
           | JSXFragmentTreeViewItem
           | JSXTextTreeViewItem
-          | JSXOtherTreeViewItem
+          | JSXSpreadChildTreeViewItem
       ).node;
 
     // TODO: copy
@@ -292,11 +295,11 @@ class JSXTextTreeViewItem extends LeafTreeViewItem {
   }
 }
 
-class JSXOtherTreeViewItem extends LeafTreeViewItem {
+class JSXExpressionContainerTreeViewItem extends TreeViewItem {
   constructor(
     file: SourceFile,
     parent: TreeViewItem | undefined,
-    node: JSXSpreadChildNode | JSXExpressionContainerNode
+    node: JSXExpressionContainerNode
   ) {
     super();
     this.file = file;
@@ -306,7 +309,77 @@ class JSXOtherTreeViewItem extends LeafTreeViewItem {
 
   readonly file: SourceFile;
   private readonly _parent: TreeViewItem | undefined;
-  readonly node: JSXSpreadChildNode | JSXExpressionContainerNode;
+  readonly node: JSXExpressionContainerNode;
+
+  get key(): string {
+    return this.node.key;
+  }
+  get parent(): TreeViewItem | undefined {
+    return this._parent;
+  }
+  get children(): readonly TreeViewItem[] {
+    const child = this.node.firstChild;
+
+    if (child) {
+      if (child instanceof JSXElementNode) {
+        return [new JSXElementTreeViewItem(this.file, this, child)];
+      }
+      if (child instanceof JSXFragmentNode) {
+        return [new JSXFragmentTreeViewItem(this.file, this, child)];
+      }
+    }
+    return [];
+  }
+  get collapsed(): boolean {
+    return this.node.collapsed;
+  }
+  get showsCollapseButton(): boolean {
+    return true;
+  }
+  toggleCollapsed(): void {
+    this.node.collapsed = !this.node.collapsed;
+  }
+  get selected(): boolean {
+    return this.node.selected;
+  }
+  get hovered(): boolean {
+    return false;
+  }
+  renderRow(options: { inverted: boolean }): ReactNode {
+    return (
+      <TreeRow inverted={options.inverted}>
+        <TreeRowLabel>{generate(this.node.ast).code}</TreeRowLabel>
+      </TreeRow>
+    );
+  }
+  deselect(): void {
+    this.node.deselect();
+  }
+  select(): void {
+    this.node.select();
+  }
+
+  handleDragStart(e: React.DragEvent): void {
+    e.dataTransfer.effectAllowed = "copyMove";
+    e.dataTransfer.setData(NODE_DRAG_MIME, "drag");
+  }
+}
+
+class JSXSpreadChildTreeViewItem extends LeafTreeViewItem {
+  constructor(
+    file: SourceFile,
+    parent: TreeViewItem | undefined,
+    node: JSXSpreadChildNode
+  ) {
+    super();
+    this.file = file;
+    this._parent = parent;
+    this.node = node;
+  }
+
+  readonly file: SourceFile;
+  private readonly _parent: TreeViewItem | undefined;
+  readonly node: JSXSpreadChildNode;
 
   get key(): string {
     return this.node.key;
