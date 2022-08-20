@@ -298,7 +298,13 @@ class JSXTextTreeViewItem extends LeafTreeViewItem {
   renderRow(options: { inverted: boolean }): ReactNode {
     return (
       <TreeRow inverted={options.inverted}>
-        <TreeRowLabel>{this.node.value}</TreeRowLabel>
+        <TreeRowLabel
+          style={{
+            opacity: opacities.label,
+          }}
+        >
+          {this.node.value}
+        </TreeRowLabel>
       </TreeRow>
     );
   }
