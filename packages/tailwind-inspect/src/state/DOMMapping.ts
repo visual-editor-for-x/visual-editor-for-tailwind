@@ -46,6 +46,7 @@ export class DOMMapping {
         if (node) {
           this.domForNode.set(node, dom);
           this.nodeForDOM.set(dom, node);
+          node.computedStyle.loadComputedStyle(dom);
         }
       }
 
