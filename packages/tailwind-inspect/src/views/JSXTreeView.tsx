@@ -22,6 +22,7 @@ import { JSXTextNode } from "../models/node/JSXTextNode";
 import { JSXFragmentNode } from "../models/node/JSXFragmentNode";
 import { JSXSpreadChildNode } from "../models/node/JSXSpreadChildNode";
 import { JSXExpressionContainerNode } from "../models/node/JSXExpressionContainerNode";
+import { colors } from "@seanchas116/paintkit/src/components/Palette";
 
 const NODE_DRAG_MIME = "application/x.macaron-tree-drag-node";
 
@@ -334,7 +335,7 @@ class JSXExpressionContainerTreeViewItem extends TreeViewItem {
     return this.node.collapsed;
   }
   get showsCollapseButton(): boolean {
-    return true;
+    return !!this.node.firstChild;
   }
   toggleCollapsed(): void {
     this.node.collapsed = !this.node.collapsed;
@@ -348,7 +349,9 @@ class JSXExpressionContainerTreeViewItem extends TreeViewItem {
   renderRow(options: { inverted: boolean }): ReactNode {
     return (
       <TreeRow inverted={options.inverted}>
-        <TreeRowLabel>{generate(this.node.ast).code}</TreeRowLabel>
+        <TreeRowLabel style={{ color: colors.disabledText }}>
+          {generate(this.node.ast).code}
+        </TreeRowLabel>
       </TreeRow>
     );
   }
