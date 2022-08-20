@@ -14,7 +14,7 @@ import {
 import { kebabCase } from "lodash-es";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { StylePropertyState } from "../state/StyleInspectorState";
+import { StylePropertyState } from "../../state/StyleInspectorState";
 
 export const StyleDimensionInput: React.FC<{
   className?: string;

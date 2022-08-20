@@ -8,7 +8,7 @@ import {
   imageStyleKeys,
   Style,
   textStyleKeys,
-} from "../models/Style";
+} from "../models/style/Style";
 import { StyleInspectorTarget } from "../models/StyleInspectorTarget";
 
 export class StylePropertyState {

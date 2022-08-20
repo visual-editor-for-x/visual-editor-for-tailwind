@@ -22,7 +22,7 @@ import Tippy from "@tippyjs/react";
 import {
   StyleInspectorState,
   StylePropertyState,
-} from "../state/StyleInspectorState";
+} from "../../state/StyleInspectorState";
 import { lengthPercentageUnits } from "./Units";
 import {
   StyleColorInput,

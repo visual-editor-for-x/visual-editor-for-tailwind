@@ -6,8 +6,8 @@ import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import { Rect, Vec2 } from "paintvec";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { StyleInspector } from "../inspector/StyleInspector";
-import { JSXTreeView } from "../outline/JSXTreeView";
+import { StyleInspector } from "./inspector/StyleInspector";
+import { JSXTreeView } from "./JSXTreeView";
 import { AppState } from "../state/AppState";
 
 const appState = new AppState();
@@ -125,16 +125,16 @@ const SelectionOverlay = observer(function SelectionOverlay({
       setTopLeft(new Vec2(left, top));
     }
   }, []);
-  useEffect(( ) => {
+  useEffect(() => {
     const handler = () => {
       if (ref.current) {
         const { top, left } = ref.current.getBoundingClientRect();
         setTopLeft(new Vec2(left, top));
       }
-    }
-    window.addEventListener('resize', handler)
-    return () => window.removeEventListener('change', handler)
-  })
+    };
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("change", handler);
+  });
 
   return (
     <svg

@@ -1,11 +1,8 @@
-import { TreeNode } from "@seanchas116/paintkit/src/util/TreeNode";
 import * as babel from "@babel/types";
-import { clone } from "lodash-es";
 import { JSXTextNode } from "./JSXTextNode";
 import { JSXOtherNode } from "./JSXOtherNode";
-import { Style } from "../Style";
-import { JSXElementUtil } from "../JSXElementUtil";
-import { makeObservable, observable, reaction } from "mobx";
+import { Style } from "../style/Style";
+import { JSXElementUtil } from "../../util/JSXElementUtil";
 import { NodeBase } from "./NodeBase";
 import { filterInstance } from "@seanchas116/paintkit/src/util/Collection";
 

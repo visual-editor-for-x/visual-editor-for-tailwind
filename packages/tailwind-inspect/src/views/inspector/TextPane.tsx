@@ -24,7 +24,7 @@ import strikethroughIcon from "@iconify-icons/ic/outline-strikethrough-s";
 import underlineIcon from "@iconify-icons/ic/outline-format-underlined";
 import closeIcon from "@iconify-icons/ic/outline-close";
 import { stripQuotes } from "@seanchas116/paintkit/src/util/String";
-import { StyleInspectorState } from "../state/StyleInspectorState";
+import { StyleInspectorState } from "../../state/StyleInspectorState";
 import { lengthPercentageEmptyUnits, lengthPercentageUnits } from "./Units";
 import {
   StyleColorInput,

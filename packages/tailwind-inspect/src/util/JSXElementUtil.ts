@@ -1,28 +1,6 @@
 import { JSXAttribute, JSXElement, JSXOpeningElement } from "@babel/types";
 
 export const JSXElementUtil = {
-  nodeForPath(
-    node: JSXElement,
-    path: readonly number[]
-  ): JSXElement["children"][number] | undefined {
-    if (path.length === 0) {
-      return node;
-    }
-
-    const [nextIndex, ...rest] = path;
-    const children = node.children;
-    if (nextIndex < children.length) {
-      const child = children[nextIndex];
-      if (rest.length === 0) {
-        return child;
-      }
-
-      if (child.type === "JSXElement") {
-        return this.nodeForPath(child, rest);
-      }
-    }
-  },
-
   getAttribute(
     openingElement: JSXOpeningElement,
     key: string
