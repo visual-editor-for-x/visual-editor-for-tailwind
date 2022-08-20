@@ -22,7 +22,10 @@ import { JSXTextNode } from "../models/node/JSXTextNode";
 import { JSXFragmentNode } from "../models/node/JSXFragmentNode";
 import { JSXSpreadChildNode } from "../models/node/JSXSpreadChildNode";
 import { JSXExpressionContainerNode } from "../models/node/JSXExpressionContainerNode";
-import { colors } from "@seanchas116/paintkit/src/components/Palette";
+import {
+  colors,
+  opacities,
+} from "@seanchas116/paintkit/src/components/Palette";
 
 const NODE_DRAG_MIME = "application/x.macaron-tree-drag-node";
 
@@ -85,8 +88,19 @@ class ComponentTreeViewItem extends TreeViewItem {
   renderRow(options: { inverted: boolean }): ReactNode {
     return (
       <TreeRow inverted={options.inverted}>
-        <TreeRowIcon icon={widgetsFilledIcon} />
-        <TreeRowLabel>{this.node.componentName ?? "default"}</TreeRowLabel>
+        <TreeRowIcon
+          icon={widgetsFilledIcon}
+          style={{
+            color: options.inverted ? colors.activeText : colors.component,
+          }}
+        />
+        <TreeRowLabel
+          style={{
+            fontWeight: "bold",
+          }}
+        >
+          {this.node.componentName ?? "default"}
+        </TreeRowLabel>
       </TreeRow>
     );
   }
@@ -220,7 +234,12 @@ class JSXElementTreeViewItem extends JSXGroupTreeViewItem {
   renderRow(options: { inverted: boolean }): ReactNode {
     return (
       <TreeRow inverted={options.inverted}>
-        <TreeRowIcon icon={chevronsIcon} />
+        <TreeRowIcon
+          icon={chevronsIcon}
+          style={{
+            opacity: opacities.disabledText,
+          }}
+        />
         <TreeRowLabel>{this.node.tagName}</TreeRowLabel>
       </TreeRow>
     );
@@ -349,7 +368,7 @@ class JSXExpressionContainerTreeViewItem extends TreeViewItem {
   renderRow(options: { inverted: boolean }): ReactNode {
     return (
       <TreeRow inverted={options.inverted}>
-        <TreeRowLabel style={{ color: colors.disabledText }}>
+        <TreeRowLabel style={{ opacity: opacities.disabledText }}>
           {generate(this.node.ast).code}
         </TreeRowLabel>
       </TreeRow>
