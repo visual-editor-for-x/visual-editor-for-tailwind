@@ -1,11 +1,9 @@
 import { PaintkitRoot } from "@seanchas116/paintkit/src/components/PaintkitRoot";
 import { colors } from "@seanchas116/paintkit/src/components/Palette";
 import { ResizeBox } from "@seanchas116/paintkit/src/components/ResizeBox";
-import { compact } from "lodash-es";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
-import { Rect, Vec2 } from "paintvec";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { StyleInspector } from "./inspector/StyleInspector";
 import { JSXTreeView } from "./JSXTreeView";
 import { AppState } from "../state/AppState";
