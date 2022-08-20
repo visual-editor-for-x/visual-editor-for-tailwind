@@ -20,7 +20,6 @@ import { JSXElementNode } from "../models/node/JSXElementNode";
 import { ComponentNode } from "../models/node/ComponentNode";
 import { JSXTextNode } from "../models/node/JSXTextNode";
 import { JSXOtherNode } from "../models/node/JSXOtherNode";
-import { JSXNode } from "../models/node/JSXNode";
 
 const NODE_DRAG_MIME = "application/x.macaron-tree-drag-node";
 
