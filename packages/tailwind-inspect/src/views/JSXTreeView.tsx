@@ -244,6 +244,14 @@ class JSXElementTreeViewItem extends JSXGroupTreeViewItem {
       </TreeRow>
     );
   }
+
+  handleMouseEnter(): void {
+    this.file.hoveredElement = this.node;
+  }
+
+  handleMouseLeave(): void {
+    this.file.hoveredElement = undefined;
+  }
 }
 
 class JSXFragmentTreeViewItem extends JSXGroupTreeViewItem {
