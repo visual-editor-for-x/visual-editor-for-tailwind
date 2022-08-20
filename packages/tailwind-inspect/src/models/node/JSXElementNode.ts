@@ -7,11 +7,13 @@ import { NodeBase } from "./NodeBase";
 import { filterInstance } from "@seanchas116/paintkit/src/util/Collection";
 import { makeObservable, observable } from "mobx";
 import { Rect } from "paintvec";
+import { JSXFragmentNode } from "./JSXFragmentNode";
+import { createNodesFromASTs, JSXNode } from "./JSXNode";
 
 export class JSXElementNode extends NodeBase<
+  JSXElementNode | JSXFragmentNode,
   JSXElementNode,
-  JSXElementNode,
-  JSXElementNode | JSXTextNode | JSXOtherNode
+  JSXNode
 > {
   constructor(ast: babel.JSXElement) {
     super();
@@ -31,39 +33,7 @@ export class JSXElementNode extends NodeBase<
   });
 
   loadAST(ast: babel.JSXElement) {
-    const oldChildren = this.children;
-    const oldTextNodes = filterInstance(oldChildren, [JSXTextNode]);
-    const oldOtherNodes = filterInstance(oldChildren, [JSXOtherNode]);
-    const oldElementNodes = filterInstance(oldChildren, [JSXElementNode]);
-
-    const children = ast.children.map((child) => {
-      if (child.type === "JSXText") {
-        const node = oldTextNodes.shift();
-        if (node) {
-          node.loadAST(child);
-          return node;
-        } else {
-          return new JSXTextNode(child);
-        }
-      } else if (child.type === "JSXElement") {
-        const node = oldElementNodes.shift();
-        if (node) {
-          node.loadAST(child);
-          return node;
-        } else {
-          return new JSXElementNode(child);
-        }
-      } else {
-        const node = oldOtherNodes.shift();
-        if (node) {
-          node.loadAST(child);
-          return node;
-        } else {
-          return new JSXOtherNode(child);
-        }
-      }
-    });
-
+    const children = createNodesFromASTs(ast.children, this.children);
     this.ast = ast;
     this.clear();
     this.append(...children);

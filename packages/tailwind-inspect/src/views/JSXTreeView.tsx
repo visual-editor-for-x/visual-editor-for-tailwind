@@ -20,6 +20,7 @@ import { JSXElementNode } from "../models/node/JSXElementNode";
 import { ComponentNode } from "../models/node/ComponentNode";
 import { JSXTextNode } from "../models/node/JSXTextNode";
 import { JSXOtherNode } from "../models/node/JSXOtherNode";
+import { JSXFragmentNode } from "../models/node/JSXFragmentNode";
 
 const NODE_DRAG_MIME = "application/x.macaron-tree-drag-node";
 
@@ -98,11 +99,11 @@ class ComponentTreeViewItem extends TreeViewItem {
   }
 }
 
-class JSXElementTreeViewItem extends TreeViewItem {
+abstract class JSXGroupTreeViewItem extends TreeViewItem {
   constructor(
     file: SourceFile,
     parent: TreeViewItem | undefined,
-    node: JSXElementNode
+    node: JSXElementNode | JSXFragmentNode
   ) {
     super();
     this.file = file;
@@ -113,7 +114,7 @@ class JSXElementTreeViewItem extends TreeViewItem {
 
   readonly file: SourceFile;
   private readonly _parent: TreeViewItem | undefined;
-  readonly node: JSXElementNode;
+  readonly node: JSXElementNode | JSXFragmentNode;
 
   get key(): string {
     return this.node.key;
@@ -126,6 +127,9 @@ class JSXElementTreeViewItem extends TreeViewItem {
       this.node.children.map((child) => {
         if (child instanceof JSXElementNode) {
           return new JSXElementTreeViewItem(this.file, this, child);
+        }
+        if (child instanceof JSXFragmentNode) {
+          return new JSXFragmentTreeViewItem(this.file, this, child);
         }
         if (child instanceof JSXTextNode) {
           // ignore newlines
@@ -149,14 +153,6 @@ class JSXElementTreeViewItem extends TreeViewItem {
   }
   get showsCollapseButton(): boolean {
     return true;
-  }
-  renderRow(options: { inverted: boolean }): ReactNode {
-    return (
-      <TreeRow inverted={options.inverted}>
-        <TreeRowIcon icon={chevronsIcon} />
-        <TreeRowLabel>{this.node.tagName}</TreeRowLabel>
-      </TreeRow>
-    );
   }
   deselect(): void {
     this.node.deselect();
@@ -200,6 +196,49 @@ class JSXElementTreeViewItem extends TreeViewItem {
     // this.context.editorState.history.commit(
     //   copy ? "Duplicate Layers" : "Move Layers"
     // );
+  }
+}
+
+class JSXElementTreeViewItem extends JSXGroupTreeViewItem {
+  constructor(
+    file: SourceFile,
+    parent: TreeViewItem | undefined,
+    node: JSXElementNode
+  ) {
+    super(file, parent, node);
+    this.node = node;
+  }
+
+  node: JSXElementNode;
+
+  renderRow(options: { inverted: boolean }): ReactNode {
+    return (
+      <TreeRow inverted={options.inverted}>
+        <TreeRowIcon icon={chevronsIcon} />
+        <TreeRowLabel>{this.node.tagName}</TreeRowLabel>
+      </TreeRow>
+    );
+  }
+}
+
+class JSXFragmentTreeViewItem extends JSXGroupTreeViewItem {
+  constructor(
+    file: SourceFile,
+    parent: TreeViewItem | undefined,
+    node: JSXFragmentNode
+  ) {
+    super(file, parent, node);
+    this.node = node;
+  }
+
+  node: JSXFragmentNode;
+
+  renderRow(options: { inverted: boolean }): ReactNode {
+    return (
+      <TreeRow inverted={options.inverted}>
+        <TreeRowIcon icon={chevronsIcon} />
+      </TreeRow>
+    );
   }
 }
 

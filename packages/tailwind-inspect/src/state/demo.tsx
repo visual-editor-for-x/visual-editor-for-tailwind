@@ -67,6 +67,11 @@ export default function Demo() {
             ))}
           </dl>
         </div>
+
+        <>
+          <div>Fragment Item 1</div>
+          <div>Fragment Item 2</div>
+        </>
       </div>
     </div>
   );
