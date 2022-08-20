@@ -12,7 +12,7 @@ import { AppState } from "../state/AppState";
 
 const appState = new AppState();
 
-const App = observer(function App() {
+export const App = observer(function App() {
   return (
     <PaintkitRoot colorScheme="dark">
       <div className="flex w-full h-full fixed left-0 top-0">
@@ -156,5 +156,3 @@ const SelectionOverlay = observer(function SelectionOverlay({
     </svg>
   );
 });
-
-export default App;
