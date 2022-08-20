@@ -5,6 +5,8 @@ import { Style } from "../style/Style";
 import { JSXElementUtil } from "../../util/JSXElementUtil";
 import { NodeBase } from "./NodeBase";
 import { filterInstance } from "@seanchas116/paintkit/src/util/Collection";
+import { makeObservable, observable } from "mobx";
+import { Rect } from "paintvec";
 
 export class JSXElementNode extends NodeBase<
   JSXElementNode,
@@ -15,11 +17,18 @@ export class JSXElementNode extends NodeBase<
     super();
     this.ast = ast;
     this.loadAST(ast);
+    makeObservable(this);
   }
 
   ast: babel.JSXElement;
   readonly style = new Style();
   readonly computedStyle = new Style();
+  @observable.ref boundingBox: Rect = Rect.from({
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+  });
 
   loadAST(ast: babel.JSXElement) {
     const oldChildren = this.children;

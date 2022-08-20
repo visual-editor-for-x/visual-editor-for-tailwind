@@ -77,9 +77,29 @@ const DemoRunner = observer(({ appState }: { appState: AppState }) => {
 
   useEffect(() => {
     if (ref.current) {
-      appState.domMapping.update(ref.current);
+      const elem = ref.current;
+      // Looks like we have to wait for fiber nodes to be ready
+      setTimeout(
+        action(() => {
+          appState.domMapping.update(elem);
+        }),
+        0
+      );
     }
   });
+
+  useEffect(() => {
+    const elem = ref.current;
+    if (!elem) {
+      return;
+    }
+
+    const handler = action(() => {
+      appState.domMapping.update(elem);
+    });
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("change", handler);
+  }, [ref]);
 
   return (
     <div
@@ -101,40 +121,11 @@ const SelectionOverlay = observer(function SelectionOverlay({
 }) {
   const ref = React.createRef<SVGSVGElement>();
 
-  const [topLeft, setTopLeft] = useState<Vec2>(new Vec2(0));
+  const selectedElements = appState.sourceFile.selectedElements;
+  const selectedRects = selectedElements.map((element) => element.boundingBox);
 
-  const selectedElements = compact(
-    appState.sourceFile.selectedElements.map((node) =>
-      appState.domMapping.domForNode.get(node)
-    )
-  );
-  const selectedRects = selectedElements.map((element) =>
-    Rect.from(element.getBoundingClientRect()).translate(topLeft.neg)
-  );
-
-  const hoveredElement =
-    appState.sourceFile.hoveredElement &&
-    appState.domMapping.domForNode.get(appState.sourceFile.hoveredElement);
-  const hoveredRect =
-    hoveredElement &&
-    Rect.from(hoveredElement.getBoundingClientRect()).translate(topLeft.neg);
-
-  useLayoutEffect(() => {
-    if (ref.current) {
-      const { top, left } = ref.current.getBoundingClientRect();
-      setTopLeft(new Vec2(left, top));
-    }
-  }, []);
-  useEffect(() => {
-    const handler = () => {
-      if (ref.current) {
-        const { top, left } = ref.current.getBoundingClientRect();
-        setTopLeft(new Vec2(left, top));
-      }
-    };
-    window.addEventListener("resize", handler);
-    return () => window.removeEventListener("change", handler);
-  });
+  const hoveredElement = appState.sourceFile.hoveredElement;
+  const hoveredRect = hoveredElement?.boundingBox;
 
   return (
     <svg

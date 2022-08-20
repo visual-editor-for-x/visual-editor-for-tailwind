@@ -1,3 +1,4 @@
+import { Rect, Vec2 } from "paintvec";
 // @ts-ignore
 import { __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED } from "react-dom";
 import { JSXElementNode } from "../models/node/JSXElementNode";
@@ -18,6 +19,8 @@ export class DOMMapping {
   readonly nodeForDOM = new Map<Element, JSXElementNode>();
 
   update(root: Element): void {
+    const viewportTopLeft = Rect.from(root.getBoundingClientRect()).topLeft;
+
     this.domForNode.clear();
     this.nodeForDOM.clear();
 
@@ -47,6 +50,9 @@ export class DOMMapping {
           this.domForNode.set(node, dom);
           this.nodeForDOM.set(dom, node);
           node.computedStyle.loadComputedStyle(dom);
+          node.boundingBox = Rect.from(dom.getBoundingClientRect()).translate(
+            viewportTopLeft.neg
+          );
         }
       }
 
