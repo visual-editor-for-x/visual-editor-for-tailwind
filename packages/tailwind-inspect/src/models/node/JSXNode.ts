@@ -1,15 +1,17 @@
 import * as babel from "@babel/types";
 import { filterInstance } from "@seanchas116/paintkit/src/util/Collection";
 import { JSXElementNode } from "./JSXElementNode";
+import { JSXExpressionContainerNode } from "./JSXExpressionContainerNode";
 import { JSXFragmentNode } from "./JSXFragmentNode";
-import { JSXOtherNode } from "./JSXOtherNode";
+import { JSXSpreadChildNode } from "./JSXSpreadChildNode";
 import { JSXTextNode } from "./JSXTextNode";
 
 export type JSXNode =
   | JSXElementNode
   | JSXTextNode
-  | JSXOtherNode
-  | JSXFragmentNode;
+  | JSXFragmentNode
+  | JSXExpressionContainerNode
+  | JSXSpreadChildNode;
 
 export function createNodesFromASTs(
   asts: babel.JSXElement["children"],
@@ -18,40 +20,53 @@ export function createNodesFromASTs(
   const oldElementNodes = filterInstance(oldChildren, [JSXElementNode]);
   const oldFragmentNodes = filterInstance(oldChildren, [JSXFragmentNode]);
   const oldTextNodes = filterInstance(oldChildren, [JSXTextNode]);
-  const oldOtherNodes = filterInstance(oldChildren, [JSXOtherNode]);
+  const oldExpressionContainerNodes = filterInstance(oldChildren, [
+    JSXExpressionContainerNode,
+  ]);
+  const oldSpreadChildNodes = filterInstance(oldChildren, [JSXSpreadChildNode]);
 
   return asts.map((child) => {
-    if (child.type === "JSXText") {
-      const node = oldTextNodes.shift();
-      if (node) {
-        node.loadAST(child);
-        return node;
-      } else {
-        return new JSXTextNode(child);
+    switch (child.type) {
+      case "JSXText": {
+        const node = oldTextNodes.shift();
+        if (node) {
+          node.loadAST(child);
+          return node;
+        } else {
+          return new JSXTextNode(child);
+        }
       }
-    } else if (child.type === "JSXFragment") {
-      const node = oldFragmentNodes.shift();
-      if (node) {
-        node.loadAST(child);
-        return node;
-      } else {
-        return new JSXFragmentNode(child);
+      case "JSXExpressionContainer": {
+        const node = oldExpressionContainerNodes.shift();
+        if (node) {
+          node.loadAST(child);
+          return node;
+        }
+        return new JSXExpressionContainerNode(child);
       }
-    } else if (child.type === "JSXElement") {
-      const node = oldElementNodes.shift();
-      if (node) {
-        node.loadAST(child);
-        return node;
-      } else {
+      case "JSXSpreadChild": {
+        const node = oldSpreadChildNodes.shift();
+        if (node) {
+          node.loadAST(child);
+          return node;
+        }
+        return new JSXSpreadChildNode(child);
+      }
+      case "JSXElement": {
+        const node = oldElementNodes.shift();
+        if (node) {
+          node.loadAST(child);
+          return node;
+        }
         return new JSXElementNode(child);
       }
-    } else {
-      const node = oldOtherNodes.shift();
-      if (node) {
-        node.loadAST(child);
-        return node;
-      } else {
-        return new JSXOtherNode(child);
+      case "JSXFragment": {
+        const node = oldFragmentNodes.shift();
+        if (node) {
+          node.loadAST(child);
+          return node;
+        }
+        return new JSXFragmentNode(child);
       }
     }
   });

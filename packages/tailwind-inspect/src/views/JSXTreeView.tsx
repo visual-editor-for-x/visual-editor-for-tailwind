@@ -19,8 +19,9 @@ import { SourceFile } from "../models/SourceFile";
 import { JSXElementNode } from "../models/node/JSXElementNode";
 import { ComponentNode } from "../models/node/ComponentNode";
 import { JSXTextNode } from "../models/node/JSXTextNode";
-import { JSXOtherNode } from "../models/node/JSXOtherNode";
 import { JSXFragmentNode } from "../models/node/JSXFragmentNode";
+import { JSXSpreadChildNode } from "../models/node/JSXSpreadChildNode";
+import { JSXExpressionContainerNode } from "../models/node/JSXExpressionContainerNode";
 
 const NODE_DRAG_MIME = "application/x.macaron-tree-drag-node";
 
@@ -181,6 +182,7 @@ abstract class JSXGroupTreeViewItem extends TreeViewItem {
       (
         before as
           | JSXElementTreeViewItem
+          | JSXFragmentTreeViewItem
           | JSXTextTreeViewItem
           | JSXOtherTreeViewItem
       ).node;
@@ -294,7 +296,7 @@ class JSXOtherTreeViewItem extends LeafTreeViewItem {
   constructor(
     file: SourceFile,
     parent: TreeViewItem | undefined,
-    node: JSXOtherNode
+    node: JSXSpreadChildNode | JSXExpressionContainerNode
   ) {
     super();
     this.file = file;
@@ -304,7 +306,7 @@ class JSXOtherTreeViewItem extends LeafTreeViewItem {
 
   readonly file: SourceFile;
   private readonly _parent: TreeViewItem | undefined;
-  readonly node: JSXOtherNode;
+  readonly node: JSXSpreadChildNode | JSXExpressionContainerNode;
 
   get key(): string {
     return this.node.key;

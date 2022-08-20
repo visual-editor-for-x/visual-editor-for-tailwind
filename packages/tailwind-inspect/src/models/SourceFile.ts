@@ -9,7 +9,9 @@ import { JSXElementNode } from "./node/JSXElementNode";
 import { filterInstance } from "@seanchas116/paintkit/src/util/Collection";
 import { JSXNode } from "./node/JSXNode";
 import { JSXTextNode } from "./node/JSXTextNode";
-import { JSXOtherNode } from "./node/JSXOtherNode";
+import { JSXFragmentNode } from "./node/JSXFragmentNode";
+import { JSXExpressionContainerNode } from "./node/JSXExpressionContainerNode";
+import { JSXSpreadChildNode } from "./node/JSXSpreadChildNode";
 
 function parseCode(code: string): babel.File {
   return recast.parse(code, {
@@ -85,7 +87,9 @@ export class SourceFile {
     return filterInstance(this.node.selectedDescendants, [
       JSXElementNode,
       JSXTextNode,
-      JSXOtherNode,
+      JSXFragmentNode,
+      JSXExpressionContainerNode,
+      JSXSpreadChildNode,
     ]);
   }
 
