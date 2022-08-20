@@ -47,5 +47,7 @@ export class JSXExpressionContainerNode extends NodeBase<
     }
   }
 
-  updateAST(): void {}
+  updateAST(): void {
+    this.firstChild?.updateAST();
+  }
 }
