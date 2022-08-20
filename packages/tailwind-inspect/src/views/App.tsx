@@ -98,7 +98,7 @@ const DemoRunner = observer(({ appState }: { appState: AppState }) => {
       appState.domMapping.update(elem);
     });
     window.addEventListener("resize", handler);
-    return () => window.removeEventListener("change", handler);
+    return () => window.removeEventListener("resize", handler);
   }, [ref]);
 
   return (
