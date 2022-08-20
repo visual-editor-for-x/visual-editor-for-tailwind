@@ -119,8 +119,6 @@ const SelectionOverlay = observer(function SelectionOverlay({
 }: {
   appState: AppState;
 }) {
-  const ref = React.createRef<SVGSVGElement>();
-
   const selectedElements = appState.sourceFile.selectedElements;
   const selectedRects = selectedElements.map((element) => element.boundingBox);
 
@@ -128,10 +126,7 @@ const SelectionOverlay = observer(function SelectionOverlay({
   const hoveredRect = hoveredElement?.boundingBox;
 
   return (
-    <svg
-      ref={ref}
-      className="absolute left-0 top-0 w-full h-full pointer-events-none"
-    >
+    <svg className="absolute left-0 top-0 w-full h-full pointer-events-none">
       {hoveredRect && (
         <rect
           x={hoveredRect.left}
