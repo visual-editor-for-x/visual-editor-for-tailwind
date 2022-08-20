@@ -125,6 +125,16 @@ const SelectionOverlay = observer(function SelectionOverlay({
       setTopLeft(new Vec2(left, top));
     }
   }, []);
+  useEffect(( ) => {
+    const handler = () => {
+      if (ref.current) {
+        const { top, left } = ref.current.getBoundingClientRect();
+        setTopLeft(new Vec2(left, top));
+      }
+    }
+    window.addEventListener('resize', handler)
+    return () => window.removeEventListener('change', handler)
+  })
 
   return (
     <svg
