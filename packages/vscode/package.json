@@ -22,10 +22,10 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "run-s compile",
-    "compile": "node build.js",
+    "vscode:prepublish": "run-s build",
+    "build": "node build.js",
     "dev": "node build.js --dev",
-    "pretest": "run-s compile lint",
+    "pretest": "run-s build lint",
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js"
   },
