@@ -40,6 +40,7 @@ setTimeout(() => {
 }, 0);
 
 if (import.meta.hot) {
+  // TODO: use vite:afterUpdate https://github.com/vitejs/vite/pull/9810
   import.meta.hot.on("vite:beforeUpdate", (payload) => {
     setTimeout(() => {
       domMapping.update(root, getInstanceFromNode);
