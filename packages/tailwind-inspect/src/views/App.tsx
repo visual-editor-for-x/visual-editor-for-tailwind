@@ -10,12 +10,29 @@ import { TargetRunner } from "./TargetRunner";
 const appState = new AppState();
 
 export const App = observer(function App() {
+  const onOpenFile = async () => {
+    await window.showOpenFilePicker({
+      types: [
+        {
+          description: "Source File",
+          accept: {
+            "text/javascript": [".tsx"],
+          },
+        },
+      ],
+      multiple: false,
+    });
+  };
+
   return (
     <PaintkitRoot colorScheme="dark">
       <div className="flex w-full h-full fixed left-0 top-0">
         <div className="flex flex-col flex-1">
           <div className="bg-zinc-800 p-1">
-            <button className="bg-blue-500 text-white text-sm py-1 px-2 rounded-md hover:bg-blue-600">
+            <button
+              className="bg-blue-500 text-white text-sm py-1 px-2 rounded-md hover:bg-blue-600"
+              onClick={onOpenFile}
+            >
               Open src/target/target.tsx...
             </button>
           </div>
