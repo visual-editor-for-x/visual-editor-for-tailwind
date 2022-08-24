@@ -1,5 +1,7 @@
+import { action } from "mobx";
 import React, { useEffect } from "react";
 import ReactDOM from "react-dom/client";
+import { TypedEmitter } from "tiny-typed-emitter";
 import { AppState } from "../state/AppState";
 import Target from "../target/target";
 
@@ -43,14 +45,20 @@ export const TargetRunner: React.FC<{
       </React.StrictMode>
     );
 
-    appState.domMapping.sourceFile.on("openFile", () => {
-      console.log("update domMapping");
+    const updateDOMMapping = action(() => {
       appState.domMapping.update(root);
     });
+
+    appState.domMapping.sourceFile.on("openFile", updateDOMMapping);
+    updateEventEmitter.on("update", updateDOMMapping);
   }, []);
 
   return <iframe className="absolute left-0 top-0 w-full h-full" ref={ref} />;
 };
+
+const updateEventEmitter = new TypedEmitter<{
+  update(): void;
+}>();
 
 if (import.meta.hot) {
   // TODO: use vite:afterUpdate https://github.com/vitejs/vite/pull/9810
@@ -61,7 +69,10 @@ if (import.meta.hot) {
       )
     ) {
       console.log("beforeUpdate", payload);
-      // TODO: update domMapping
+
+      setTimeout(() => {
+        updateEventEmitter.emit("update");
+      }, 500);
     }
   });
 }
