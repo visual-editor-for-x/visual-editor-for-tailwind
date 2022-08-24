@@ -11,7 +11,7 @@ const appState = new AppState();
 
 export const App = observer(function App() {
   const onOpenFile = async () => {
-    await window.showOpenFilePicker({
+    const [file] = await window.showOpenFilePicker({
       types: [
         {
           description: "Source File",
@@ -22,6 +22,7 @@ export const App = observer(function App() {
       ],
       multiple: false,
     });
+    appState.sourceFile.openFile(file);
   };
 
   return (

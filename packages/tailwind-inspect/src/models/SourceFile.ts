@@ -44,7 +44,23 @@ export class SourceFile {
     );
   }
 
-  readonly node: SourceFileNode;
+  private _fsHandle: FileSystemFileHandle | undefined = undefined;
+
+  async openFile(fsHandle: FileSystemFileHandle) {
+    const file = await fsHandle.getFile();
+    const code = await file.text();
+
+    const ast = parseCode(code);
+    this.node = new SourceFileNode(ast);
+    this._code = code;
+    this.compileCode();
+  }
+
+  get fsHandle() {
+    return this._fsHandle;
+  }
+
+  @observable node: SourceFileNode;
 
   @observable private _code: string;
   @observable private _compiledCode = "";
