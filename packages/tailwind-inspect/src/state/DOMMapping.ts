@@ -18,7 +18,7 @@ export class DOMMapping {
   readonly domForNode = new Map<JSXElementNode, Element>();
   readonly nodeForDOM = new Map<Element, JSXElementNode>();
 
-  update(root: Element): void {
+  update(root: Element, getInstance = getInstanceFromNode): void {
     const viewportTopLeft = Rect.from(root.getBoundingClientRect()).topLeft;
 
     this.domForNode.clear();
@@ -39,7 +39,7 @@ export class DOMMapping {
     });
 
     const traverse = (dom: Element) => {
-      const fiberNode = getInstanceFromNode(dom);
+      const fiberNode = getInstance(dom);
 
       if (fiberNode?._debugSource) {
         const line = fiberNode._debugSource.lineNumber;
