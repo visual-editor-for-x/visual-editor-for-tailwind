@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
+import ReactDOM from "react-dom/client";
 import { AppState } from "../state/AppState";
+import Target from "../target/target";
 
 export const TargetRunner: React.FC<{
   appState: AppState;
@@ -15,36 +17,40 @@ export const TargetRunner: React.FC<{
     // @ts-ignore
     window.domMapping = appState.domMapping;
 
-    iframe.srcdoc = `
-      <!DOCTYPE html>
-      <html lang="en">
-      <head>
-        <meta charset="utf-8">
-      </head>
-      <body>
-        <script type="module">
-          import RefreshRuntime from "/@react-refresh"
-          RefreshRuntime.injectIntoGlobalHook(window)
-          window.$RefreshReg$ = () => {}
-          window.$RefreshSig$ = () => (type) => type
-          window.__vite_plugin_react_preamble_installed__ = true
-        </script>
-        <script type="module" src="/@vite/client"></script>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script src="https://code.iconify.design/iconify-icon/1.0.0-beta.2/iconify-icon.min.js"></script>
-        <script type="module">
-          import "/src/target/targetRenderer.tsx";
-        </script>
-      </body>
-      </html>
-    `;
+    const contentDocument = iframe.contentDocument!;
+
+    contentDocument.open();
+    contentDocument.write(
+      `<!DOCTYPE html><html><head></head><body></body></html>
+           <script src="https://cdn.tailwindcss.com"></script>
+           <script src="https://code.iconify.design/iconify-icon/1.0.0-beta.2/iconify-icon.min.js"></script>
+      `
+    );
+    contentDocument.close();
+
+    const root = contentDocument.createElement("div");
+    contentDocument.body.appendChild(root);
+    const reactRoot = ReactDOM.createRoot(root);
+
+    reactRoot.render(
+      <React.StrictMode>
+        <Target />
+      </React.StrictMode>
+    );
+
+    appState.domMapping.sourceFile.on("openFile", () => {
+      console.log("update domMapping");
+      appState.domMapping.update(root);
+    });
   }, []);
 
   return <iframe className="absolute left-0 top-0 w-full h-full" ref={ref} />;
 };
 
 if (import.meta.hot) {
-  import.meta.hot.accept("src/target/target", () => {
-    console.log("accept");
+  // TODO: use vite:afterUpdate https://github.com/vitejs/vite/pull/9810
+  import.meta.hot.on("vite:beforeUpdate", (payload) => {
+    console.log("beforeUpdate");
+    // TODO: update domMapping
   });
 }
