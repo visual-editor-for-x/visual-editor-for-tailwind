@@ -5,6 +5,7 @@ import { JSXTreeView } from "./JSXTreeView";
 import { AppState } from "../state/AppState";
 import { DemoRunner } from "./DemoRunner";
 import { SelectionOverlay } from "./SelectionOverlay";
+import { TargetRunner } from "./TargetRunner";
 
 const appState = new AppState();
 
@@ -40,7 +41,7 @@ export const App = observer(function App() {
             </button>
           </div>
           <div className="flex-1 relative">
-            <DemoRunner appState={appState} />
+            <TargetRunner />
             <SelectionOverlay appState={appState} />
           </div>
         </div>
