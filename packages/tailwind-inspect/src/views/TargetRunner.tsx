@@ -1,6 +1,9 @@
 import React, { useEffect } from "react";
+import { AppState } from "../state/AppState";
 
-export const TargetRunner: React.FC = () => {
+export const TargetRunner: React.FC<{
+  appState: AppState;
+}> = ({ appState }) => {
   const ref = React.createRef<HTMLIFrameElement>();
 
   useEffect(() => {
@@ -8,6 +11,9 @@ export const TargetRunner: React.FC = () => {
     if (!iframe) {
       return;
     }
+
+    // @ts-ignore
+    window.domMapping = appState.domMapping;
 
     iframe.srcdoc = `
       <!DOCTYPE html>

@@ -50,7 +50,7 @@ export const App = observer(function App() {
               className="flex-1 relative flex flex-col"
               style={{ contain: "strict" }}
             >
-              <TargetRunner />
+              <TargetRunner appState={appState} />
               <SelectionOverlay appState={appState} />
             </div>
           </div>
