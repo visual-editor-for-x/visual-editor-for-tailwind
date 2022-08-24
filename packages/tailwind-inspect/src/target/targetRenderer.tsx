@@ -34,10 +34,10 @@ reactRoot.render(
   </React.StrictMode>
 );
 
-setTimeout(() => {
+domMapping.sourceFile.on("openFile", () => {
   console.log("update domMapping");
   domMapping.update(root, getInstanceFromNode);
-}, 0);
+});
 
 if (import.meta.hot) {
   // TODO: use vite:afterUpdate https://github.com/vitejs/vite/pull/9810

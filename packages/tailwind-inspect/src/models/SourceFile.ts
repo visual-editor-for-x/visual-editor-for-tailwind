@@ -3,6 +3,7 @@ import { action, computed, makeObservable, observable, reaction } from "mobx";
 import { parse } from "@babel/parser";
 import { transform } from "@babel/standalone";
 import * as recast from "recast";
+import { TypedEmitter } from "tiny-typed-emitter";
 import { DebugSource } from "./DebugSource";
 import { SourceFileNode } from "./node/SourceFileNode";
 import { JSXElementNode } from "./node/JSXElementNode";
@@ -27,8 +28,11 @@ function parseCode(code: string): babel.File {
   });
 }
 
-export class SourceFile {
+export class SourceFile extends TypedEmitter<{
+  openFile(): void;
+}> {
   constructor(code: string) {
+    super();
     const ast = parseCode(code);
     this.node = new SourceFileNode(ast);
     this._code = code;
@@ -53,6 +57,8 @@ export class SourceFile {
     this.node = new SourceFileNode(ast);
     this._code = code;
     this._fsHandle = fsHandle;
+
+    this.emit("openFile");
   }
 
   get fsHandle() {
