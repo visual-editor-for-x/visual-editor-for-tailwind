@@ -54,6 +54,7 @@ export class SourceFile {
     this.node = new SourceFileNode(ast);
     this._code = code;
     this.compileCode();
+    this._fsHandle = fsHandle;
   }
 
   get fsHandle() {
@@ -73,7 +74,7 @@ export class SourceFile {
     return this._compiledCode;
   }
 
-  updateCode() {
+  async updateCode() {
     this.node.updateAST();
 
     const { code } = recast.print(this.node.ast);
@@ -83,6 +84,12 @@ export class SourceFile {
     this.node.loadAST(newAST);
 
     this.compileCode();
+
+    if (this.fsHandle) {
+      const writable = await this.fsHandle.createWritable();
+      await writable.write(code);
+      await writable.close();
+    }
   }
 
   private compileCode() {
