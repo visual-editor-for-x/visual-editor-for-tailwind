@@ -49,6 +49,17 @@ export const TargetRunner: React.FC<{
       appState.domMapping.update(root);
     });
 
+    const observer = new MutationObserver(() => {
+      setTimeout(() => {
+        updateDOMMapping();
+      }, 0);
+    });
+    observer.observe(root, {
+      attributes: true,
+      childList: true,
+      subtree: true,
+    });
+
     appState.domMapping.sourceFile.on("openFile", updateDOMMapping);
     updateEventEmitter.on("update", updateDOMMapping);
   }, []);
@@ -60,19 +71,19 @@ const updateEventEmitter = new TypedEmitter<{
   update(): void;
 }>();
 
-if (import.meta.hot) {
-  // TODO: use vite:afterUpdate https://github.com/vitejs/vite/pull/9810
-  import.meta.hot.on("vite:beforeUpdate", (payload) => {
-    if (
-      payload.updates.some((update) =>
-        update.path.endsWith("/target/target.tsx")
-      )
-    ) {
-      console.log("beforeUpdate", payload);
+// if (import.meta.hot) {
+//   // TODO: use vite:afterUpdate https://github.com/vitejs/vite/pull/9810
+//   import.meta.hot.on("vite:beforeUpdate", (payload) => {
+//     if (
+//       payload.updates.some((update) =>
+//         update.path.endsWith("/target/target.tsx")
+//       )
+//     ) {
+//       console.log("beforeUpdate", payload);
 
-      setTimeout(() => {
-        updateEventEmitter.emit("update");
-      }, 500);
-    }
-  });
-}
+//       setTimeout(() => {
+//         updateEventEmitter.emit("update");
+//       }, 100);
+//     }
+//   });
+// }
