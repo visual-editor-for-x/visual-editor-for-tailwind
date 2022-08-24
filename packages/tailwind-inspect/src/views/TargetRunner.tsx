@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { TypedEmitter } from "tiny-typed-emitter";
 import { AppState } from "../state/AppState";
-import Target from "../target/target";
+import Target from "../target";
 
 export const TargetRunner: React.FC<{
   appState: AppState;

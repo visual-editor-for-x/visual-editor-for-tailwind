@@ -35,7 +35,7 @@ export const App = observer(function App() {
               className="bg-blue-500 text-white text-sm py-1 px-2 rounded-md hover:bg-blue-600"
               onClick={onOpenFile}
             >
-              Open src/target/target.tsx...
+              Open src/target.tsx...
             </button>
             <label className="text-white flex items-center gap-1">
               <input
