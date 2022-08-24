@@ -20,12 +20,17 @@ export const TargetRunner: React.FC<{
     const contentDocument = iframe.contentDocument!;
 
     contentDocument.open();
-    contentDocument.write(
-      `<!DOCTYPE html><html><head></head><body></body></html>
-           <script src="https://cdn.tailwindcss.com"></script>
-           <script src="https://code.iconify.design/iconify-icon/1.0.0-beta.2/iconify-icon.min.js"></script>
-      `
-    );
+    contentDocument.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+      </head>
+      <body>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://code.iconify.design/iconify-icon/1.0.0-beta.2/iconify-icon.min.js"></script>
+      </body>
+      </html>
+    `);
     contentDocument.close();
 
     const root = contentDocument.createElement("div");
