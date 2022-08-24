@@ -1,5 +1,5 @@
 import { StyleInspectorState } from "./StyleInspectorState";
-import demoCode from "./demo?raw";
+import demoCode from "../target/target?raw";
 import { computed, makeObservable } from "mobx";
 import { DOMMapping } from "./DOMMapping";
 import { SourceFile } from "../models/SourceFile";
