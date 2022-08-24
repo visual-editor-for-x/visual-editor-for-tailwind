@@ -13,16 +13,36 @@ export const App = observer(function App() {
     <PaintkitRoot colorScheme="dark">
       <div className="flex w-full h-full fixed left-0 top-0">
         <div
-          className="flex-1 bg-gray-900 text-white overflow-y-auto p-4"
+          className="flex-1 bg-zinc-800 text-white overflow-y-auto p-4"
           style={{ contain: "strict" }}
         >
           <pre className="text-xs text-white whitespace-pre-wrap">
             {appState.sourceFile.code}
           </pre>
         </div>
-        <div className="flex-1 relative" style={{ contain: "strict" }}>
-          <DemoRunner appState={appState} />
-          <SelectionOverlay appState={appState} />
+        <div
+          className="flex-1 relative flex flex-col"
+          style={{ contain: "strict" }}
+        >
+          <div className="bg-zinc-800 p-1">
+            <button
+              className="
+              bg-blue-500
+              text-white
+              text-sm
+              py-1
+              px-2
+              rounded-md
+              hover:bg-blue-600
+            "
+            >
+              Open demo.tsx...
+            </button>
+          </div>
+          <div className="flex-1 relative">
+            <DemoRunner appState={appState} />
+            <SelectionOverlay appState={appState} />
+          </div>
         </div>
         <div className="bg-zinc-800 w-64 flex flex-col ">
           <JSXTreeView
