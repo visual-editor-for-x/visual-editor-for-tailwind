@@ -6,6 +6,7 @@ import { AppState } from "../state/AppState";
 import { DemoRunner } from "./DemoRunner";
 import { SelectionOverlay } from "./SelectionOverlay";
 import { TargetRunner } from "./TargetRunner";
+import { action } from "mobx";
 
 const appState = new AppState();
 
@@ -29,17 +30,29 @@ export const App = observer(function App() {
     <PaintkitRoot colorScheme="dark">
       <div className="flex w-full h-full fixed left-0 top-0">
         <div className="flex flex-col flex-1">
-          <div className="bg-zinc-800 p-1">
+          <div className="bg-zinc-800 p-2 flex gap-2 items-center">
             <button
               className="bg-blue-500 text-white text-sm py-1 px-2 rounded-md hover:bg-blue-600"
               onClick={onOpenFile}
             >
               Open src/target/target.tsx...
             </button>
+            <label className="text-white flex items-center gap-1">
+              <input
+                className="appearance-auto"
+                type="checkbox"
+                checked={appState.showsCode}
+                onClick={action(
+                  () => (appState.showsCode = !appState.showsCode)
+                )}
+              />
+              Show Code
+            </label>
           </div>
           <div className="flex flex-1">
             <div
               className="flex-1 bg-zinc-800 text-white overflow-y-auto p-4"
+              hidden={!appState.showsCode}
               style={{ contain: "strict" }}
             >
               <pre className="text-xs text-white whitespace-pre-wrap">
