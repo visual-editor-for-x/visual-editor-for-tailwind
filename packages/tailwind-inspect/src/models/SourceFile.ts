@@ -32,7 +32,6 @@ export class SourceFile {
     const ast = parseCode(code);
     this.node = new SourceFileNode(ast);
     this._code = code;
-    this.compileCode();
 
     makeObservable(this);
 
@@ -53,7 +52,6 @@ export class SourceFile {
     const ast = parseCode(code);
     this.node = new SourceFileNode(ast);
     this._code = code;
-    this.compileCode();
     this._fsHandle = fsHandle;
   }
 
@@ -64,14 +62,9 @@ export class SourceFile {
   @observable node: SourceFileNode;
 
   @observable private _code: string;
-  @observable private _compiledCode = "";
 
   get code(): string {
     return this._code;
-  }
-
-  get compiledCode(): string {
-    return this._compiledCode;
   }
 
   async updateCode() {
@@ -83,22 +76,11 @@ export class SourceFile {
     const newAST = parseCode(code);
     this.node.loadAST(newAST);
 
-    this.compileCode();
-
     if (this.fsHandle) {
       const writable = await this.fsHandle.createWritable();
       await writable.write(code);
       await writable.close();
     }
-  }
-
-  private compileCode() {
-    const output = transform(this._code, {
-      presets: ["env", "react"],
-      plugins: ["transform-react-jsx-source"],
-    }).code;
-    //console.log(output);
-    this._compiledCode = output ?? "";
   }
 
   @observable hoveredElement: JSXElementNode | undefined = undefined;
