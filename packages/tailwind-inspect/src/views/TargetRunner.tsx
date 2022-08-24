@@ -50,7 +50,13 @@ export const TargetRunner: React.FC<{
 if (import.meta.hot) {
   // TODO: use vite:afterUpdate https://github.com/vitejs/vite/pull/9810
   import.meta.hot.on("vite:beforeUpdate", (payload) => {
-    console.log("beforeUpdate");
-    // TODO: update domMapping
+    if (
+      payload.updates.some((update) =>
+        update.path.endsWith("/target/target.tsx")
+      )
+    ) {
+      console.log("beforeUpdate", payload);
+      // TODO: update domMapping
+    }
   });
 }
