@@ -27,48 +27,45 @@ export const App = observer(function App() {
   };
 
   return (
-    <PaintkitRoot colorScheme="dark">
-      <div className="flex w-full h-full fixed left-0 top-0">
-        <div className="flex flex-col flex-1">
-          <div className="bg-zinc-800 p-2 flex gap-2 items-center">
-            <button
-              className="bg-blue-500 text-white text-sm py-1 px-2 rounded-md hover:bg-blue-600"
-              onClick={onOpenFile}
-            >
-              Open src/target.tsx...
-            </button>
-            <label className="text-white flex items-center gap-1">
-              <input
-                className="appearance-auto"
-                type="checkbox"
-                checked={appState.showsCode}
-                onClick={action(
-                  () => (appState.showsCode = !appState.showsCode)
-                )}
-              />
-              Show Code
-            </label>
+    <div className="flex w-full h-full fixed left-0 top-0">
+      <div className="flex flex-col flex-1">
+        <div className="bg-zinc-800 p-2 flex gap-2 items-center">
+          <button
+            className="bg-blue-500 text-white text-sm py-1 px-2 rounded-md hover:bg-blue-600"
+            onClick={onOpenFile}
+          >
+            Open src/target.tsx...
+          </button>
+          <label className="text-white flex items-center gap-1">
+            <input
+              type="checkbox"
+              checked={appState.showsCode}
+              onClick={action(() => (appState.showsCode = !appState.showsCode))}
+            />
+            Show Code
+          </label>
+        </div>
+        <div className="flex flex-1">
+          <div
+            className="flex-1 bg-zinc-800 text-white overflow-y-auto p-4"
+            hidden={!appState.showsCode}
+            style={{ contain: "strict" }}
+          >
+            <pre className="text-xs text-white whitespace-pre-wrap">
+              {appState.sourceFile.code}
+            </pre>
           </div>
-          <div className="flex flex-1">
-            <div
-              className="flex-1 bg-zinc-800 text-white overflow-y-auto p-4"
-              hidden={!appState.showsCode}
-              style={{ contain: "strict" }}
-            >
-              <pre className="text-xs text-white whitespace-pre-wrap">
-                {appState.sourceFile.code}
-              </pre>
-            </div>
-            <div
-              className="flex-1 relative flex flex-col"
-              style={{ contain: "strict" }}
-            >
-              <TargetRunner appState={appState} />
-              <SelectionOverlay appState={appState} />
-            </div>
+          <div
+            className="flex-1 relative flex flex-col"
+            style={{ contain: "strict" }}
+          >
+            <TargetRunner appState={appState} />
+            <SelectionOverlay appState={appState} />
           </div>
         </div>
-        <div className="bg-zinc-800 w-64 flex flex-col ">
+      </div>
+      <div className="bg-zinc-800 w-64 flex flex-col ">
+        <PaintkitRoot colorScheme="dark">
           <JSXTreeView
             className="h-80 shrink-0 border-b-neutral-700 border-solid border-b-[2px]"
             file={appState.sourceFile}
@@ -77,8 +74,8 @@ export const App = observer(function App() {
             className="flex-1 overflow-y-auto"
             state={appState.styleInspectorState}
           />
-        </div>
+        </PaintkitRoot>
       </div>
-    </PaintkitRoot>
+    </div>
   );
 });
