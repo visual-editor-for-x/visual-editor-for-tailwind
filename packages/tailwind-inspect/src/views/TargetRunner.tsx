@@ -35,3 +35,9 @@ window.__vite_plugin_react_preamble_installed__ = true
 
   return <iframe className="absolute left-0 top-0 w-full h-full" ref={ref} />;
 };
+
+if (import.meta.hot) {
+  import.meta.hot.accept("src/target/target", () => {
+    console.log("accept");
+  });
+}
