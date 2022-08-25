@@ -46,15 +46,15 @@ export class SourceFile extends TypedEmitter<{
       }
     );
 
-    this.openFile();
+    this.fetchCode();
   }
 
-  async openFile() {
+  async fetchCode() {
     const request = await fetch("/edit-target");
     const code = await request.text();
 
     const ast = parseCode(code);
-    this.node = new SourceFileNode(ast);
+    this.node.loadAST(ast);
     this._code = code;
 
     this.emit("openFile");

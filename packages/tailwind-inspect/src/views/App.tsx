@@ -64,3 +64,14 @@ export const App = observer(function App() {
     </PaintkitRoot>
   );
 });
+
+if (import.meta.hot) {
+  // TODO: use vite:afterUpdate https://github.com/vitejs/vite/pull/9810
+  import.meta.hot.on("vite:beforeUpdate", (payload) => {
+    if (
+      payload.updates.some((update) => update.path.endsWith("/edit-target.tsx"))
+    ) {
+      appState.sourceFile.fetchCode();
+    }
+  });
+}
