@@ -45,24 +45,19 @@ export class SourceFile extends TypedEmitter<{
         console.log(elements);
       }
     );
+
+    this.openFile();
   }
 
-  @observable private _fsHandle: FileSystemFileHandle | undefined = undefined;
-
-  async openFile(fsHandle: FileSystemFileHandle) {
-    const file = await fsHandle.getFile();
-    const code = await file.text();
+  async openFile() {
+    const request = await fetch("/edit-target");
+    const code = await request.text();
 
     const ast = parseCode(code);
     this.node = new SourceFileNode(ast);
     this._code = code;
-    this._fsHandle = fsHandle;
 
     this.emit("openFile");
-  }
-
-  get fsHandle() {
-    return this._fsHandle;
   }
 
   @observable node: SourceFileNode;
@@ -82,11 +77,10 @@ export class SourceFile extends TypedEmitter<{
     const newAST = parseCode(code);
     this.node.loadAST(newAST);
 
-    if (this.fsHandle) {
-      const writable = await this.fsHandle.createWritable();
-      await writable.write(code);
-      await writable.close();
-    }
+    await fetch("/edit-target", {
+      method: "PUT",
+      body: code,
+    });
   }
 
   @observable hoveredElement: JSXElementNode | undefined = undefined;

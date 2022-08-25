@@ -11,34 +11,11 @@ import { action } from "mobx";
 const appState = new AppState();
 
 export const App = observer(function App() {
-  const onOpenFile = async () => {
-    const [file] = await window.showOpenFilePicker({
-      types: [
-        {
-          description: "Source File",
-          accept: {
-            "text/javascript": [".tsx"],
-          },
-        },
-      ],
-      multiple: false,
-    });
-    appState.sourceFile.openFile(file);
-  };
-
   return (
     <PaintkitRoot colorScheme="dark">
       <div className="flex w-full h-full fixed left-0 top-0">
         <div className="flex flex-col flex-1">
           <div className="bg-zinc-800 p-2 flex gap-2 items-center">
-            {!appState.sourceFile.fsHandle && (
-              <button
-                className="bg-blue-500 text-white text-sm py-1 px-2 rounded-md hover:bg-blue-600"
-                onClick={onOpenFile}
-              >
-                Open src/target.tsx...
-              </button>
-            )}
             <label className="text-white flex items-center gap-1">
               <input
                 style={{ appearance: "auto" }}

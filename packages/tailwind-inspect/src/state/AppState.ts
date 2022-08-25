@@ -3,11 +3,10 @@ import { StyleInspectorState } from "./StyleInspectorState";
 import { computed, makeObservable, observable } from "mobx";
 import { DOMMapping } from "./DOMMapping";
 import { SourceFile } from "../models/SourceFile";
-import originalTarget from "../target.original?raw";
 
 export class AppState {
   constructor() {
-    this.sourceFile = new SourceFile(originalTarget);
+    this.sourceFile = new SourceFile("");
     this.domMapping = new DOMMapping(this.sourceFile);
     makeObservable(this);
   }
