@@ -16,6 +16,9 @@ export const App = observer(function App() {
       <div className="flex w-full h-full fixed left-0 top-0">
         <div className="flex flex-col flex-1">
           <div className="bg-zinc-800 p-2 flex gap-2 items-center">
+            <div className="text-sm text-zinc-400 mr-4">
+              /edit-target.tsx will be edited
+            </div>
             <label className="text-white flex items-center gap-1">
               <input
                 style={{ appearance: "auto" }}
