@@ -61,15 +61,10 @@ export const TargetRunner: React.FC<{
     });
 
     appState.domMapping.sourceFile.on("fetchCode", updateDOMMapping);
-    updateEventEmitter.on("update", updateDOMMapping);
   }, []);
 
   return <iframe className="absolute left-0 top-0 w-full h-full" ref={ref} />;
 };
-
-const updateEventEmitter = new TypedEmitter<{
-  update(): void;
-}>();
 
 // if (import.meta.hot) {
 //   // TODO: use vite:afterUpdate https://github.com/vitejs/vite/pull/9810
