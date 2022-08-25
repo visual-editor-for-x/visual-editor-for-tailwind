@@ -3,6 +3,7 @@ import { action, computed, makeObservable, observable, reaction } from "mobx";
 import { parse } from "@babel/parser";
 import { transform } from "@babel/standalone";
 import * as recast from "recast";
+import { TypedEmitter } from "tiny-typed-emitter";
 import { DebugSource } from "./DebugSource";
 import { SourceFileNode } from "./node/SourceFileNode";
 import { JSXElementNode } from "./node/JSXElementNode";
@@ -27,12 +28,14 @@ function parseCode(code: string): babel.File {
   });
 }
 
-export class SourceFile {
+export class SourceFile extends TypedEmitter<{
+  fetchCode(): void;
+}> {
   constructor(code: string) {
+    super();
     const ast = parseCode(code);
     this.node = new SourceFileNode(ast);
     this._code = code;
-    this.compileCode();
 
     makeObservable(this);
 
@@ -42,22 +45,30 @@ export class SourceFile {
         console.log(elements);
       }
     );
+
+    this.fetchCode();
   }
 
-  readonly node: SourceFileNode;
+  async fetchCode() {
+    const request = await fetch("/edit-target");
+    const code = await request.text();
+
+    const ast = parseCode(code);
+    this.node.loadAST(ast);
+    this._code = code;
+
+    this.emit("fetchCode");
+  }
+
+  @observable node: SourceFileNode;
 
   @observable private _code: string;
-  @observable private _compiledCode = "";
 
   get code(): string {
     return this._code;
   }
 
-  get compiledCode(): string {
-    return this._compiledCode;
-  }
-
-  updateCode() {
+  async updateCode() {
     this.node.updateAST();
 
     const { code } = recast.print(this.node.ast);
@@ -66,16 +77,10 @@ export class SourceFile {
     const newAST = parseCode(code);
     this.node.loadAST(newAST);
 
-    this.compileCode();
-  }
-
-  private compileCode() {
-    const output = transform(this._code, {
-      presets: ["env", "react"],
-      plugins: ["transform-react-jsx-source"],
-    }).code;
-    //console.log(output);
-    this._compiledCode = output ?? "";
+    await fetch("/edit-target", {
+      method: "PUT",
+      body: code,
+    });
   }
 
   @observable hoveredElement: JSXElementNode | undefined = undefined;

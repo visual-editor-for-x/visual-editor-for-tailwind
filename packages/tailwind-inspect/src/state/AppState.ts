@@ -1,12 +1,12 @@
 import { StyleInspectorState } from "./StyleInspectorState";
-import demoCode from "./demo?raw";
-import { computed, makeObservable } from "mobx";
+//import demoCode from "./demo?raw";
+import { computed, makeObservable, observable } from "mobx";
 import { DOMMapping } from "./DOMMapping";
 import { SourceFile } from "../models/SourceFile";
 
 export class AppState {
   constructor() {
-    this.sourceFile = new SourceFile(demoCode);
+    this.sourceFile = new SourceFile("");
     this.domMapping = new DOMMapping(this.sourceFile);
     makeObservable(this);
   }
@@ -21,10 +21,8 @@ export class AppState {
     },
   });
 
-  @computed get compiledCode() {
-    return this.sourceFile.compiledCode;
-  }
-
   readonly sourceFile: SourceFile;
   readonly domMapping: DOMMapping;
+
+  @observable showsCode = true;
 }
