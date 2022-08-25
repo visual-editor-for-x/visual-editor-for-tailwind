@@ -29,7 +29,7 @@ function parseCode(code: string): babel.File {
 }
 
 export class SourceFile extends TypedEmitter<{
-  openFile(): void;
+  fetchCode(): void;
 }> {
   constructor(code: string) {
     super();
@@ -57,7 +57,7 @@ export class SourceFile extends TypedEmitter<{
     this.node.loadAST(ast);
     this._code = code;
 
-    this.emit("openFile");
+    this.emit("fetchCode");
   }
 
   @observable node: SourceFileNode;

@@ -60,7 +60,7 @@ export const TargetRunner: React.FC<{
       subtree: true,
     });
 
-    appState.domMapping.sourceFile.on("openFile", updateDOMMapping);
+    appState.domMapping.sourceFile.on("fetchCode", updateDOMMapping);
     updateEventEmitter.on("update", updateDOMMapping);
   }, []);
 
