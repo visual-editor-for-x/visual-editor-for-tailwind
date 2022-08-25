@@ -47,7 +47,7 @@ export class SourceFile extends TypedEmitter<{
     );
   }
 
-  private _fsHandle: FileSystemFileHandle | undefined = undefined;
+  @observable private _fsHandle: FileSystemFileHandle | undefined = undefined;
 
   async openFile(fsHandle: FileSystemFileHandle) {
     const file = await fsHandle.getFile();

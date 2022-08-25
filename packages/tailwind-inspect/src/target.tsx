@@ -29,38 +29,38 @@ const features = [
 
 export default function Demo() {
   return (
-    <div className="py-12 bg-white">
+    (<div className="py-12 bg-[#fff]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="lg:text-center">
-          <h2 className="text-base text-indigo-600 font-semibold tracking-wide uppercase">
-            Transactions
-          </h2>
-          <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+          <p className="sm:text-4xl mt-[8px] text-[#111827] font-[800] text-[30px] leading-[32px] tracking-[-0.025em]">
             A better way to send money
-          </p>
-          <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
+          </p><h2 className="uppercase text-[#4f46e5] font-[600] text-[16px] tracking-[0.025em]">
+          Transactions
+        </h2>
+            
+          <p className="max-w-2xl lg:mx-auto mt-[16px] text-[#6b7280] text-[20px]">
             Lorem ipsum dolor sit amet consect adipisicing elit. Possimus magnam
             voluptatum cupiditate veritatis in accusamus quisquam.
           </p>
         </div>
 
-        <div className="mt-10">
+        <div className="mt-[40px]">
           <dl className="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
             {features.map((feature) => (
               <div key={feature.name} className="relative">
                 <dt>
-                  <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
+                  <div className="rounded-md absolute w-[48px] h-[48px] flex items-center justify-center text-[#fff] bg-[#6366f1]">
                     <iconify-icon
                       icon={feature.icon}
                       class="h-6 w-6 text-2xl"
                       aria-hidden="true"
                     />
                   </div>
-                  <p className="ml-16 text-lg leading-6 font-medium text-gray-900">
+                  <p className="ml-[64px] text-[#111827] font-[500] text-[18px] leading-[24px]">
                     {feature.name}
                   </p>
                 </dt>
-                <dd className="mt-2 ml-16 text-base text-gray-500">
+                <dd className="mt-[8px] ml-[64px] text-[#6b7280] text-[16px]">
                   {feature.description}
                 </dd>
               </div>
@@ -73,6 +73,6 @@ export default function Demo() {
           <div>Fragment Item 2</div>
         </>
       </div>
-    </div>
+    </div>)
   );
 }
